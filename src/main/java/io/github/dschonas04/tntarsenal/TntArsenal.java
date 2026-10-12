@@ -2,6 +2,7 @@ package io.github.dschonas04.tntarsenal;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
@@ -71,7 +72,10 @@ public final class TntArsenal implements ModInitializer {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, tabKey, tab);
         CreativeModeTabEvents.modifyOutputEvent(tabKey).register(output -> {
             // TabVisibility is protected as well; the stack lists are not.
-            for (Item item : ITEMS) {
+            // the ordinary arsenal first, then the nuclear one: bombs, fuses, protection, alarms
+            List<Item> all = new ArrayList<>(ITEMS);
+            all.addAll(NuclearTnt.ITEMS);
+            for (Item item : all) {
                 output.getDisplayStacks().add(new ItemStack(item));
                 output.getSearchTabStacks().add(new ItemStack(item));
             }

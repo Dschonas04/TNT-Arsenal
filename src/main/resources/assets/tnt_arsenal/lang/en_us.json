@@ -177,5 +177,11 @@
   "advancements.tnt_arsenal.nuclear.survivor.title": "Survivor",
   "advancements.tnt_arsenal.nuclear.survivor.description": "Take in 500 mSv and live",
   "advancements.tnt_arsenal.nuclear.glowing.title": "Glowing",
-  "advancements.tnt_arsenal.nuclear.glowing.description": "Carry a dose of 1000 mSv"
+  "advancements.tnt_arsenal.nuclear.glowing.description": "Carry a dose of 1000 mSv",
+  "effect.tnt_arsenal.radiation": "Radiation",
+  "subtitles.tnt_arsenal.siren": "Siren wails",
+  "subtitles.tnt_arsenal.geiger": "Geiger counter clicks",
+  "subtitles.tnt_arsenal.nuke_blast": "Nuclear blast",
+  "subtitles.tnt_arsenal.beep": "Countdown beeps",
+  "subtitles.tnt_arsenal.detonator": "Detonator fires"
 }

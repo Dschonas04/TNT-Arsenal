@@ -261,6 +261,30 @@ def iodine_icon():
     return c
 
 
+def radiation_icon():
+    """The radiation trefoil, lime with a dark rim, for the single radiation effect."""
+    import math
+    c = [TRANSPARENT] * (18 * 18)
+    lime, light, edge = P.hexc("#b6ec2c"), P.hexc("#e6ff8a"), P.hexc("#2f4a0c")
+    for y in range(18):
+        for x in range(18):
+            dx, dy = x - 8.5, y - 8.5
+            r = math.hypot(dx, dy)
+            a = (math.degrees(math.atan2(dy, dx)) + 360) % 360
+            blade = any(abs(((a - b + 180) % 360) - 180) <= 30 for b in (270, 30, 150))
+            if r <= 1.8 or (2.8 <= r <= 7.6 and blade):
+                c[y * 18 + x] = (light if (dx + dy) < -3 else lime) + (255,)
+    out = list(c)
+    for y in range(18):
+        for x in range(18):
+            if c[y * 18 + x] != TRANSPARENT:
+                continue
+            if any(0 <= x + dx < 18 and 0 <= y + dy < 18 and c[(y + dy) * 18 + x + dx] != TRANSPARENT
+                   for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                out[y * 18 + x] = edge + (255,)
+    return out
+
+
 def door_blockstate(ns):
     base = {"east": 0, "south": 90, "west": 180, "north": 270}
     variants = {}
@@ -304,6 +328,7 @@ def generate(root, ns, write_json, lang_en, lang_de):
 
     # iodine effect
     P.write_png(f"{tex}/mob_effect/iodine.png", 18, 18, iodine_icon())
+    P.write_png(f"{tex}/mob_effect/radiation.png", 18, 18, radiation_icon())
 
     # lead block
     lead = P.Canvas()
@@ -433,6 +458,12 @@ def generate(root, ns, write_json, lang_en, lang_de):
         "block.{ns}.siren": ("Siren", "Sirene"),
         "block.{ns}.bunker_door": ("Bunker Door", "Bunkertür"),
         "effect.{ns}.iodine": ("Iodine", "Jod"),
+        "effect.{ns}.radiation": ("Radiation", "Strahlung"),
+        "subtitles.{ns}.siren": ("Siren wails", "Sirene heult"),
+        "subtitles.{ns}.geiger": ("Geiger counter clicks", "Geigerzähler knackt"),
+        "subtitles.{ns}.nuke_blast": ("Nuclear blast", "Atomexplosion"),
+        "subtitles.{ns}.beep": ("Countdown beeps", "Countdown piept"),
+        "subtitles.{ns}.detonator": ("Detonator fires", "Fernzünder ausgelöst"),
         "entity.{ns}.irradiated_zombie": ("Irradiated Zombie", "Verstrahlter Zombie"),
         "{ns}.emp": ("EMP! Electronics knocked out", "EMP! Elektronik ausgefallen"),
         "advancements.{ns}.nuclear.root.title": ("TNT Arsenal: Nuclear", "TNT-Arsenal: Atom"),

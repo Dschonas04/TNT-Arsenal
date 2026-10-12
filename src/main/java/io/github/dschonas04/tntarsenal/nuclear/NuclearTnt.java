@@ -19,8 +19,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -32,9 +30,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.block.Block;
@@ -94,6 +90,7 @@ public final class NuclearTnt implements ModInitializer {
     @Override
     public void onInitialize() {
         NukeConfig.load();
+        Sounds.register();
         Jobs.register();
         Radiation.register();
         RadiationCommand.register();
@@ -151,16 +148,6 @@ public final class NuclearTnt implements ModInitializer {
         IrradiatedZombies.register();
         Contamination.register();
 
-        ResourceKey<CreativeModeTab> tabKey = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id("nuclear"));
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, tabKey, FabricCreativeModeTab.builder()
-                .title(Component.translatable("itemGroup.tnt_arsenal.nuclear"))
-                .icon(() -> new ItemStack(BOMBS.get(Tier.TSAR)))
-                .build());
-        CreativeModeTabEvents.modifyOutputEvent(tabKey).register(output -> {
-            for (Item item : ITEMS) {
-                output.getDisplayStacks().add(new ItemStack(item));
-                output.getSearchTabStacks().add(new ItemStack(item));
-            }
-        });
+        // No tab of its own: the nuclear items follow the other TNT in the TNT Arsenal tab (see TntArsenal).
     }
 }

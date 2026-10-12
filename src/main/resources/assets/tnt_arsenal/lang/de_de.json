@@ -177,5 +177,11 @@
   "advancements.tnt_arsenal.nuclear.survivor.title": "Überlebender",
   "advancements.tnt_arsenal.nuclear.survivor.description": "Nimm 500 mSv auf und überlebe",
   "advancements.tnt_arsenal.nuclear.glowing.title": "Glühend",
-  "advancements.tnt_arsenal.nuclear.glowing.description": "Trage eine Dosis von 1000 mSv"
+  "advancements.tnt_arsenal.nuclear.glowing.description": "Trage eine Dosis von 1000 mSv",
+  "effect.tnt_arsenal.radiation": "Strahlung",
+  "subtitles.tnt_arsenal.siren": "Sirene heult",
+  "subtitles.tnt_arsenal.geiger": "Geigerzähler knackt",
+  "subtitles.tnt_arsenal.nuke_blast": "Atomexplosion",
+  "subtitles.tnt_arsenal.beep": "Countdown piept",
+  "subtitles.tnt_arsenal.detonator": "Fernzünder ausgelöst"
 }

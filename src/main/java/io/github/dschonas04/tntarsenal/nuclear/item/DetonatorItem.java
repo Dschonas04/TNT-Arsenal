@@ -1,13 +1,12 @@
 package io.github.dschonas04.tntarsenal.nuclear.item;
 
-import io.github.dschonas04.tntarsenal.nuclear.block.NukeBlock;
-import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
+import io.github.dschonas04.tntarsenal.Bombs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,10 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * The remote detonator. Right-click a bomb to bind it; right-click anywhere else
+ * The remote detonator. Right-click a bomb — nuclear, any arsenal TNT or plain TNT — to bind it; right-click anywhere else
  * to light it, wherever you are — as long as its chunk is loaded and you are in
  * the same dimension.
  */
@@ -33,7 +31,7 @@ public class DetonatorItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!(level.getBlockState(pos).getBlock() instanceof NukeBlock)) return super.useOn(context);
+        if (!Bombs.isBomb(level.getBlockState(pos))) return super.useOn(context);
         Player player = context.getPlayer();
         if (level instanceof ServerLevel && player != null) {
             CompoundTag tag = new CompoundTag();
@@ -41,7 +39,7 @@ public class DetonatorItem extends Item {
             tag.putString("dimension", level.dimension().identifier().toString());
             CustomData.set(DataComponents.CUSTOM_DATA, context.getItemInHand(), tag);
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.bound", pos.getX(), pos.getY(), pos.getZ()));
-            level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BIT.value(), SoundSource.PLAYERS, 1.0f, 2.0f);
+            level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 1.3f);
         }
         return InteractionResult.SUCCESS;
     }
@@ -65,16 +63,14 @@ public class DetonatorItem extends Item {
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.not_loaded"));
             return InteractionResult.FAIL;
         }
-        BlockState state = level.getBlockState(pos);
-        if (!(state.getBlock() instanceof NukeBlock bomb)) {
+        if (!Bombs.ignite((ServerLevel) level, pos, player, 0)) {
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.gone"));
             stack.remove(DataComponents.CUSTOM_DATA);
             return InteractionResult.FAIL;
         }
-        bomb.ignite(level, pos, player, NukeConfig.get().fuse(bomb.tier()));
         stack.remove(DataComponents.CUSTOM_DATA);
         player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.fired"));
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.DETONATOR, SoundSource.PLAYERS, 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
     }
 }

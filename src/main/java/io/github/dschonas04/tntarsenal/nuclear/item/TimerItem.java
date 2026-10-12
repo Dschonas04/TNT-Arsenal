@@ -1,6 +1,7 @@
 package io.github.dschonas04.tntarsenal.nuclear.item;
 
-import io.github.dschonas04.tntarsenal.nuclear.block.NukeBlock;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
+import io.github.dschonas04.tntarsenal.Bombs;
 import io.github.dschonas04.tntarsenal.nuclear.explosion.Jobs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * The timer fuse. Sneak and right-click to set the time (10 s, 30 s, 1, 2 or 5
- * minutes), then right-click a bomb to fix it there: the countdown runs above
+ * minutes), then right-click a bomb (nuclear, arsenal or plain TNT) to fix it there: the countdown runs above
  * the hotbar of everyone within 64 blocks, beeping faster at the end, and lights
  * the bomb at zero. The fuse is used up.
  */
@@ -60,7 +61,7 @@ public class TimerItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!(level.getBlockState(pos).getBlock() instanceof NukeBlock)) return super.useOn(context);
+        if (!Bombs.isBomb(level.getBlockState(pos))) return super.useOn(context);
         if (level instanceof ServerLevel server) {
             ItemStack stack = context.getItemInHand();
             Player player = context.getPlayer();
@@ -84,17 +85,17 @@ public class TimerItem extends Item {
 
             @Override
             public boolean tick() {
-                if (!(level.getBlockState(pos).getBlock() instanceof NukeBlock bomb)) {
+                if (!Bombs.isBomb(level.getBlockState(pos))) {
                     if (igniter instanceof ServerPlayer player) player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.timer.gone"));
                     return true;
                 }
                 if (left <= 0) {
-                    bomb.ignite(level, pos, igniter, 1);
+                    Bombs.ignite(level, pos, igniter, 1);
                     return true;
                 }
                 int every = left > 200 ? 20 : left > 60 ? 10 : 4;
                 if (left % every == 0) {
-                    level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BIT.value(), SoundSource.BLOCKS, 1.5f, left > 200 ? 1.2f : 1.9f);
+                    level.playSound(null, pos, Sounds.BEEP, SoundSource.BLOCKS, 1.5f, left > 200 ? 0.8f : 1.2f);
                     level.sendParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 2, 0.1, 0.05, 0.1, 0);
                 }
                 if (left % 20 == 0) {

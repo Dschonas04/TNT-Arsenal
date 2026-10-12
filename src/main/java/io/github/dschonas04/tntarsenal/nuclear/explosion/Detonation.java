@@ -1,5 +1,6 @@
 package io.github.dschonas04.tntarsenal.nuclear.explosion;
 
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.Achievements;
 import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
 import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
@@ -9,7 +10,6 @@ import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.saveddata.WeatherData;
 import net.minecraft.world.phys.Vec3;
@@ -22,7 +22,7 @@ public final class Detonation {
     public static void start(ServerLevel level, PrimedNuke nuke) {
         int radius = NukeConfig.get().radius(nuke.tier());
         Vec3 origin = nuke.position();
-        level.playSound(null, origin.x, origin.y, origin.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 8.0f, 0.4f);
+        level.playSound(null, origin.x, origin.y, origin.z, Sounds.NUKE_BLAST, SoundSource.BLOCKS, 8.0f, 1.0f);
         Jobs.add(new NukeExplosion(level, nuke.blockPosition(), radius, nuke, nuke.igniter()));
         Jobs.add(new Bang(level, origin));
         Jobs.add(new Fallout(level, nuke.blockPosition(), radius));

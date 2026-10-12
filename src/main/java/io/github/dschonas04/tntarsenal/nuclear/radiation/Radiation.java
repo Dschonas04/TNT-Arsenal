@@ -21,7 +21,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import com.mojang.serialization.Codec;
@@ -37,8 +41,8 @@ import com.mojang.serialization.Codec;
  * <p>Players carry their dose in mSv, saved and sent to their own client. Every
  * second they take in the rate of the chunk they stand in, less what the blocks
  * over their head and water around them shield. Out of the radiation the dose
- * slowly goes down. The stages: from 100 mSv nausea, from 250 weakness and
- * hunger, from 500 radiation damage, from 1000 far more of it.
+ * goes down again, two percent a second (at least 1 mSv). What the dose does is
+ * one effect, {@link RadiationEffect}, at four levels: from 100, 250, 500 and 1000 mSv.
  */
 public final class Radiation {
     private Radiation() {
@@ -52,8 +56,10 @@ public final class Radiation {
             b -> b.persistent(Blast.CODEC.listOf()));
 
     public static final ResourceKey<DamageType> DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, NuclearTnt.id("radiation"));
+    public static Holder<MobEffect> EFFECT;
 
     public static void register() {
+        EFFECT = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, NuclearTnt.id("radiation"), new RadiationEffect());
         ServerChunkEvents.CHUNK_LOAD.register((level, chunk, generated) -> catchUp(level, chunk));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if (server.getTickCount() % 20 != 0) return;
@@ -175,23 +181,25 @@ public final class Radiation {
         if (rate > 0.001f && level.isRainingAt(player.blockPosition().above())) rate *= 2f;
         float dose = dose(player);
         if (rate > 0.001f) dose += rate;
-        else dose = Math.max(0f, dose - 0.2f);
+        else dose = Math.max(0f, dose - Math.max(1f, dose * 0.02f));
         setDose(player, dose);
         if (dose >= 500) Achievements.award(player, "survivor");
         if (dose >= 1000) Achievements.award(player, "glowing");
-        if (dose >= 100 && player.getRandom().nextFloat() < 0.15f) {
-            player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 200, 0));
-        }
-        if (dose >= 250) {
-            player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, dose >= 1000 ? 1 : 0));
-            player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 1));
-        }
-        if (dose >= 1000) {
-            player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 0));
-            player.hurtServer(level, damage(level), 2f);
-        } else if (dose >= 500 && level.getGameTime() % 40 < 20) {
-            player.hurtServer(level, damage(level), 1f);
-        }
+        int stage = stage(dose);
+        // Refreshed every second while the dose is high enough; runs out by itself three seconds after.
+        if (stage >= 0) player.addEffect(new MobEffectInstance(EFFECT, 60, stage, false, true, true));
+    }
+
+    /** The radiation effect's amplifier for a dose, or -1 below 100 mSv. */
+    public static int stage(float dose) {
+        return dose >= 1000 ? 3 : dose >= 500 ? 2 : dose >= 250 ? 1 : dose >= 100 ? 0 : -1;
+    }
+
+    /** Radiation sickness for a mob or a player without going through the dose, e.g. in fallout. */
+    public static void sicken(LivingEntity entity, int amplifier, int ticks) {
+        MobEffectInstance current = entity.getEffect(EFFECT);
+        if (current != null && current.getAmplifier() > amplifier) return;
+        entity.addEffect(new MobEffectInstance(EFFECT, ticks, amplifier, false, true, true));
     }
 
     public static DamageSource damage(ServerLevel level) {

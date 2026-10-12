@@ -1,5 +1,6 @@
 package io.github.dschonas04.tntarsenal.nuclear.item;
 
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -7,7 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 
@@ -47,9 +47,8 @@ public final class GeigerCounter {
     private static void tick(ServerLevel level, ServerPlayer player, float rate) {
         float chance = Math.min(0.9f, 0.01f + rate * 0.15f);
         if (player.getRandom().nextFloat() >= chance) return;
-        float pitch = 1.6f + player.getRandom().nextFloat() * 0.4f;
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_HAT.value(),
-                SoundSource.PLAYERS, 0.35f, pitch);
+        float pitch = 0.9f + player.getRandom().nextFloat() * 0.2f;
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.GEIGER, SoundSource.PLAYERS, 0.5f, pitch);
     }
 
     private static void show(ServerPlayer player, float rate) {

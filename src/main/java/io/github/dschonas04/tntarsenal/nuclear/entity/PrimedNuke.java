@@ -1,11 +1,11 @@
 package io.github.dschonas04.tntarsenal.nuclear.entity;
 
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.block.NukeBlock;
 import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
 import io.github.dschonas04.tntarsenal.nuclear.explosion.Detonation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,8 +55,8 @@ public class PrimedNuke extends PrimedTnt {
         // A slow beep at first, then faster and higher towards the end.
         int every = fuse > 200 ? 20 : fuse > 100 ? 10 : fuse > 40 ? 5 : 2;
         if (fuse % every == 0) {
-            float pitch = fuse > 100 ? 1.2f : fuse > 40 ? 1.6f : 2.0f;
-            level.playSound(null, getX(), getY(), getZ(), SoundEvents.NOTE_BLOCK_BIT.value(), SoundSource.BLOCKS, 2.0f, pitch);
+            float pitch = fuse > 100 ? 0.8f : fuse > 40 ? 1.0f : 1.25f;
+            level.playSound(null, getX(), getY(), getZ(), Sounds.BEEP, SoundSource.BLOCKS, 2.0f, pitch);
         }
     }
 

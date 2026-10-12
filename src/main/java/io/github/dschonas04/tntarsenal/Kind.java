@@ -88,6 +88,11 @@ public enum Kind {
         return id;
     }
 
+    /** The kinds big enough to sound the siren while lit. */
+    public boolean heavy() {
+        return this == GIGA || this == NUKE || this == ANTIMATTER || this == BLACK_HOLE || this == EARTHQUAKE || this == VOLCANO;
+    }
+
     public int fuse() {
         return fuse;
     }

@@ -1,0 +1,22 @@
+{
+  "siren": {
+    "subtitle": "subtitles.tnt_arsenal.siren",
+    "sounds": [{"name": "tnt_arsenal:siren", "attenuation_distance": 192}]
+  },
+  "geiger": {
+    "subtitle": "subtitles.tnt_arsenal.geiger",
+    "sounds": ["tnt_arsenal:geiger1", "tnt_arsenal:geiger2", "tnt_arsenal:geiger3"]
+  },
+  "nuke_blast": {
+    "subtitle": "subtitles.tnt_arsenal.nuke_blast",
+    "sounds": [{"name": "tnt_arsenal:nuke_blast", "attenuation_distance": 256}]
+  },
+  "beep": {
+    "subtitle": "subtitles.tnt_arsenal.beep",
+    "sounds": ["tnt_arsenal:beep"]
+  },
+  "detonator": {
+    "subtitle": "subtitles.tnt_arsenal.detonator",
+    "sounds": ["tnt_arsenal:detonator"]
+  }
+}

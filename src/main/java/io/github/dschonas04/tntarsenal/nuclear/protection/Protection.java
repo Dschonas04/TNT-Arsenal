@@ -77,7 +77,6 @@ public final class Protection {
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
             if (entity instanceof ServerPlayer player) {
                 Radiation.setDose(player, Math.max(0f, Radiation.dose(player) - 200f));
-                player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0));
             }
             return super.finishUsingItem(stack, level, entity);
         }

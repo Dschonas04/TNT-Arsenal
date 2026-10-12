@@ -1,11 +1,12 @@
 package io.github.dschonas04.tntarsenal.nuclear.explosion;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
@@ -52,10 +53,10 @@ public final class Bang implements Jobs.Job {
             Vec3 toward = origin.subtract(player.position());
             Vec3 at = player.getEyePosition().add(toward.lengthSqr() < 1 ? Vec3.ZERO : toward.normalize().scale(4));
             long seed = level.getRandom().nextLong();
-            player.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS,
-                    at.x, at.y, at.z, volume, 0.35f, seed));
-            player.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS,
-                    at.x, at.y, at.z, volume, 0.5f, seed + 1));
+            // farther away the thunder arrives deeper
+            float pitch = (float) Math.max(0.7, 1.0 - dist / AUDIBLE * 0.3);
+            player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(Sounds.NUKE_BLAST),
+                    SoundSource.BLOCKS, at.x, at.y, at.z, volume, pitch, seed));
         }
         age++;
         return waiting.isEmpty();

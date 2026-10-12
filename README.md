@@ -89,26 +89,32 @@ deep** is carved out from the middle; the blast wave throws everything within 96
 blocks outwards. A mushroom cloud rises 50 blocks. Within 70 blocks the land is
 scorched — grass turns to coarse dirt, leaves and plants burn away, the crater
 and its rim glaze over with blackstone and glowing magma. Then the fallout: for
-five minutes everyone within 96 blocks is poisoned, starved and weakened, and
-within 48 blocks the wither sets in. Green motes drift over the zone, and every
+two minutes mobs within 96 blocks get radiation sickness (worse within 48
+blocks), and players take in the radiation of the crater as a dose, which shows
+as the same single *Radiation* effect. Green motes drift over the zone, and every
 player inside hears a Geiger counter that ticks faster the closer they are. The
 crater's chunks stay loaded until it is finished, even if everyone runs.
 
 ## The nuclear arsenal
 
-Next to the sixty kinds sits a nuclear arsenal of its own, in a creative tab
-called *TNT Arsenal: Nuclear*:
+After the sixty kinds, in the same creative tab, comes the nuclear arsenal. The
+detonator, the timer fuse and the siren work with all of it: any arsenal TNT,
+plain TNT and the nuclear bombs.
+
 
 - **Mini nuke, nuke and tsar bomba** (radius 15, 40 and 80). The explosion is
   spread over many ticks in zones — core, middle, edge — with a blast wave that
   respects cover and a bang that travels at the speed of sound. A flash, a
   shaking ground and a mushroom cloud go with it.
-- **Remote detonator.** Right-click a bomb to bind it, right-click anywhere to
-  set it off, as long as its chunk is loaded.
-- **Radiation** stays in the chunks around ground zero, halves every three
-  Minecraft days and survives a restart. Players take in a dose in mSv; roofs
-  and water shield. From 100 mSv nausea, from 250 weakness and hunger, from
-  500 radiation damage.
+- **Remote detonator.** Right-click a bomb — nuclear, any arsenal TNT or plain
+  TNT — to bind it, right-click anywhere to set it off, as long as its chunk is
+  loaded.
+- **Radiation** stays in the chunks around ground zero, halves every four
+  minutes (`halfLifeTicks`) and survives a restart. Players take in a dose in
+  mSv; roofs and water shield; out of the radiation it falls by 2 % a second.
+  The dose shows as one effect, *Radiation*, like poison: level I from 100 mSv
+  (hungrier, a little weaker and slower), II from 250, III from 500 (half a heart
+  every two seconds), IV from 1000 (a heart a second).
 - **Fallout** comes down after the blast with the wind: glowing ash, grass
   turns into irradiated earth, sand into trinitite, water into contaminated
   water; in contaminated land a green fog hangs.
@@ -126,9 +132,12 @@ called *TNT Arsenal: Nuclear*:
 - **Irradiated zombies.** Zombies in contaminated land turn tougher, faster
   and harder hitting, glow green, and every hit adds 25 mSv.
 - **Timer fuse.** Sneak and right-click to set 10 s to 5 minutes, right-click
-  a bomb to start the countdown, shown to everyone within 64 blocks.
+  a bomb (any of them) to start the countdown, shown to everyone within 64 blocks.
 - **Siren.** A siren block wails while it gets a redstone signal; every lit
-  bomb sounds the siren over 256 blocks for as long as its fuse burns.
+  nuclear bomb and the heavy arsenal kinds (giga, nuke, antimatter, black hole,
+  earthquake, volcano) sound the siren over 256 blocks while their fuse burns.
+- **Sounds of its own**, synthesised by `tools/sounds.py`: the air-raid siren,
+  Geiger clicks, the nuclear blast, the countdown beep and the detonator.
 - **EMP.** A detonation knocks out detonators, timer fuses and Geiger counters
   within twice its radius for a minute and puts out redstone lamps and copper
   bulbs.

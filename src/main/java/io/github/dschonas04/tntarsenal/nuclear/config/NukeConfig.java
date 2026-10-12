@@ -31,8 +31,8 @@ public final class NukeConfig {
     /** How many blocks the explosion may change per server tick. */
     public int blocksPerTick = 2000;
 
-    /** Radiation: how long until a chunk's dose rate has halved (72000 ticks = three Minecraft days). */
-    public long halfLifeTicks = 72000;
+    /** Radiation: how long until a chunk's dose rate has halved (4800 ticks = four minutes). */
+    public long halfLifeTicks = 4800;
 
     /** Radiation: the dose rate at ground zero right after the blast, in mSv per second. */
     public float miniPeakRate = 2f;

@@ -6,6 +6,33 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-12
+
+### Changed
+- One mod, one tab: the nuclear items follow the sixty kinds in the TNT Arsenal
+  creative tab; the separate nuclear tab is gone.
+- The remote detonator and the timer fuse work on every arsenal TNT and on plain
+  TNT, not only on the nuclear bombs.
+- The heavy kinds (giga, nuke, antimatter, black hole, earthquake, volcano)
+  sound the siren while their fuse burns, like the nuclear bombs.
+- Radiation is one effect, *Radiation* I–IV with its own icon, instead of
+  nausea, weakness, hunger, slowness, poison and wither. RadAway no longer
+  makes you sick.
+- Radiation fades faster: chunks halve every four minutes by default (was three
+  Minecraft days), a player's dose falls by 2 % a second out of the radiation
+  (was 0.2 mSv), the nuke kind's fallout lasts two minutes (was five).
+
+### Added
+- Sounds of its own, synthesised by `tools/sounds.py`: siren, Geiger clicks,
+  nuclear blast, countdown beep, detonator.
+
+### Fixed
+- Meteor and arrow rain under a roof (Nether, caves, sky islands) start just
+  below the ceiling instead of not at all or inside the rock.
+- Storm lightning and the earthquake no longer aim at the Nether roof.
+- Miner, x-ray, nether, sculk, end and the nuke's scorching recognise the rock
+  and soil of modded dimensions (Aerial Hell, Limbo, Chrono Dawn …).
+
 ## [1.4.1] - 2026-10-08
 
 ### Added

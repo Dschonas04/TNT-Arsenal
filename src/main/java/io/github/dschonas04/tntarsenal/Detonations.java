@@ -1,5 +1,6 @@
 package io.github.dschonas04.tntarsenal;
 
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
 import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -142,14 +144,64 @@ final class Detonations {
         return !(state.getBlock() instanceof TntBlock);
     }
 
-    /** Plain ground: stone of every dimension, dirt, sand, gravel. */
-    private static boolean ground(BlockState state) {
-        return state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.BASE_STONE_NETHER) || state.is(BlockTags.SUBSTRATE_OVERWORLD)
+    /**
+     * Plain ground: stone of every dimension, dirt, sand, gravel — and the rock and soil of modded
+     * dimensions (Aerial Hell, Limbo, Chrono Dawn and the like), which the vanilla tags do not know.
+     */
+    static boolean ground(BlockState state) {
+        if (state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.BASE_STONE_NETHER) || state.is(BlockTags.SUBSTRATE_OVERWORLD)
+                || state.is(BlockTags.DIRT) || state.is(BlockTags.NYLIUM) || state.is(BlockTags.TERRACOTTA)
                 || state.is(BlockTags.SAND) || state.is(Blocks.GRAVEL) || state.is(Blocks.COBBLESTONE)
                 || state.is(Blocks.COBBLED_DEEPSLATE) || state.is(Blocks.CALCITE) || state.is(Blocks.CLAY)
                 || state.is(Blocks.DRIPSTONE_BLOCK) || state.is(Blocks.SMOOTH_BASALT) || state.is(Blocks.END_STONE)
                 || state.is(Blocks.SANDSTONE) || state.is(Blocks.RED_SANDSTONE) || state.is(Blocks.SOUL_SAND)
-                || state.is(Blocks.SOUL_SOIL);
+                || state.is(Blocks.SOUL_SOIL) || state.is(Blocks.MUD) || state.is(Blocks.PACKED_MUD)) {
+            return true;
+        }
+        Identifier id = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        if (id.getNamespace().equals("minecraft") || state.hasBlockEntity()) return false;
+        if (!state.is(BlockTags.MINEABLE_WITH_PICKAXE) && !state.is(BlockTags.MINEABLE_WITH_SHOVEL)) return false;
+        return naturalName(id.getPath());
+    }
+
+    private static final String[] NATURAL = {"stone", "rock", "dirt", "soil", "sand", "gravel", "grass", "moss", "slate",
+            "clay", "rack", "ground", "earth", "basalt", "mud", "shale", "marble", "granite", "limestone", "crust", "regolith",
+            "turf", "loam", "silt", "ash", "cinder", "pumice", "obsidian_sand"};
+    private static final String[] BUILT = {"brick", "polished", "smooth", "chiseled", "cut_", "tile", "pillar", "slab",
+            "stairs", "wall", "fence", "door", "button", "plate", "lamp", "glass", "plank", "carved", "ore", "block_of",
+            "lantern", "torch", "sign", "path"};
+
+    /** Guesses from a modded block's name whether it is natural rock or soil rather than a building block or an ore. */
+    static boolean naturalName(String path) {
+        for (String built : BUILT) if (path.contains(built)) return false;
+        for (String natural : NATURAL) if (path.contains(natural)) return true;
+        return false;
+    }
+
+    /**
+     * The highest air block straight above {@code from}, at most {@code up} blocks higher. Under the
+     * Nether roof, in a cave or under the islands of a sky dimension that is just below the ceiling.
+     */
+    private static int openAbove(ServerLevel level, BlockPos from, int up) {
+        int limit = Math.min(level.getMaxY() - 2, from.getY() + up);
+        BlockPos.MutableBlockPos pos = from.mutable();
+        while (pos.getY() < limit && level.isLoaded(pos) && level.getBlockState(pos.above()).isAir()) pos.move(Direction.UP);
+        return pos.getY();
+    }
+
+    /**
+     * The ground under a column. With an open sky that is the heightmap; in a dimension with a
+     * roof the heightmap would be the roof, so the search starts under the ceiling above the TNT.
+     */
+    private static BlockPos groundAt(ServerLevel level, double x, double y, double z) {
+        BlockPos column = BlockPos.containing(x, y, z);
+        if (!level.dimensionType().hasCeiling()) return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, column);
+        BlockPos.MutableBlockPos pos = column.mutable().setY(openAbove(level, column, 24));
+        for (int i = 0; i < 64 && pos.getY() > level.getMinY() && level.isLoaded(pos); i++) {
+            if (!level.getBlockState(pos.below()).isAir()) return pos.immutable();
+            pos.move(Direction.DOWN);
+        }
+        return column;
     }
 
     private static List<BlockPos> sphere(BlockPos center, int radius) {
@@ -282,7 +334,7 @@ final class Detonations {
             double angle = Math.PI * 2 * i / 16;
             level.explode(t, x + Math.cos(angle) * 48, y, z + Math.sin(angle) * 48, 9, true, Level.ExplosionInteraction.BLOCK);
         }
-        level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 30.0f, 0.4f);
+        level.playSound(null, x, y, z, Sounds.NUKE_BLAST, SoundSource.BLOCKS, 30.0f, 1.0f);
         level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 4, z, 40, 14, 6, 14, 0);
         // The crater: a flattened ball 110 wide and about 37 deep, carved from the
         // middle outwards, one shell every other tick. Its chunks stay loaded until
@@ -597,7 +649,7 @@ final class Detonations {
             if (age % 8 == 0) {
                 double x = c.x + (random.nextDouble() - 0.5) * 40;
                 double z = c.z + (random.nextDouble() - 0.5) * 40;
-                BlockPos ground = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, BlockPos.containing(x, c.y, z));
+                BlockPos ground = groundAt(level, x, c.y, z);
                 if (level.isLoaded(ground)) strike(level, x, ground.getY(), z);
             }
             return age >= 160;
@@ -1202,7 +1254,6 @@ final class Detonations {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
         sound(level, c, SoundEvents.FIRECHARGE_USE, 3.0f, 0.5f);
-        int height = Math.min(level.getMaxY() - 2, (int) c.y + 50);
         for (int i = 0; i < 6; i++) {
             int delay = i * 12;
             Tasks.start(new Tasks.Task() {
@@ -1213,8 +1264,10 @@ final class Detonations {
                 public boolean tick(int age) {
                     if (age < delay) return false;
                     if (rock == null) {
-                        BlockPos from = BlockPos.containing(c.x + (random.nextDouble() - 0.5) * 20, height, c.z + (random.nextDouble() - 0.5) * 20);
-                        if (!level.isLoaded(from) || !level.getBlockState(from).isAir()) return true;
+                        // as high as the sky (or the roof of the Nether, a cave, a sky island) lets it start
+                        BlockPos column = BlockPos.containing(c.x + (random.nextDouble() - 0.5) * 20, c.y + 1, c.z + (random.nextDouble() - 0.5) * 20);
+                        if (!level.isLoaded(column) || !level.getBlockState(column).isAir()) return true;
+                        BlockPos from = column.atY(openAbove(level, column, 50));
                         rock = FallingBlockEntity.fall(level, from, Blocks.MAGMA_BLOCK.defaultBlockState());
                         rock.disableDrop();
                         rock.setHurtsEntities(2.0f, 40);
@@ -1246,8 +1299,11 @@ final class Detonations {
             for (int i = 0; i < 3; i++) {
                 double angle = random.nextDouble() * Math.PI * 2;
                 double r = Math.sqrt(random.nextDouble()) * 12;
-                Arrow arrow = new Arrow(level, c.x + Math.cos(angle) * r, c.y + 22, c.z + Math.sin(angle) * r,
-                        new ItemStack(Items.ARROW), null);
+                double ax = c.x + Math.cos(angle) * r, az = c.z + Math.sin(angle) * r;
+                BlockPos column = BlockPos.containing(ax, c.y + 1, az);
+                if (!level.isLoaded(column) || !level.getBlockState(column).isAir()) continue;
+                // under a roof the arrows come from just below it instead of out of the rock
+                Arrow arrow = new Arrow(level, ax, openAbove(level, column, 22), az, new ItemStack(Items.ARROW), null);
                 arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 if (owner != null) arrow.setOwner(owner);
                 arrow.setDeltaMovement((random.nextDouble() - 0.5) * 0.1, -2.2, (random.nextDouble() - 0.5) * 0.1);
@@ -1353,8 +1409,9 @@ final class Detonations {
     }
 
     /**
-     * Fallout: five minutes of radiation within 96 blocks. Everyone inside is
-     * poisoned, starved and weakened; within 48 blocks the wither sets in. Green
+     * Fallout: two minutes of radiation within 96 blocks. Mobs inside get
+     * radiation sickness, worse within 48 blocks; players soak up the dose of the
+     * contaminated chunks and get the same effect from it. Green
      * motes drift over the zone and a Geiger counter ticks for every player in
      * it — faster the closer they are. Milk helps for a moment; leaving helps.
      */
@@ -1372,21 +1429,14 @@ final class Detonations {
             for (LivingEntity entity : around(level, c, LivingEntity.class, 96)) {
                 double dist = Math.sqrt(entity.distanceToSqr(c));
                 boolean hot = dist < 48;
-                if (age % 20 == 0) {
-                    entity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, hot ? 1 : 0));
-                    entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 1));
-                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
-                    if (hot) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 0));
-                        entity.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0));
-                    }
-                }
+                // Players take it in as a dose from the contaminated chunks; mobs get the sickness directly.
+                if (age % 20 == 0 && !(entity instanceof Player)) Radiation.sicken(entity, hot ? 2 : 1, 60);
                 if (entity instanceof Player player && age % (hot ? 3 : 7) == 0 && random.nextFloat() < 0.8f) {
-                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SCULK_CLICKING,
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.GEIGER,
                             SoundSource.AMBIENT, 0.5f, 1.6f + random.nextFloat() * 0.4f);
                 }
             }
-            return age >= 6000;
+            return age >= 2400;
         });
     }
 
@@ -1535,6 +1585,8 @@ final class Detonations {
                         BlockPos column = BlockPos.containing(x[i] + w * -Math.sin(angle[i]), center.getY(), z[i] + w * Math.cos(angle[i]));
                         if (!level.isLoaded(column)) continue;
                         int top = level.getHeight(Heightmap.Types.WORLD_SURFACE, column.getX(), column.getZ());
+                        // in the Nether the heightmap is the roof: tear open the ground around the TNT instead
+                        if (level.dimensionType().hasCeiling()) top = Math.min(top, center.getY() + 12);
                         for (int y = top; y >= floor; y--) {
                             BlockPos pos = new BlockPos(column.getX(), y, column.getZ());
                             BlockState state = level.getBlockState(pos);
