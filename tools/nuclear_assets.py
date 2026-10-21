@@ -9,6 +9,7 @@ the ones it wrote.
 
 Painting reuses the bundled-sticks style of TNT Arsenal (tools/pixelart.py)."""
 import json
+import random
 import os
 import sys
 
@@ -30,7 +31,8 @@ BOMBS = [
          body="#4a5320", strap=("hazard",), label="#f2c81b", icon="trefoil", pal={"a": "#1a1a1a"},
          pattern="rivets", pcol=[], recipe=["tnt_arsenal:mini_nuke"] * 4 + ["minecraft:nether_star"]),
     dict(id="tsar_bomba", en="Tsar Bomba", de="Zar-Bombe", desc_en="The biggest bomb ever built", desc_de="Die größte Bombe, die je gebaut wurde",
-         body="#2a2a2e", strap=("metal", "#c9a227"), label="#8a1010", icon="star", pal={"a": "#ffd23a", "b": "#ff8a1a"},
+         body="#2a2a2e", strap=("metal", "#c9a227"), label="#8a1010", icon="mushroom", pal={"a": "#d8cfc2", "b": "#a89e90", "d": "#7a6e62", "f": "#ff7a1a", "y": "#ffe066",
+                                                                 "s": "#e8622a", "w": "#f4f4f4", "g": "#8a7a66", "o": "#2a0606"},
          pattern="rivets", pcol=[], recipe=["tnt_arsenal:nuke"] * 4 + ["minecraft:nether_star", "minecraft:netherite_ingot"]),
 ]
 
@@ -117,28 +119,20 @@ def contamination(lang_en, lang_de):
         write_json(f"{ROOT}/assets/{NS}/items/{name}.json", {"model": {"type": "minecraft:model", "model": f"{NS}:block/{name}"}})
     # contaminated water: the vanilla water models, the colour comes from the client's fluid model
     write_json(f"{ROOT}/assets/{NS}/blockstates/contaminated_water.json", {"variants": {"": {"model": "minecraft:block/water"}}})
-    bucket = [
-        "................",
-        "................",
-        "................",
-        "...oooooooooo...",
-        "..o.gGgggGgg.o..",
-        "..oggGgggggGgo..",
-        "..oaggggGgggao..",
-        "...oaaaaaaaao...",
-        "...obbbbbbbbo...",
-        "...oabbbbbbao...",
-        "....obbbbbbo....",
-        "....oabbbbao....",
-        "....obbbbbbo....",
-        ".....oooooo.....",
-        "................",
-        "................"]
-    pal = {"o": "#2a2c30", "a": "#8a8f96", "b": "#c4c8cc", "g": "#6fb83a", "G": "#b4ff6a"}
-    px = [P.hexc(pal[ch]) + (255,) if ch != "." else (0, 0, 0, 0) for row in bucket for ch in row]
+    # The bucket is the vanilla bucket (its texture, not a copy of it) with our own
+    # glowing green water in the opening on a second layer.
+    water = {2: range(5, 11), 3: range(3, 13), 4: range(3, 13), 5: range(5, 11)}
+    tones = [P.hexc(c) for c in ("#3f8f22", "#6fd13a", "#a6f25a", "#dcff9a")]
+    rnd = random.Random("bucket")
+    px = [(0, 0, 0, 0)] * 256
+    for y, xs in water.items():
+        for x in xs:
+            t = 3 if (y == 2 and x < 8) or (y == 3 and x in (4, 5)) else 0 if y == 5 or x in (xs[-1], xs[-2]) and y >= 4 else rnd.choice((1, 1, 2))
+            px[y * 16 + x] = tones[t] + (255,)
     P.write_png(f"{tex}/item/contaminated_water_bucket.png", 16, 16, px)
     write_json(f"{ROOT}/assets/{NS}/models/item/contaminated_water_bucket.json",
-               {"parent": "minecraft:item/generated", "textures": {"layer0": f"{NS}:item/contaminated_water_bucket"}})
+               {"parent": "minecraft:item/generated", "textures": {"layer0": "minecraft:item/bucket",
+                                                                    "layer1": f"{NS}:item/contaminated_water_bucket"}})
     write_json(f"{ROOT}/assets/{NS}/items/contaminated_water_bucket.json",
                {"model": {"type": "minecraft:model", "model": f"{NS}:item/contaminated_water_bucket"}})
     # loot: fallout and irradiated earth crumble, trinitite keeps
@@ -201,19 +195,70 @@ def main():
                "item.tnt_arsenal.detonator.not_loaded": "Kein Signal – die Bombe ist zu weit weg",
                "item.tnt_arsenal.detonator.gone": "Die Bombe ist nicht mehr da",
                "item.tnt_arsenal.detonator.fired": "Zündsequenz gestartet"}
+    import textures as T
+    T.ICONS.update({name: P.ICONS[name] for name in ("star", "trefoil_s")})
+    # the tsar bomba's picture: a mushroom cloud, full size
+    T.ICONS["mushroom16"] = [
+        "....aabaaba.....",
+        "..aabaaaabaaa...",
+        ".abaaaaaaaaaba..",
+        ".aaaaaaaaaaaaa..",
+        "..ddddddddddd...",
+        "...fffffffff....",
+        ".....ffyff......",
+        "......sys.......",
+        "....wwsysww.....",
+        "......sys.......",
+        "......sss.......",
+        ".....sssss......",
+        "..gggfffffggg...",
+        ".ggggggggggggg..",
+    ]
+    # the tsar bomba's star, full size, in two golds like a cut edge
+    T.ICONS["star16"] = [r + "." for r in (
+        ".......a.......",
+        "......aab......",
+        "......aab......",
+        ".....aaabb.....",
+        ".....aaabb.....",
+        "aaaaaaaabbbbbbb",
+        ".aaaaaaabbbbbb.",
+        "..aaaaaabbbbb..",
+        "...aaaaabbbb...",
+        "...aaaaabbbb...",
+        "..aaaaaabbbbb..",
+        "..aaaa...bbbb..",
+        ".aaa.......bbb.",
+        ".aa.........bb.",
+    )]
+    # the radiation sign of the atomic bomb, drawn at full label size
+    T.ICONS["trefoil16"] = [
+        "..aaaa....aaaa..",
+        ".aaaaaa..aaaaaa.",
+        ".aaaaaa..aaaaaa.",
+        "..aaaaa..aaaaa..",
+        "...aaaa..aaaa...",
+        "....aa....aa....",
+        ".......aa.......",
+        "......aaaa......",
+        ".......aa.......",
+        "................",
+        ".....aaaaaa.....",
+        "....aaaaaaaa....",
+        "....aaaaaaaa....",
+        ".....aaaaaa.....",
+    ]
     faces = {}
     for b in BOMBS:
         k = dict(b)
-        side, top, bottom = P.paint(k)
-        faces[b["id"]] = (side, top)
+        # the same 32x32 look as the arsenal, with a sculpture on top
+        # the bomb block itself, calm 16x16 faces; the figure on top comes from tools/models.py
+        side, top, bottom = T.paint(k)
         base = f"{ROOT}/assets/{NS}/textures/block/{b['id']}"
         P.write_png(base + "_side.png", 16, 16, side.rgba())
         P.write_png(base + "_top.png", 16, 16, top.rgba())
         P.write_png(base + "_bottom.png", 16, 16, bottom.rgba())
-        write_json(f"{ROOT}/assets/{NS}/models/block/{b['id']}.json", {
-            "parent": "minecraft:block/cube_bottom_top",
-            "textures": {"top": f"{NS}:block/{b['id']}_top", "bottom": f"{NS}:block/{b['id']}_bottom",
-                         "side": f"{NS}:block/{b['id']}_side"}})
+        # the model itself is written by models.build (tools/models.py)
         write_json(f"{ROOT}/assets/{NS}/blockstates/{b['id']}.json", {"variants": {"": {"model": f"{NS}:block/{b['id']}"}}})
         write_json(f"{ROOT}/assets/{NS}/items/{b['id']}.json", {"model": {"type": "minecraft:model", "model": f"{NS}:block/{b['id']}"}})
         write_json(f"{ROOT}/data/{NS}/loot_table/blocks/{b['id']}.json", {
@@ -311,19 +356,6 @@ def main():
             merged = json.load(f)
         merged.update(extra)
         write_json(path, merged)
-    # preview for the README
-    w, h = 3 * 150, 160
-    sheet = [(0, 0, 0, 0)] * (w * h)
-    for i, b in enumerate(BOMBS):
-        side, top = faces[b["id"]]
-        cube = P.iso(top, side, 4)
-        cx = i * 150 + 11
-        for y in range(128):
-            for x in range(128):
-                if cube[y * 128 + x][3]:
-                    sheet[(6 + y) * w + cx + x] = cube[y * 128 + x]
-        P.text(sheet, w, i * 150 + (150 - P.text_width(b["en"])) // 2, 142, b["en"], (140, 140, 140, 255))
-    P.write_png(os.path.join(REPO, "docs", "nuclear.png"), w, h, sheet)
     print("ok")
 
 

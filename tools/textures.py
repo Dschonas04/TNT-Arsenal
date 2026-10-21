@@ -18,6 +18,9 @@ import struct
 import sys
 import zlib
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import models  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 ROOT = os.path.join(REPO, "src", "main", "resources")
@@ -161,6 +164,7 @@ ICONS = {
     "wolf": ["a......a", "aa....aa", "aaaaaaaa", "adaaaada", "aaaaaaaa", ".aabbaa.", "..adda..", "..cccc.."],
     "golem": [".aaaaaa.", ".avbbba.", ".adbbda.", ".abccba.", ".vbccba.", ".abbbva.", "..aaaa.."],
     "rocket": ["...a....", "..aaa...", "..aba...", "..aaa...", "..aaa...", ".caaac..", ".c.c.c..", "..c.c..."],
+    "mushroom": ["..aaaa..", ".abaaba.", "aaaaaaaa", ".dddddd.", "..fyyf..", "...ss...", "..wssw..", ".gggggg."],
     "pumpkin": ["...v....", "..aaaa..", ".aaaaaa.", "adaadada", "aaaaaaaa", "adaddaad", ".adaada.", "..aaaa.."],
 }
 
@@ -190,10 +194,10 @@ kind("giga_tnt", "Giga TNT", "Giga-TNT", "Four times the power of TNT", "Vierfac
 kind("nuke_tnt", "Nuke TNT", "Atom-TNT", "Heat flash, a crater 110 wide, blast wave, mushroom cloud and five minutes of fallout", "Hitzeblitz, 110 Blöcke breiter Krater, Druckwelle, Atompilz und fünf Minuten Fallout",
      "#4a5320", ("hazard",), "#f2c81b", "trefoil", {"a": "#1a1a1a"},
      "rivets", ["tnt_arsenal:giga_tnt"] * 4 + ["minecraft:nether_star"])
-kind("fire_tnt", "Fire TNT", "Feuer-TNT", "Sets everything around alight", "Setzt die Umgebung in Brand",
+kind("fire_tnt", "Fire TNT", "Feuer-TNT", "Napalm: a ring of fire runs out ten blocks and sets monsters alight", "Napalm: Ein Feuerring läuft zehn Blöcke weit und setzt Monster in Brand",
      "#d9501a", ("metal", "#3a2a22"), "#fff1cf", "flame", {"c": "#d42a0c", "a": "#ff8a1a", "b": "#ffe066"},
      "embers", [T, "minecraft:fire_charge"], ["#ffcc33", "#ff7a1a"])
-kind("lightning_tnt", "Lightning TNT", "Blitz-TNT", "A ring of lightning", "Ein Ring aus Blitzen",
+kind("lightning_tnt", "Lightning TNT", "Blitz-TNT", "Chain lightning into the eight nearest monsters", "Kettenblitz in die acht nächsten Monster",
      "#2a3a8c", ("metal", "#b8683c"), "#1b2440", "bolt", {"a": "#ffe14d"},
      "stars", [T, "minecraft:lightning_rod"], ["#9fe8ff", "#ffffff"])
 kind("cluster_tnt", "Cluster TNT", "Cluster-TNT", "Bursts into eight TNT", "Zerplatzt in acht TNT",
@@ -208,13 +212,13 @@ kind("tunnel_tnt", "Tunnel TNT", "Tunnel-TNT", "A clean 3×3 tunnel, 48 long, wi
 kind("leveler_tnt", "Leveler TNT", "Planier-TNT", "Clears a plot: radius 10, 16 high", "Räumt eine Fläche frei: Radius 10, 16 hoch",
      "#4f7a2c", ("rope",), "#eef2d9", "shovel", {"b": "#8a5a2b", "o": "#2d1d0e", "c": "#aeb7bd"},
      "moss", [T, "minecraft:iron_shovel"], ["#6f9a3c", "#3b5e20"])
-kind("miner_tnt", "Miner TNT", "Bergbau-TNT", "Removes stone and dirt, leaves the ores", "Entfernt Stein und Erde, lässt die Erze stehen",
+kind("miner_tnt", "Miner TNT", "Bergbau-TNT", "Clears the rock and collects every ore in one pile", "Räumt das Gestein weg und sammelt alle Erze auf einen Haufen",
      "#3d3d45", ("metal", "#7a7f86"), "#d9d6cf", "gem", {"a": "#3ec6d6", "b": "#c8f6fb", "o": "#135a66"},
      "ore", [T, "minecraft:stone_pickaxe", "minecraft:redstone"])
-kind("water_tnt", "Water TNT", "Wasser-TNT", "Floods its crater", "Flutet den Krater",
+kind("water_tnt", "Water TNT", "Wasser-TNT", "Floods the crater, puts out fires, washes creatures back", "Flutet den Krater, löscht Brände, spült alles zurück",
      "#1f6fb5", ("metal", "#8a9aa6"), "#dff0fb", "drop", {"a": "#2f8be0", "b": "#d6f0ff", "o": "#0d3f73"},
      "drip", [T, "minecraft:water_bucket"], ["#7cc4ff", "#4aa3f0"])
-kind("lava_tnt", "Lava TNT", "Lava-TNT", "Fills its crater with lava", "Füllt den Krater mit Lava",
+kind("lava_tnt", "Lava TNT", "Lava-TNT", "A lava fountain that fills the crater", "Eine Lavafontäne, die den Krater füllt",
      "#3a2a26", ("metal", "#2a2422"), "#ffe0b3", "drop", {"a": "#ff7a00", "b": "#ffd23a", "o": "#8a2400"},
      "cracks", [T, "minecraft:lava_bucket"], ["#ffd23a", "#ff7a00", "#c23a00"])
 kind("frost_tnt", "Frost TNT", "Frost-TNT", "Freezes water, lava and creatures", "Friert Wasser, Lava und Lebewesen ein",
@@ -226,7 +230,7 @@ kind("poison_tnt", "Poison TNT", "Gift-TNT", "Leaves a cloud of poison", "Hinter
 kind("gravity_tnt", "Gravity TNT", "Schwerkraft-TNT", "Tears the ground loose, whirls it up and hurls it away", "Reißt Blöcke los, wirbelt sie hoch und schleudert sie weg",
      "#4b2a6b", ("metal", "#8a8f96"), "#e6daf2", "pull", {"a": "#3a1a5a", "b": "#b06cff"},
      "stars", [T, "minecraft:iron_block"], ["#c9a0ff", "#8a5ad6"])
-kind("ender_tnt", "Ender TNT", "Ender-TNT", "Scatters everyone nearby", "Teleportiert alle in der Nähe weg",
+kind("ender_tnt", "Ender TNT", "Ender-TNT", "Sends every monster nearby far away", "Schickt alle Monster in der Nähe weit weg",
      "#133f38", ("metal", "#c9a227"), "#c9f2e6", "eye", {"a": "#2aa58a", "b": "#8ef0d4", "d": "#0b0b0b", "o": "#0b2a24"},
      "stars", [T, "minecraft:ender_pearl"], ["#d07cff", "#7a3ac9"])
 kind("bounce_tnt", "Bounce TNT", "Sprung-TNT", "Launches everything into the air, soft landing", "Schleudert alles in die Luft, sanfte Landung",
@@ -280,7 +284,7 @@ kind("arrow_rain_tnt", "Arrow Rain TNT", "Pfeilhagel-TNT", "Arrows rain down fro
 kind("cobweb_tnt", "Cobweb TNT", "Spinnennetz-TNT", "Spins cobwebs into the air", "Spinnt Netze in die Luft",
      "#4a4a52", ("rope", "#8a8a8a"), "#24242a", "web", {"a": "#f0f0f0"},
      "speck", [T] + ["minecraft:string"] * 3, ["#d8d8d8", "#8a8a92"])
-kind("storm_tnt", "Storm TNT", "Gewitter-TNT", "Eight seconds of storm, twenty lightning strikes", "Acht Sekunden Gewitter mit 20 Blitzen",
+kind("storm_tnt", "Storm TNT", "Gewitter-TNT", "Eight seconds of storm; the lightning seeks out monsters", "Acht Sekunden Gewitter, die Blitze suchen sich Monster",
      "#3a4458", ("metal", "#b8683c"), "#e8ecf2", "storm", {"a": "#5a6478", "b": "#c9d0dc", "c": "#ffd84a"},
      "drip", ["tnt_arsenal:lightning_tnt", "minecraft:lightning_rod", "minecraft:lightning_rod"], ["#9cc8ff", "#6a9ad6"])
 kind("magnet_tnt", "Magnet TNT", "Magnet-TNT", "Pulls all items and XP within 40 blocks", "Zieht alle Items und XP im Umkreis von 40 heran",
@@ -363,6 +367,10 @@ kind("halloween_tnt", "Halloween TNT", "Halloween-TNT", "A ring of jack o'lanter
      "#2a1a2e", ("rope", "#e07a1a"), "#1a1018", "pumpkin", {"a": "#e07a1a", "d": "#ffd23a", "v": "#3a6a1a"},
      "embers", [T, "minecraft:carved_pumpkin", "minecraft:torch"], ["#ff8a1a", "#8a3ad6"])
 
+# The arsenal's own nuke is gone (the atomic bomb of the nuclear part is the only one);
+# its drawing stays as the mod icon.
+ICON = K.pop(next(i for i, k in enumerate(K) if k["id"] == "nuke_tnt"))
+
 assert len({k["id"] for k in K}) == len(K)
 assert len({tuple(sorted(k["recipe"])) for k in K}) == len(K), "two kinds share a recipe"
 
@@ -408,7 +416,6 @@ def paint(k):
                 elif y in (2, 13, 15):
                     t = max(1, t - 1)
             c = body[t]
-            c = mul(c, 1 + (rnd.random() - 0.5) * 0.05)
             side.set(x, y, c)
     for y in STRAP_ROWS:
         for x in range(16):
@@ -418,7 +425,7 @@ def paint(k):
     dark_label = sum(paper) < 300
     for y in LABEL_ROWS:
         for x in range(16):
-            c = mul(paper, 1 + (rnd.random() - 0.5) * (0.06 if dark_label else 0.035))
+            c = paper
             if y == 4:
                 c = mul(c, 0.86)  # shadow under the strap
             if y == 11:
@@ -429,7 +436,9 @@ def paint(k):
     first = next(iter(pal.values()))
     pal.setdefault("o", mul(first, 0.4))
     rows = ICONS[k["icon"]]
-    pts = [(x, y, ch) for y, row in enumerate(rows) for x, ch in enumerate(row) if ch != "."]
+    if len(rows) > 8:
+        rows = ["."]  # a full-size emblem: only paint32 draws it, the small label stays plain
+    pts = [(x, y, ch) for y, row in enumerate(rows) for x, ch in enumerate(row) if ch != "."] or [(0, 0, ".")]
     minx = min(p[0] for p in pts)
     maxx = max(p[0] for p in pts)
     miny = min(p[1] for p in pts)
@@ -442,7 +451,8 @@ def paint(k):
         if (sx, sy) not in occupied and sy in LABEL_ROWS and sx < 16:
             side.set(sx, sy, mix(side.get(sx, sy), (0, 0, 0), 0.22 if not dark_label else 0.45))
     for x, y, ch in pts:
-        side.set(x + ox, y + oy, pal[ch])
+        if ch != ".":
+            side.set(x + ox, y + oy, pal[ch])
     # little corner marks on the label in the emblem colour
     mark = mix(paper, first, 0.55)
     for x, y in ((1, 5), (14, 5), (1, 10), (14, 10)):
@@ -455,7 +465,6 @@ def paint(k):
     for y in range(16):
         for x in range(16):
             c = tones[cell[y % 4][x % 4]]
-            c = mul(c, 1 + (rnd.random() - 0.5) * 0.05)
             top.set(x, y, c)
             bottom.set(x, y, mul(c, 0.78))
     # cap with fuse on top
@@ -478,7 +487,7 @@ def paint(k):
         for x in range(6, 10):
             bottom.set(x, y, mul(strap_colour(k["strap"], x, 3), 0.7 if x in (6, 9) or y in (6, 9) else 0.82))
 
-    pattern(k, side, top, bottom, rnd, body)
+    # calm faces: no speckled patterns any more, the figure on top tells the kinds apart
     return side, top, bottom
 
 
@@ -604,11 +613,122 @@ def pattern(k, side, top, bottom, rnd, body):
     raise ValueError(p)
 
 
+# --- 32x32 ------------------------------------------------------------------
+# The textures are drawn at 16x16 and then doubled; the label is painted again at
+# full resolution, so the emblem is twice as big and crisp: smoothed with Scale2x,
+# outlined, lit from the top left, with a drop shadow on the paper.
+
+S = 32
+
+
+def scale2x(rows):
+    """Scale2x (EPX) on a grid of palette letters: doubles it and rounds the diagonals."""
+    h, w = len(rows), len(rows[0])
+    g = lambda x, y: rows[y][x] if 0 <= x < w and 0 <= y < h else "."
+    out = [["."] * (w * 2) for _ in range(h * 2)]
+    for y in range(h):
+        for x in range(w):
+            p = g(x, y)
+            a, b, c, d = g(x, y - 1), g(x + 1, y), g(x - 1, y), g(x, y + 1)
+            e0 = a if c == a and c != d and a != b else p
+            e1 = b if a == b and a != c and b != d else p
+            e2 = c if d == c and d != b and c != a else p
+            e3 = d if b == d and b != a and d != c else p
+            out[2 * y][2 * x], out[2 * y][2 * x + 1] = e0, e1
+            out[2 * y + 1][2 * x], out[2 * y + 1][2 * x + 1] = e2, e3
+    return ["".join(r) for r in out]
+
+
+def doubled(img, rnd, grain=0.035):
+    big = Canvas(S, S)
+    for y in range(S):
+        for x in range(S):
+            big.set(x, y, mul(img.get(x // 2, y // 2), 1 + (rnd.random() - 0.5) * grain))
+    return big
+
+
+LABEL32 = range(8, 24)
+
+
+def paint32(k):
+    side16, top16, bottom16 = paint(k)
+    rnd = random.Random(k["id"] + "@32")
+    side, top, bottom = doubled(side16, rnd), doubled(top16, rnd), doubled(bottom16, rnd, 0.025)
+    # the sticks get a fine highlight along their upper edge and a darker groove between them
+    for y in list(range(0, 6)) + list(range(26, 32)):
+        for x in range(S):
+            if x % 8 == 7:
+                side.set(x, y, mul(side.get(x, y), 0.88))
+            elif x % 8 == 2:
+                side.set(x, y, mul(side.get(x, y), 1.06))
+    # a fresh label
+    paper = hexc(k["label"])
+    dark_label = sum(paper) < 300
+    for y in LABEL32:
+        for x in range(S):
+            c = mul(paper, 1 + (rnd.random() - 0.5) * (0.07 if dark_label else 0.04))
+            if y == 8:
+                c = mul(c, 0.8)
+            elif y == 9:
+                c = mul(c, 0.92)
+            elif y == 23:
+                c = mul(c, 0.9)
+            if x in (0, 31):
+                c = mul(c, 0.94)
+            side.set(x, y, c)
+    pal = {key: hexc(v) for key, v in k["pal"].items()}
+    first = next(iter(pal.values()))
+    pal.setdefault("o", mul(first, 0.4))
+    # thin border inset on the label in the emblem colour
+    edge = mix(paper, first, 0.35)
+    for x in range(3, 29):
+        side.set(x, 10, edge)
+        side.set(x, 21, edge)
+    for y in range(10, 22):
+        side.set(3, y, edge)
+        side.set(28, y, edge)
+    rows = ICONS[k["icon"]]
+    if len(rows) <= 8:  # the 8x8 emblems are doubled; bigger ones are drawn at full size already
+        rows = scale2x(rows)
+    pts = [(x, y, ch) for y, row in enumerate(rows) for x, ch in enumerate(row) if ch != "."]
+    minx, maxx = min(p[0] for p in pts), max(p[0] for p in pts)
+    miny, maxy = min(p[1] for p in pts), max(p[1] for p in pts)
+    ox = (S - (maxx - minx + 1)) // 2 - minx
+    oy = 8 + (16 - (maxy - miny + 1)) // 2 - miny
+    occupied = {(x + ox, y + oy) for x, y, _ in pts}
+    outline = mix(pal["o"], (0, 0, 0), 0.35)
+    for x, y, _ in pts:  # drop shadow, two pixels down-right
+        for sx, sy in ((x + ox + 2, y + oy + 2), (x + ox + 1, y + oy + 2)):
+            if (sx, sy) not in occupied and sy in LABEL32 and sx < S:
+                side.set(sx, sy, mix(side.get(sx, sy), (0, 0, 0), 0.2 if not dark_label else 0.28))
+    for x, y, _ in pts:  # a dark outline around the whole emblem
+        for nx, ny in ((x + ox + 1, y + oy), (x + ox - 1, y + oy), (x + ox, y + oy + 1), (x + ox, y + oy - 1)):
+            if (nx, ny) not in occupied and ny in LABEL32 and 0 <= nx < S:
+                side.set(nx, ny, outline)
+    for x, y, ch in pts:
+        c = pal.get(ch, first) if ch != "w" else (255, 255, 255)
+        X, Y = x + ox, y + oy
+        if (X - 1, Y) not in occupied or (X, Y - 1) not in occupied:
+            c = shift(c, 0.1, YELLOW, 0.02)  # lit from the top left
+        elif (X + 1, Y) not in occupied or (X, Y + 1) not in occupied:
+            c = shift(c, -0.1, BLUE, 0.02)
+        side.set(X, Y, c)
+    # the fuse on top, drawn again at full size: a twisted cord with a glowing tip
+    for i, (x, y) in enumerate(((16, 14), (17, 13), (17, 12), (18, 11), (19, 10), (19, 9), (20, 8), (21, 7))):
+        top.set(x, y, (190, 176, 150) if i % 2 == 0 else (150, 136, 112))
+        top.set(x + 1, y, (96, 86, 72))
+    top.set(22, 6, (255, 196, 80))
+    top.set(21, 6, (255, 120, 40))
+    top.set(22, 5, (255, 236, 160))
+    return side, top, bottom
+
+
 # --- isometric preview -----------------------------------------------------
 
 
 def iso(top, side, k=4):
-    """A 2:1 isometric cube, 32k x 32k, transparent around it."""
+    """A 2:1 isometric cube, 32k x 32k, transparent around it. Faces of any size are sampled to fit."""
+    f = top.w / 16
     n = 32 * k
     out = [(0, 0, 0, 0)] * (n * n)
     for py in range(n):
@@ -619,19 +739,19 @@ def iso(top, side, k=4):
             b = (v + 16 * k) * 2 / k
             x, z = (a + b) / 2, (b - a) / 2
             if 0 <= x < 16 and 0 <= z < 16:
-                c = top.get(int(x), int(z))
+                c = top.get(int(x * f), int(z * f))
                 out[py * n + px] = c + (255,)
                 continue
             if u < 0:
                 x = u / k + 16
                 y = ((x + 16) * k / 2 - v) / k
                 if 0 <= x < 16 and 0 <= y < 16:
-                    out[py * n + px] = mul(side.get(int(x), 15 - int(y)), 0.84) + (255,)
+                    out[py * n + px] = mul(side.get(int(x * f), int((16 - y) * f - 1e-9)), 0.84) + (255,)
             else:
                 z = 16 - u / k
                 y = ((16 + z) * k / 2 - v) / k
                 if 0 <= z < 16 and 0 <= y < 16:
-                    out[py * n + px] = mul(side.get(int(u / k), 15 - int(y)), 0.66) + (255,)
+                    out[py * n + px] = mul(side.get(int(u / k * f), int((16 - y) * f - 1e-9)), 0.66) + (255,)
     return out
 
 
@@ -686,17 +806,13 @@ def main():
     faces = {}
     for k in K:
         kid = k["id"]
+        # the TNT block itself, calm 16x16 faces; the figure on top comes from tools/models.py
         side, top, bottom = paint(k)
-        faces[kid] = (side, top)
         base = f"{ROOT}/assets/{NS}/textures/block/{kid}"
         write_png(base + "_side.png", 16, 16, side.rgba())
         write_png(base + "_top.png", 16, 16, top.rgba())
         write_png(base + "_bottom.png", 16, 16, bottom.rgba())
-        write_json(f"{ROOT}/assets/{NS}/models/block/{kid}.json", {
-            "parent": "minecraft:block/cube_bottom_top",
-            "textures": {"top": f"{NS}:block/{kid}_top", "bottom": f"{NS}:block/{kid}_bottom",
-                         "side": f"{NS}:block/{kid}_side"},
-        })
+        # the model itself is written by models.build at the end
         # Multipart without a condition: the same model for every facing.
         write_json(f"{ROOT}/assets/{NS}/blockstates/{kid}.json", {"multipart": [{"apply": {"model": f"{NS}:block/{kid}"}}]})
         write_json(f"{ROOT}/assets/{NS}/items/{kid}.json", {"model": {"type": "minecraft:model", "model": f"{NS}:block/{kid}"}})
@@ -720,35 +836,21 @@ def main():
     write_json(f"{ROOT}/assets/{NS}/lang/de_de.json", lang_de)
 
     # mod icon: the nuke as a cube
-    side, top = faces["nuke_tnt"]
+    side, top, _ = paint32(ICON)
     write_png(f"{ROOT}/assets/{NS}/icon.png", 128, 128, iso(top, side, 4))
 
-    # preview sheet: every kind as a cube with its name
-    cols, cell_w, cell_h = 7, 150, 160
-    rows = (len(K) + cols - 1) // cols
-    w, h = cols * cell_w, rows * cell_h
-    sheet = [(0, 0, 0, 0)] * (w * h)
-    grey = (140, 140, 140, 255)
-    for i, k in enumerate(K):
-        side, top = faces[k["id"]]
-        cube = iso(top, side, 4)
-        cx = (i % cols) * cell_w + (cell_w - 128) // 2
-        cy = (i // cols) * cell_h + 6
-        for y in range(128):
-            for x in range(128):
-                p = cube[y * 128 + x]
-                if p[3]:
-                    sheet[(cy + y) * w + cx + x] = p
-        name = k["en"].replace(" TNT", "")
-        tx = (i % cols) * cell_w + (cell_w - text_width(name)) // 2
-        text(sheet, w, tx, cy + 136, name, grey)
-    write_png(os.path.join(REPO, "docs", "textures.png"), w, h, sheet)
+    # the preview sheets in docs/ are rendered from the models by tools/preview.py
     print("ok", len(K), "kinds")
     # The nuclear part: bombs, detonator, Geiger counter, contamination. Runs last
     # because it adds its translations to the files written above.
     sys.path.insert(0, HERE)
     import nuclear_assets
     nuclear_assets.main()
+    # last: the 3D models of every TNT and bomb, which replace the plain cube models written above
+    bombs = [dict(b) for b in nuclear_assets.BOMBS]
+    for b in bombs:
+        b["sign_icon"] = {"mini_nuke": "trefoil", "nuke": "trefoil", "tsar_bomba": "mushroom"}[b["id"]]
+    models.build(write_png, write_json, ROOT, NS, K + bombs, ICONS)
 
 
 if __name__ == "__main__":

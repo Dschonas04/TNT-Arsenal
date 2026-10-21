@@ -1,6 +1,5 @@
 package io.github.dschonas04.tntarsenal;
 
-import io.github.dschonas04.tntarsenal.nuclear.alarm.Siren;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -79,8 +78,8 @@ public class ArsenalTntBlock extends TntBlock {
         level.addFreshEntity(primed);
         level.playSound(null, primed.getX(), primed.getY(), primed.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0f, 1.0f);
         level.gameEvent(igniter, GameEvent.PRIME_FUSE, pos);
-        // The heavy kinds sound the same air-raid siren as the nuclear bombs while their fuse burns.
-        if (kind.heavy() && fuse > 20) Siren.warn((ServerLevel) level, primed.position(), fuse);
+        // Only the nuclear bombs sound the siren; every TNT here sparks its own way instead.
+        Fuses.burn((ServerLevel) level, primed, kind);
     }
 
     @Override

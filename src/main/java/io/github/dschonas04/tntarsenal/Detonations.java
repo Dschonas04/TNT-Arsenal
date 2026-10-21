@@ -1,6 +1,5 @@
 package io.github.dschonas04.tntarsenal;
 
-import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -11,9 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
-import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
-import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -66,7 +62,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.bee.Bee;
@@ -95,6 +91,8 @@ final class Detonations {
     private static final int QUIET = Block.UPDATE_CLIENTS;
     /** Ores as every mod tags them; the tunnel and drill drop these instead of deleting them. */
     private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "ores"));
+    /** Marks a mob frozen by stasis TNT, so it thaws even if its chunk unloads in between (see TntArsenal). */
+    static final String STASIS_TAG = "tnt_arsenal.stasis";
     private static final TagKey<Block> GLASS_PANES = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "glass_panes"));
 
     // --- helpers -------------------------------------------------------
@@ -283,6 +281,38 @@ final class Detonations {
         entity.hurtMarked = true;
     }
 
+    /**
+     * The show of a real blast: dust and chunks of the ground it stood on fly up, smoke
+     * billows, a ring of dust runs out over the ground and the boom rolls on for a moment.
+     */
+    static void debris(ServerLevel level, Vec3 c, double radius) {
+        BlockState ground = level.getBlockState(BlockPos.containing(c).below());
+        if (ground.isAir() || !ground.getFluidState().isEmpty()) ground = Blocks.DIRT.defaultBlockState();
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ground), c.x, c.y + 0.5, c.z,
+                (int) (radius * 40), radius * 0.35, 0.6, radius * 0.35, 0.8);
+        level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, c.x, c.y + 1, c.z, 1 + (int) (radius / 5), radius * 0.3, 0.6, radius * 0.3, 0);
+        level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, c.x, c.y + 1, c.z, (int) (radius * 5), radius * 0.3, 0.8, radius * 0.3, 0.04);
+        Tasks.start(age -> {
+            double r = 1 + age * radius / 6;
+            int points = (int) (r * 5);
+            for (int i = 0; i < points; i++) {
+                double angle = Math.PI * 2 * i / points;
+                level.sendParticles(ParticleTypes.DUST_PLUME, c.x + Math.cos(angle) * r, c.y + 0.2, c.z + Math.sin(angle) * r, 1, 0.2, 0.1, 0.2, 0.02);
+            }
+            if (age == 5) level.playSound(null, c.x, c.y, c.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, (float) radius / 2, 0.45f);
+            if (age == 12) level.playSound(null, c.x, c.y, c.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, (float) radius / 3, 0.3f);
+            return age >= 12;
+        });
+    }
+
+    /** Hostile creatures around a point, nearest first. */
+    private static List<LivingEntity> enemies(ServerLevel level, Vec3 c, double radius) {
+        List<LivingEntity> out = new ArrayList<>();
+        for (LivingEntity e : around(level, c, LivingEntity.class, radius)) if (e instanceof Enemy) out.add(e);
+        out.sort(Comparator.comparingDouble(e -> e.distanceToSqr(c)));
+        return out;
+    }
+
     // --- raw power -----------------------------------------------------
 
     /**
@@ -291,132 +321,91 @@ final class Detonations {
      * thousands of items lying around and drag the server down.
      */
     static void giga(ServerLevel level, PrimedTnt t) {
+        Vec3 c = t.position();
+        debris(level, c, 16);
         level.explode(t, t.getX(), y(t), t.getZ(), 16, false, Level.ExplosionInteraction.BLOCK);
-    }
-
-    /**
-     * A real nuke. A flash of heat burns everything within 72 blocks, armour or
-     * not; a core blast and three rings of blasts tear the land open; a bowl-shaped
-     * crater 110 wide and 37 deep is carved out from the middle; the blast wave
-     * throws everything within 96 blocks outwards. Then a mushroom cloud rises, the land
-     * around is scorched and five minutes of fallout follow.
-     */
-    static void nuke(ServerLevel level, PrimedTnt t) {
-        double x = t.getX();
-        double y = y(t);
-        double z = t.getZ();
-        Vec3 c = new Vec3(x, y, z);
-        BlockPos center = t.blockPosition();
-        LivingEntity owner = t.getOwner();
-        for (Entity entity : around(level, c, Entity.class, 96)) {
-            double dist = Math.sqrt(entity.distanceToSqr(c));
-            double near = 1 - dist / 96;
-            Vec3 away = entity.position().subtract(c);
-            Vec3 dir = away.lengthSqr() < 0.01 ? new Vec3(0, 1, 0) : away.normalize();
-            entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(near * 3.5)).add(0, near * 1.2, 0));
-            entity.hurtMarked = true;
-            if (entity instanceof LivingEntity living && dist < 72) {
-                double heat = 1 - dist / 72;
-                living.hurtServer(level, level.damageSources().magic(), (float) (45 * heat * heat + 8 * heat));
-                if (heat > 0.3) living.igniteForSeconds(10);
-            }
-        }
-        level.explode(t, x, y, z, 28, true, Level.ExplosionInteraction.BLOCK);
-        for (int i = 0; i < 8; i++) {
-            double angle = Math.PI * 2 * i / 8;
-            level.explode(t, x + Math.cos(angle) * 14, y, z + Math.sin(angle) * 14, 14, true, Level.ExplosionInteraction.BLOCK);
-        }
-        for (int i = 0; i < 12; i++) {
-            double angle = Math.PI * 2 * i / 12 + 0.26;
-            level.explode(t, x + Math.cos(angle) * 30, y, z + Math.sin(angle) * 30, 12, true, Level.ExplosionInteraction.BLOCK);
-        }
-        for (int i = 0; i < 16; i++) {
-            double angle = Math.PI * 2 * i / 16;
-            level.explode(t, x + Math.cos(angle) * 48, y, z + Math.sin(angle) * 48, 9, true, Level.ExplosionInteraction.BLOCK);
-        }
-        level.playSound(null, x, y, z, Sounds.NUKE_BLAST, SoundSource.BLOCKS, 30.0f, 1.0f);
-        level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 4, z, 40, 14, 6, 14, 0);
-        // The crater: a flattened ball 110 wide and about 37 deep, carved from the
-        // middle outwards, one shell every other tick. Its chunks stay loaded until
-        // the land around is scorched, so it is finished even if everyone runs.
-        List<long[]> forced = new ArrayList<>();
-        for (int cx = (center.getX() - 72) >> 4; cx <= (center.getX() + 72) >> 4; cx++) {
-            for (int cz = (center.getZ() - 72) >> 4; cz <= (center.getZ() + 72) >> 4; cz++) {
-                if (level.setChunkForced(cx, cz, true)) forced.add(new long[]{cx, cz});
-            }
-        }
-        // released exactly once: after the scorching, or when a task fails or the server stops
-        Runnable release = () -> {
-            for (long[] chunk : forced) level.setChunkForced((int) chunk[0], (int) chunk[1], false);
-            forced.clear();
-        };
+        // a column of smoke rises over the crater and spreads at the top
         Tasks.start(age -> {
-            if (age % 2 != 0) return false;
-            int r = age / 2 + 1;
-            double outer = (double) r * r;
-            double inner = (r - 1.0) * (r - 1.0);
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dz = -r; dz <= r; dz++) {
-                    double flat = dx * dx + dz * dz;
-                    if (flat > outer) continue;
-                    // the dy that put this column inside the shell, with depth squashed by 1.5
-                    int top = (int) Math.floor(Math.sqrt((outer - flat) / 2.25));
-                    int bottom = flat >= inner ? 0 : (int) Math.ceil(Math.sqrt((inner - flat) / 2.25) + 1e-9);
-                    for (int dy = bottom; dy <= top; dy++) {
-                        for (int sign = (dy == 0 ? 1 : -1); sign <= 1; sign += 2) {
-                            BlockPos pos = center.offset(dx, dy * sign, dz);
-                            if (level.isLoaded(pos) && removable(level, pos, level.getBlockState(pos))) {
-                                level.setBlock(pos, Blocks.AIR.defaultBlockState(), QUIET);
-                            }
-                        }
-                    }
-                }
-            }
-            if (r < 55) return false;
-            scorch(level, center, release);
-            fallout(level, c);
-            return true;
-        }, release);
-        // the mushroom cloud
-        Tasks.start(age -> {
-            double stem = Math.min(age, 50) * 1.0;
-            level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y + stem, z, 20, 2.5, 1.5, 2.5, 0.01);
-            level.sendParticles(ParticleTypes.FLAME, x, y + stem * 0.5, z, 10, 2.0, stem * 0.3, 2.0, 0.02);
-            if (age >= 25) {
-                double cap = y + 50;
-                double spread = 6 + (age - 25) * 0.2;
-                level.sendParticles(ParticleTypes.LARGE_SMOKE, x, cap, z, 80, spread, 3.0, spread, 0.02);
-                level.sendParticles(ParticleTypes.EXPLOSION, x, cap, z, 4, spread, 2.0, spread, 0);
-                level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, cap + 2, z, 30, spread * 0.8, 2.0, spread * 0.8, 0.01);
-            }
-            if (age == 8 || age == 20 || age == 40) {
-                level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 20.0f, 0.3f);
-            }
-            return age >= 100;
+            double h = Math.min(age, 30) * 0.8;
+            level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, c.x, c.y + h, c.z, 12, 1.5, 1, 1.5, 0.01);
+            if (age > 20) level.sendParticles(ParticleTypes.LARGE_SMOKE, c.x, c.y + 24, c.z, 30, 3 + (age - 20) * 0.2, 1.5, 3 + (age - 20) * 0.2, 0.02);
+            return age >= 60;
         });
     }
 
-
-    /** A normal explosion that also sets the surroundings alight. */
-    static void fire(ServerLevel level, PrimedTnt t) {
-        blast(level, t, 4, true);
-        RandomSource random = level.getRandom();
-        for (BlockPos pos : sphere(t.blockPosition(), 8)) {
-            if (random.nextFloat() < 0.35f && level.getBlockState(pos).isAir()
-                    && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP)) {
-                level.setBlock(pos, Blocks.FIRE.defaultBlockState(), FLAGS);
-            }
-        }
+    /** Twice TNT, with the show of a big blast. */
+    static void mega(ServerLevel level, PrimedTnt t) {
+        debris(level, t.position(), 8);
+        blast(level, t, 8, false);
     }
 
-    /** A ring of lightning around a small blast. */
+    /**
+     * Napalm: an explosion, then a ring of fire that runs out to ten blocks and sets
+     * every creature it reaches alight — except whoever lit it.
+     */
+    static void fire(ServerLevel level, PrimedTnt t) {
+        debris(level, t.position(), 4);
+        blast(level, t, 4, true);
+        RandomSource random = level.getRandom();
+        BlockPos center = t.blockPosition();
+        Vec3 c = t.position();
+        LivingEntity owner = t.getOwner();
+        Tasks.start(age -> {
+            int r = age + 2;
+            for (BlockPos pos : shell(center, r)) {
+                if (Math.abs(pos.getY() - center.getY()) > 3 || random.nextFloat() > 0.3f) continue;
+                if (level.isLoaded(pos) && level.getBlockState(pos).isAir()
+                        && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP)) {
+                    level.setBlock(pos, Blocks.FIRE.defaultBlockState(), FLAGS);
+                }
+            }
+            for (int i = 0; i < r * 6; i++) {
+                double angle = Math.PI * 2 * i / (r * 6);
+                level.sendParticles(ParticleTypes.FLAME, c.x + Math.cos(angle) * r, c.y + 0.3, c.z + Math.sin(angle) * r, 1, 0.1, 0.2, 0.1, 0.01);
+            }
+            for (LivingEntity entity : around(level, c, LivingEntity.class, r + 0.5)) {
+                if (entity != owner) entity.igniteForSeconds(8);
+            }
+            return r >= 10;
+        });
+    }
+
+    /**
+     * Chain lightning: one bolt after another into the eight nearest monsters within
+     * 24 blocks, with an arc of sparks to each. Without monsters, a ring of lightning.
+     */
     static void lightning(ServerLevel level, PrimedTnt t) {
         blast(level, t, 2, false);
-        for (int i = 0; i <= 8; i++) {
-            double angle = Math.PI * 2 * i / 8;
-            double r = i == 8 ? 0 : 5;
-            strike(level, t.getX() + Math.cos(angle) * r, t.getY(), t.getZ() + Math.sin(angle) * r);
+        Vec3 c = t.position().add(0, 1, 0);
+        List<LivingEntity> targets = enemies(level, c, 24);
+        if (targets.isEmpty()) {
+            for (int i = 0; i < 8; i++) {
+                double angle = Math.PI * 2 * i / 8;
+                strike(level, t.getX() + Math.cos(angle) * 6, t.getY(), t.getZ() + Math.sin(angle) * 6);
+            }
+            return;
         }
+        List<LivingEntity> chain = targets.subList(0, Math.min(8, targets.size()));
+        Tasks.start(age -> {
+            if (age % 4 != 0) return false;
+            int n = age / 4;
+            if (n >= chain.size()) return true;
+            LivingEntity target = chain.get(n);
+            Vec3 from = n == 0 ? c : chain.get(n - 1).position().add(0, 1, 0);
+            Vec3 to = target.position().add(0, 1, 0);
+            for (int i = 0; i <= 12; i++) {
+                Vec3 p = from.lerp(to, i / 12.0);
+                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, p.x, p.y, p.z, 3, 0.15, 0.15, 0.15, 0.05);
+            }
+            if (target.isAlive()) {
+                // a bolt alone barely scratches a zombie; the chain is meant to clear them out,
+                // so the extra hit comes first, before the bolt's own hit starts the hurt cooldown
+                target.invulnerableTime = 0;
+                target.hurtServer(level, level.damageSources().lightningBolt(), 24);
+                strike(level, target.getX(), target.getY(), target.getZ());
+            }
+            return false;
+        });
     }
 
     private static void strike(ServerLevel level, double x, double y, double z) {
@@ -428,6 +417,7 @@ final class Detonations {
 
     /** Bursts and flings eight ordinary TNT in all directions. */
     static void cluster(ServerLevel level, PrimedTnt t) {
+        debris(level, t.position(), 3);
         blast(level, t, 2, false);
         RandomSource random = level.getRandom();
         LivingEntity owner = t.getOwner();
@@ -537,15 +527,26 @@ final class Detonations {
         });
     }
 
-    /** Removes the stone, dirt and gravel around it and leaves the ores standing. */
+    /**
+     * Clears the rock and soil around it and collects every ore: their yield lands in one
+     * pile where the TNT stood, as if mined by hand.
+     */
     static void miner(ServerLevel level, PrimedTnt t) {
         pop(level, t, 2);
+        List<ItemStack> pile = new ArrayList<>();
         for (BlockPos pos : sphere(t.blockPosition(), 7)) {
             BlockState state = level.getBlockState(pos);
-            if (ground(state) && removable(level, pos, state)) {
+            if (!removable(level, pos, state)) continue;
+            if (state.is(ORES)) {
+                addDrops(pile, Block.getDrops(state, level, pos, null));
+                level.sendParticles(ParticleTypes.WAX_OFF, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 6, 0.3, 0.3, 0.3, 0.1);
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), QUIET);
+            } else if (ground(state)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), QUIET);
             }
         }
+        dropPile(level, t.position(), pile);
+        sound(level, t.position(), SoundEvents.AMETHYST_CLUSTER_BREAK, 2.0f, 0.8f);
     }
 
     /**
@@ -574,21 +575,57 @@ final class Detonations {
             });
             if (age == 600) sound(level, at, SoundEvents.AMETHYST_BLOCK_CHIME, 3.0f, 0.5f);
             return swapped.isEmpty() || age > 72000;
+        }, () -> {
+            // the server stops before the thirty seconds are up: put back what can be put back, not leave glass forever
+            swapped.forEach((pos, state) -> {
+                if (level.isLoaded(pos) && level.getBlockState(pos).is(Blocks.GLASS)) level.setBlock(pos, state, QUIET);
+            });
         });
     }
 
     // --- liquids and weather -------------------------------------------
 
-    /** Explodes and floods the crater. */
+    /**
+     * A flood: explodes, fills the crater, puts out every fire within twelve blocks
+     * and washes creatures back with a wave.
+     */
     static void water(ServerLevel level, PrimedTnt t) {
+        debris(level, t.position(), 3);
         blast(level, t, 3, false);
         fill(level, t, Blocks.WATER.defaultBlockState());
+        for (BlockPos pos : sphere(t.blockPosition(), 12)) {
+            if (level.isLoaded(pos) && level.getBlockState(pos).is(BlockTags.FIRE)) level.setBlock(pos, Blocks.AIR.defaultBlockState(), FLAGS);
+        }
+        Vec3 c = t.position();
+        for (Entity entity : around(level, c, Entity.class, 12)) {
+            entity.clearFire();
+            Vec3 away = entity.position().subtract(c).multiply(1, 0, 1);
+            if (away.lengthSqr() > 0.01) {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(away.normalize().scale(0.8)).add(0, 0.3, 0));
+                entity.hurtMarked = true;
+            }
+        }
+        level.sendParticles(ParticleTypes.SPLASH, c.x, c.y + 1, c.z, 600, 6, 1, 6, 0.5);
+        level.sendParticles(ParticleTypes.BUBBLE_POP, c.x, c.y + 1, c.z, 200, 4, 1, 4, 0.1);
+        sound(level, c, SoundEvents.GENERIC_SPLASH, 3.0f, 0.6f);
     }
 
-    /** Explodes and fills the crater with lava. */
+    /** A lava fountain: explodes, fills the crater with lava, sprays glowing drops and sets what is near alight. */
     static void lava(ServerLevel level, PrimedTnt t) {
+        debris(level, t.position(), 3);
         blast(level, t, 3, false);
         fill(level, t, Blocks.LAVA.defaultBlockState());
+        Vec3 c = t.position();
+        LivingEntity owner = t.getOwner();
+        for (LivingEntity entity : around(level, c, LivingEntity.class, 6)) {
+            if (entity != owner) entity.igniteForSeconds(6);
+        }
+        Tasks.start(age -> {
+            level.sendParticles(ParticleTypes.LAVA, c.x, c.y + 1, c.z, 6, 0.5, 0.2, 0.5, 0);
+            level.sendParticles(ParticleTypes.FALLING_LAVA, c.x, c.y + 4 + age * 0.05, c.z, 8, 1.5, 1.5, 1.5, 0);
+            if (age % 10 == 0) sound(level, c, SoundEvents.LAVA_POP, 2.0f, 0.7f);
+            return age >= 60;
+        });
     }
 
     private static void fill(ServerLevel level, PrimedTnt t, BlockState liquid) {
@@ -647,10 +684,19 @@ final class Detonations {
         Tasks.start(age -> {
             level.sendParticles(ParticleTypes.FALLING_WATER, c.x, c.y + 14, c.z, 40, 14, 1, 14, 0);
             if (age % 8 == 0) {
-                double x = c.x + (random.nextDouble() - 0.5) * 40;
-                double z = c.z + (random.nextDouble() - 0.5) * 40;
-                BlockPos ground = groundAt(level, x, c.y, z);
-                if (level.isLoaded(ground)) strike(level, x, ground.getY(), z);
+                // every other bolt goes for a monster in the storm, if there is one
+                List<LivingEntity> targets = age % 16 == 0 ? enemies(level, c, 20) : List.of();
+                if (!targets.isEmpty()) {
+                    LivingEntity target = targets.get(random.nextInt(targets.size()));
+                    target.invulnerableTime = 0;
+                    target.hurtServer(level, level.damageSources().lightningBolt(), 20);
+                    strike(level, target.getX(), target.getY(), target.getZ());
+                } else {
+                    double x = c.x + (random.nextDouble() - 0.5) * 40;
+                    double z = c.z + (random.nextDouble() - 0.5) * 40;
+                    BlockPos ground = groundAt(level, x, c.y, z);
+                    if (level.isLoaded(ground)) strike(level, x, ground.getY(), z);
+                }
             }
             return age >= 160;
         });
@@ -715,15 +761,17 @@ final class Detonations {
         particles(level, ParticleTypes.LARGE_SMOKE, t.position(), 80, 2, 0.05);
     }
 
-    /** Scatters every creature around it like a chorus fruit, just stronger. */
+    /** Sends every monster within 16 blocks far away, like a chorus fruit but stronger. Players and animals stay. */
     static void ender(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         RandomSource random = level.getRandom();
-        for (LivingEntity entity : around(level, t, LivingEntity.class, 10)) {
+        for (LivingEntity entity : enemies(level, t.position(), 16)) {
+            level.sendParticles(ParticleTypes.REVERSE_PORTAL, entity.getX(), entity.getY() + 1, entity.getZ(), 30, 0.3, 0.6, 0.3, 0.2);
             for (int attempt = 0; attempt < 16; attempt++) {
-                double x = entity.getX() + (random.nextDouble() - 0.5) * 48;
+                double angle = random.nextDouble() * Math.PI * 2;
+                double x = entity.getX() + Math.cos(angle) * (32 + random.nextInt(24));
                 double y = entity.getY() + random.nextInt(16) - 8;
-                double z = entity.getZ() + (random.nextDouble() - 0.5) * 48;
+                double z = entity.getZ() + Math.sin(angle) * (32 + random.nextInt(24));
                 if (entity.randomTeleport(x, y, z, true)) break;
             }
         }
@@ -770,6 +818,9 @@ final class Detonations {
                 block.hurtMarked = true;
             }
             return true;
+        }, () -> {
+            // weightless rubble would otherwise hang in the air for good after a restart
+            for (FallingBlockEntity block : rubble) if (block.isAlive()) block.setNoGravity(false);
         });
     }
 
@@ -850,7 +901,7 @@ final class Detonations {
             level.explode(t, c.x, c.y, c.z, 4, false, Level.ExplosionInteraction.NONE);
             level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, c.x, c.y, c.z, 3, 1, 1, 1, 0);
             return true;
-        });
+        }, () -> rubble.forEach(Entity::discard));
     }
 
 
@@ -1366,80 +1417,6 @@ final class Detonations {
         level.sendParticles(ParticleTypes.FIREWORK, c.x, c.y + 1, c.z, 60, 1, 1, 1, 0.2);
     }
 
-    // --- the nuke's aftermath ----------------------------------------------
-
-    /**
-     * Scorched earth around ground zero, one layer per tick: within 70 blocks
-     * grass turns to coarse dirt and leaves and plants burn away; the crater
-     * and its rim within 60 blocks glaze over with blackstone and glowing magma.
-     */
-    private static void scorch(ServerLevel level, BlockPos center, Runnable done) {
-        RandomSource random = level.getRandom();
-        Tasks.start(age -> {
-            int dy = 24 - age;
-            for (int dx = -70; dx <= 70; dx++) {
-                for (int dz = -70; dz <= 70; dz++) {
-                    int d = dx * dx + dz * dz;
-                    if (d > 4900) continue;
-                    BlockPos pos = center.offset(dx, dy, dz);
-                    if (!level.isLoaded(pos)) continue;
-                    BlockState state = level.getBlockState(pos);
-                    if (!removable(level, pos, state)) continue;
-                    boolean open = level.getBlockState(pos.above()).isAir();
-                    BlockState into = null;
-                    if (state.is(BlockTags.LEAVES) || state.is(Blocks.SNOW)) {
-                        into = Blocks.AIR.defaultBlockState();
-                    } else if (state.canBeReplaced() && state.getFluidState().isEmpty()) {
-                        into = random.nextFloat() < 0.15f && level.getBlockState(pos.below()).is(BlockTags.SUBSTRATE_OVERWORLD)
-                                ? Blocks.DEAD_BUSH.defaultBlockState() : Blocks.AIR.defaultBlockState();
-                    } else if (open && d <= 3600 && ground(state)) {
-                        float roll = random.nextFloat();
-                        into = roll < 0.08f ? Blocks.MAGMA_BLOCK.defaultBlockState()
-                                : roll < 0.4f ? Blocks.BLACKSTONE.defaultBlockState() : null;
-                    } else if (state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.PODZOL) || state.is(Blocks.MYCELIUM) || state.is(Blocks.MOSS_BLOCK)) {
-                        into = Blocks.COARSE_DIRT.defaultBlockState();
-                    }
-                    if (into != null) level.setBlock(pos, into, QUIET);
-                }
-            }
-            if (dy > -40) return false;
-            done.run();
-            return true;
-        }, done);
-    }
-
-    /**
-     * Fallout: two minutes of radiation within 96 blocks. Mobs inside get
-     * radiation sickness, worse within 48 blocks; players soak up the dose of the
-     * contaminated chunks and get the same effect from it. Green
-     * motes drift over the zone and a Geiger counter ticks for every player in
-     * it — faster the closer they are. Milk helps for a moment; leaving helps.
-     */
-    private static void fallout(ServerLevel level, Vec3 c) {
-        // The same lasting radiation the nuclear bombs leave, so a Geiger counter
-        // reads this crater too, long after the five minutes below are over.
-        Radiation.contaminate(level, BlockPos.containing(c), 55, NukeConfig.get().peakRate(Tier.NUKE));
-        DustParticleOptions glow = new DustParticleOptions(0x7CFF3A, 1.6f);
-        RandomSource random = level.getRandom();
-        Tasks.start(age -> {
-            if (age % 4 == 0) {
-                level.sendParticles(glow, c.x, c.y + 3, c.z, 120, 45, 6, 45, 0);
-                level.sendParticles(ParticleTypes.WHITE_ASH, c.x, c.y + 10, c.z, 150, 55, 12, 55, 0);
-            }
-            for (LivingEntity entity : around(level, c, LivingEntity.class, 96)) {
-                double dist = Math.sqrt(entity.distanceToSqr(c));
-                boolean hot = dist < 48;
-                // Players take it in as a dose from the contaminated chunks; mobs get the sickness directly.
-                if (age % 20 == 0 && !(entity instanceof Player)) Radiation.sicken(entity, hot ? 2 : 1, 60);
-                if (entity instanceof Player player && age % (hot ? 3 : 7) == 0 && random.nextFloat() < 0.8f) {
-                    level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.GEIGER,
-                            SoundSource.AMBIENT, 0.5f, 1.6f + random.nextFloat() * 0.4f);
-                }
-            }
-            return age >= 2400;
-        });
-    }
-
     // --- landscapes ----------------------------------------------------------
 
     /** The topmost block of a column near the given height that has air above it. */
@@ -1845,6 +1822,7 @@ final class Detonations {
         for (Mob mob : around(level, t, Mob.class, 12)) {
             if (mob.isNoAi()) continue; // already still on purpose; leave it that way
             mob.setNoAi(true);
+            mob.addTag(STASIS_TAG);
             mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
             frozen.add(mob);
         }
@@ -1857,9 +1835,17 @@ final class Detonations {
                 }
             }
             if (age < 200) return false;
-            for (Mob mob : frozen) if (mob.isAlive()) mob.setNoAi(false);
+            for (Mob mob : frozen) {
+                if (mob.isAlive() && mob.removeTag(STASIS_TAG)) mob.setNoAi(false);
+            }
             sound(level, c, SoundEvents.BEACON_DEACTIVATE, 2.0f, 1.4f);
             return true;
+        }, () -> {
+            // never leave a mob frozen for good because the server stopped within the ten seconds
+            for (Mob mob : frozen) {
+                mob.removeTag(STASIS_TAG);
+                mob.setNoAi(false);
+            }
         });
     }
 
@@ -1877,7 +1863,7 @@ final class Detonations {
             bee.setTarget(enemies.get(i % enemies.size()));
             ((NeutralMob) bee).startPersistentAngerTimer();
         }
-        sound(level, t.position(), SoundEvents.BEE_LOOP_AGGRESSIVE, 3.0f, 1.0f);
+        sound(level, t.position(), SoundEvents.BEEHIVE_EXIT, 3.0f, 0.9f);
     }
 
     /** A pack of four wolves, tamed to whoever lit the TNT. */

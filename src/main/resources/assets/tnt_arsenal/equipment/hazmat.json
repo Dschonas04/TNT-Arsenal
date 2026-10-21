@@ -2,10 +2,28 @@
   "layers": {
     "humanoid": [
       {
+        "texture": "minecraft:leather",
+        "dyeable": {
+          "color_when_undyed": -1523398
+        }
+      },
+      {
+        "texture": "minecraft:leather_overlay"
+      },
+      {
         "texture": "tnt_arsenal:hazmat"
       }
     ],
     "humanoid_leggings": [
+      {
+        "texture": "minecraft:leather",
+        "dyeable": {
+          "color_when_undyed": -1523398
+        }
+      },
+      {
+        "texture": "minecraft:leather_overlay"
+      },
       {
         "texture": "tnt_arsenal:hazmat"
       }

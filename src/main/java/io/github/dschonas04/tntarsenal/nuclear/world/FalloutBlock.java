@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Fallout: a faintly glowing layer of radioactive ash. It does not melt like
- * snow; once the land around it has cooled down it slowly blows away.
+ * snow; once the radiation around it is over it soon blows away.
  */
 public class FalloutBlock extends SnowLayerBlock {
     public FalloutBlock(Properties properties) {
@@ -21,7 +21,7 @@ public class FalloutBlock extends SnowLayerBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(4) != 0 || Radiation.rateAt(level, pos) > 0.05f) return;
+        if (random.nextInt(4) != 0 || Radiation.rateAt(level, pos) > 0f) return;
         int layers = state.getValue(LAYERS);
         level.setBlock(pos, layers > 1 ? state.setValue(LAYERS, layers - 1) : Blocks.AIR.defaultBlockState(), UPDATE_ALL);
     }

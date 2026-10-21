@@ -36,7 +36,8 @@ import com.mojang.serialization.Codec;
  * <p>Chunks carry their rate as an attachment that is saved with them and sent to
  * clients. A detonation raises the rate of every loaded chunk within three blast
  * radii and is remembered by the level; a chunk that loads later catches up on
- * the blasts it missed. Rates halve every half-life.
+ * the blasts it missed. Rates wane steadily and are gone after two Minecraft days
+ * ({@code radiationTicks}).
  *
  * <p>Players carry their dose in mSv, saved and sent to their own client. Every
  * second they take in the rate of the chunk they stand in, less what the blocks
@@ -74,15 +75,15 @@ public final class Radiation {
         return (AttachmentTarget) target;
     }
 
-    private static long halfLife() {
-        return NukeConfig.get().halfLifeTicks;
+    private static long lifetime() {
+        return NukeConfig.get().radiationTicks;
     }
 
     /** The current dose rate in the chunk at a position, in mSv per second. */
     public static float rateAt(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) return 0f;
         ChunkRadiation radiation = at(level.getChunkAt(pos)).getAttached(CHUNK);
-        return radiation == null ? 0f : radiation.at(level.getGameTime(), halfLife());
+        return radiation == null ? 0f : radiation.at(level.getGameTime(), lifetime());
     }
 
     public static float dose(ServerPlayer player) {
@@ -100,8 +101,8 @@ public final class Radiation {
         long now = level.getGameTime();
         Blast blast = new Blast(center, radius, peak, now);
         List<Blast> blasts = new ArrayList<>(at(level).getAttachedOrElse(BLASTS, List.of()));
-        // blasts that have decayed to nothing are forgotten
-        blasts.removeIf(old -> old.peak() * Math.pow(0.5, (double) (now - old.time()) / halfLife()) < 0.01);
+        // blasts whose radiation is over are forgotten
+        blasts.removeIf(old -> ChunkRadiation.left(now - old.time(), lifetime()) <= 0);
         blasts.add(blast);
         at(level).setAttached(BLASTS, List.copyOf(blasts));
         int reach = blast.reach();
@@ -116,7 +117,7 @@ public final class Radiation {
     private static void add(LevelChunk chunk, float rate, long now) {
         if (rate <= 0.001f) return;
         ChunkRadiation old = at(chunk).getAttachedOrElse(CHUNK, ChunkRadiation.NONE);
-        at(chunk).setAttached(CHUNK, old.plus(rate, now, halfLife()));
+        at(chunk).setAttached(CHUNK, old.plus(rate, now, lifetime()));
         chunk.markUnsaved();
     }
 
@@ -135,7 +136,7 @@ public final class Radiation {
             for (int cz = (center.getZ() - radius) >> 4; cz <= (center.getZ() + radius) >> 4; cz++) {
                 LevelChunk chunk = level.getChunk(cx, cz);
                 ChunkRadiation old = at(chunk).getAttached(CHUNK);
-                if (old == null || old.at(now, halfLife()) <= 0f) continue;
+                if (old == null || old.at(now, lifetime()) <= 0f) continue;
                 // zero as of now, so that catchUp does not replay older blasts
                 at(chunk).setAttached(CHUNK, new ChunkRadiation(0f, now));
                 chunk.markUnsaved();
@@ -145,7 +146,7 @@ public final class Radiation {
         return cleared;
     }
 
-    /** A chunk that was unloaded during a blast gets that blast's radiation now, decayed by the time since. */
+    /** A chunk that was unloaded during a blast gets that blast's radiation now, less what has waned since. */
     private static void catchUp(ServerLevel level, LevelChunk chunk) {
         List<Blast> blasts = at(level).getAttached(BLASTS);
         if (blasts == null || blasts.isEmpty()) return;
@@ -155,7 +156,7 @@ public final class Radiation {
         for (Blast blast : blasts) {
             if (blast.time() <= current.since()) continue;
             float rate = blast.rateAt(chunk.getPos().x(), chunk.getPos().z());
-            missed += (float) (rate * Math.pow(0.5, (double) (now - blast.time()) / halfLife()));
+            missed += rate * ChunkRadiation.left(now - blast.time(), lifetime());
         }
         if (missed > 0.001f) add(chunk, missed, now);
     }

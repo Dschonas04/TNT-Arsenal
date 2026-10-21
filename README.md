@@ -6,30 +6,29 @@
 [![Fabric](https://img.shields.io/badge/loader-Fabric-dbd0b4)](https://fabricmc.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Sixty kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
-look and its own way of going off. They are crafted at an ordinary crafting table,
+Fifty-nine kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
+look, a little 3D sculpture on top that shows what it does, and its own way of going off. They are crafted at an ordinary crafting table,
 so **JEI and REI show every recipe**.
 
-![All sixty kinds](docs/textures.png)
+![All fifty-nine kinds](docs/textures.png)
 
 | Kind | What it does | Recipe (shapeless) |
 |---|---|---|
 | Mega TNT | twice the power of TNT | 4 × TNT |
 | Giga TNT | four times the power of TNT | 4 × Mega TNT + blaze powder |
-| Nuke TNT | heat flash, a crater 110 wide, blast wave, mushroom cloud and five minutes of fallout | 4 × Giga TNT + nether star |
-| Fire TNT | sets everything around alight | TNT + fire charge |
-| Lightning TNT | a ring of lightning | TNT + lightning rod |
+| Fire TNT | a ring of napalm rolls outwards and sets everything alight | TNT + fire charge |
+| Lightning TNT | chain lightning into the eight nearest monsters, otherwise a ring of lightning | TNT + lightning rod |
 | Cluster TNT | bursts into eight TNT | 3 × TNT + 2 × gunpowder |
 | Drill TNT | a clean 3×3 shaft up to 64 deep, with a ladder | TNT + iron pickaxe |
 | Tunnel TNT | a clean 3×3 tunnel, 48 long, with torches | 2 × TNT + rail |
 | Leveler TNT | clears a plot: radius 10, 16 high | TNT + iron shovel |
-| Miner TNT | removes stone and dirt, leaves the ores | TNT + stone pickaxe + redstone |
-| Water TNT | floods its crater | TNT + water bucket |
-| Lava TNT | fills its crater with lava | TNT + lava bucket |
+| Miner TNT | removes stone and dirt, drops the ores in one pile | TNT + stone pickaxe + redstone |
+| Water TNT | floods its crater, puts out fire and washes creatures back | TNT + water bucket |
+| Lava TNT | fills its crater with lava, with a lava fountain | TNT + lava bucket |
 | Frost TNT | freezes water, lava and creatures | TNT + packed ice + snowball |
 | Poison TNT | leaves a cloud of poison | TNT + fermented spider eye |
 | Gravity TNT | tears the ground loose, whirls it up and hurls it away | TNT + iron block |
-| Ender TNT | scatters everyone nearby | TNT + ender pearl |
+| Ender TNT | teleports monsters nearby far away | TNT + ender pearl |
 | Bounce TNT | launches everything into the air, soft landing | TNT + slime ball |
 | Firework TNT | real fireworks, no damage | TNT + firework rocket |
 | Healing TNT | heals and cures poison and wither | TNT + glistering melon slice |
@@ -47,7 +46,7 @@ so **JEI and REI show every recipe**.
 | Meteor TNT | six burning meteors fall from the sky | 2 × TNT + magma block + fire charge |
 | Arrow Rain TNT | arrows rain down from the sky | TNT + 4 × arrow |
 | Cobweb TNT | spins cobwebs into the air | TNT + 3 × string |
-| Storm TNT | eight seconds of storm, twenty lightning strikes | Lightning TNT + 2 × lightning rod |
+| Storm TNT | eight seconds of storm, twenty lightning strikes, aimed at monsters | Lightning TNT + 2 × lightning rod |
 | Magnet TNT | pulls all items and XP within 40 blocks | TNT + 2 × iron ingot + redstone |
 | Sponge TNT | soaks up water and lava within 10 blocks | TNT + sponge |
 | Torch TNT | places torches wherever it is dark | TNT + 4 × torch |
@@ -97,7 +96,7 @@ crater's chunks stay loaded until it is finished, even if everyone runs.
 
 ## The nuclear arsenal
 
-After the sixty kinds, in the same creative tab, comes the nuclear arsenal. The
+After the fifty-nine kinds, in the same creative tab, comes the nuclear arsenal. The
 detonator, the timer fuse and the siren work with all of it: any arsenal TNT,
 plain TNT and the nuclear bombs.
 
@@ -109,8 +108,8 @@ plain TNT and the nuclear bombs.
 - **Remote detonator.** Right-click a bomb — nuclear, any arsenal TNT or plain
   TNT — to bind it, right-click anywhere to set it off, as long as its chunk is
   loaded.
-- **Radiation** stays in the chunks around ground zero, halves every four
-  minutes (`halfLifeTicks`) and survives a restart. Players take in a dose in
+- **Radiation** stays in the chunks around ground zero for two Minecraft days
+  (`radiationTicks`), waning steadily, and survives a restart. Players take in a dose in
   mSv; roofs and water shield; out of the radiation it falls by 2 % a second.
   The dose shows as one effect, *Radiation*, like poison: level I from 100 mSv
   (hungrier, a little weaker and slower), II from 250, III from 500 (half a heart
@@ -120,8 +119,6 @@ plain TNT and the nuclear bombs.
   water; in contaminated land a green fog hangs.
 - **Geiger counter.** Held in either hand it shows the dose rate where you
   stand and your own dose above the hotbar, and ticks faster the hotter it gets.
-  The nuke from the sixty kinds leaves the same radiation, so the counter reads
-  its crater too.
 
 - **Protection.** Iodine tablets halve what the body takes in for ten
   minutes; RadAway washes 200 mSv out at once. Every piece of the hazmat suit
@@ -134,8 +131,7 @@ plain TNT and the nuclear bombs.
 - **Timer fuse.** Sneak and right-click to set 10 s to 5 minutes, right-click
   a bomb (any of them) to start the countdown, shown to everyone within 64 blocks.
 - **Siren.** A siren block wails while it gets a redstone signal; every lit
-  nuclear bomb and the heavy arsenal kinds (giga, nuke, antimatter, black hole,
-  earthquake, volcano) sound the siren over 256 blocks while their fuse burns.
+  nuclear bomb sounds the siren over 256 blocks while its fuse burns.
 - **Sounds of its own**, synthesised by `tools/sounds.py`: the air-raid siren,
   Geiger clicks, the nuclear blast, the countdown beep and the detonator.
 - **EMP.** A detonation knocks out detonators, timer fuses and Geiger counters

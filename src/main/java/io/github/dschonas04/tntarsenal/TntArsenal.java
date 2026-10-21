@@ -3,7 +3,10 @@ package io.github.dschonas04.tntarsenal;
 import java.util.ArrayList;
 import java.util.List;
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
+import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.minecraft.world.entity.Mob;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.ChatFormatting;
@@ -45,8 +48,17 @@ public final class TntArsenal implements ModInitializer {
         Tasks.clear();
     }
 
+    /** Entry point for the mixin: the flash and sparks every kind goes off with. */
+    public static void burst(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.item.PrimedTnt tnt, Kind kind) {
+        Fuses.burst(level, tnt, kind);
+    }
+
     @Override
     public void onInitialize() {
+        // A mob that was frozen by stasis TNT and unloaded before it thawed thaws when it loads again.
+        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG)) mob.setNoAi(false);
+        });
         for (Kind kind : Kind.values()) {
             ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id(kind.id()));
             Block block = new ArsenalTntBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.TNT).setId(blockKey));
@@ -67,7 +79,7 @@ public final class TntArsenal implements ModInitializer {
         ResourceKey<CreativeModeTab> tabKey = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id("tnt"));
         CreativeModeTab tab = FabricCreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.tnt_arsenal"))
-                .icon(() -> new ItemStack(ITEMS.get(Kind.NUKE.ordinal())))
+                .icon(() -> new ItemStack(NuclearTnt.BOMBS.get(Tier.NUKE)))
                 .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, tabKey, tab);
         CreativeModeTabEvents.modifyOutputEvent(tabKey).register(output -> {

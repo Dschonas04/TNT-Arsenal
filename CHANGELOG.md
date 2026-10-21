@@ -6,6 +6,40 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-10-21
+
+### Added
+- A detailed 3D figure on top of every TNT block that shows what it does: a
+  castle tower, torn ground with a lava crack, a wheat field, a sitting wolf,
+  a firework battery, a horseshoe magnet and so on. It is part of the block model, so it shows on the
+  placed block, on the lit TNT and in the inventory.
+- Every arsenal TNT sparks its own way while its fuse burns (snow, flames,
+  hearts, portal shimmer …), more and more towards the end.
+
+### Changed
+- Calmer textures: clean 16×16 faces without noise, each kind with its own
+  colours and emblem, so the kinds are easy to tell apart.
+- More spectacular and more useful effects: fire TNT rolls out a ring of
+  napalm, lightning TNT chains into the nearest monsters and kills them,
+  storm TNT aims at monsters, ender TNT only sends monsters away, miner TNT
+  drops its ores in one pile, water TNT puts out fire, lava TNT spouts a
+  fountain, big blasts throw up debris and dust.
+- Hazmat suit in the style of vanilla armour: worn it is leather dyed yellow
+  with a visor, respirator, belt and rubber boots; new item icons.
+- The bucket of contaminated water is a real bucket with glowing green water.
+- One nuke: the arsenal's "Nuke TNT" is gone, the atomic bomb of the nuclear
+  part is the only one. Nuke TNT in worlds and inventories turns into it.
+- Only the nuclear bombs sound the siren; the other big kinds are quiet again.
+- Radiation lasts two Minecraft days (`radiationTicks`, 48000) and then is gone
+  for good, instead of halving every four minutes. Fallout, irradiated earth and
+  contaminated water turn back to normal once it is over.
+
+### Fixed
+- If the server stops mid-detonation, stasis no longer leaves mobs frozen for
+  good, the x-ray TNT puts its glass back, and gravity and black-hole rubble no
+  longer hangs in the air.
+- The bee TNT no longer plays the bees' looping drone once at full volume.
+
 ## [1.5.0] - 2026-10-12
 
 ### Changed

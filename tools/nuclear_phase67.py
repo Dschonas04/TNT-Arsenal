@@ -10,6 +10,8 @@ import random
 import nuclear_pixelart as P
 
 TRANSPARENT = (0, 0, 0, 0)
+# 0xFFE8C13A as the signed ARGB int the game expects
+HAZMAT_YELLOW = 0xFFE8C13A - (1 << 32)
 
 
 def art(rows, pal):
@@ -80,58 +82,63 @@ TIMER_ART = [
 ]
 TIMER_PAL = {"k": "#1b1d21", "a": "#6a717b", "K": "#101214", "r": "#ff4a3a", "b": "#3a6fd8", "g": "#3ac16a", "y": "#d8c23a"}
 
-HAZMAT_PAL = {"k": "#2a2416", "y": "#e8c13a", "Y": "#b8901e", "g": "#1e3a40", "G": "#3f7f88", "b": "#2a2a2a"}
+# The hazmat suit in the style of vanilla armour icons: a dark outline, yellow
+# rubber in four tones lit from the top left, a visor with a glint, a respirator,
+# a black belt and black rubber boots.
+HAZMAT_PAL = {"o": "#3a2c0c", "Y": "#ffe27a", "y": "#e8c13a", "s": "#b8901e", "S": "#7a5c12",
+              "V": "#8fd6de", "v": "#1e3a40", "g": "#5a5f66", "G": "#a0a6ae", "k": "#1c1c1c",
+              "r": "#2a2a2a", "R": "#4c4c4c"}
 HAZMAT_HELMET = [
     "................",
     "................",
-    "....kkkkkkkk....",
-    "...kyyyyyyyyk...",
-    "..kyyyyyyyyyyk..",
-    "..kyggggggggyk..",
-    "..kygGGGGGGgyk..",
-    "..kygGggggGgyk..",
-    "..kyggggggggyk..",
-    "..kyyyyyyyyyyk..",
-    "..kYyybbbbyyYk..",
-    "...kYYYYYYYYk...",
-    "....kkkkkkkk....",
-    "................",
+    ".....oooooo.....",
+    "...ooYYYyyyoo...",
+    "..oYYyyyyyyyso..",
+    "..oYyyyyyyyyso..",
+    ".oYyooooooooyso.",
+    ".oyoVVvvvvvvoso.",
+    ".oyoVvvvvvvvoso.",
+    ".oyovvvvvvvvoso.",
+    ".oyyooooooooyso.",
+    ".osyyyogGoyyySo.",
+    "..oSsyogGoysSo..",
+    "...oooooooooo...",
     "................",
     "................",
 ]
 HAZMAT_SUIT = [
     "................",
-    "..kkkk....kkkk..",
-    ".kyyyyk..kyyyyk.",
-    ".kyyyyykkyyyyyk.",
-    ".kyyyyyyyyyyyyk.",
-    ".kkkyyybbyyykkk.",
-    "...kyyybbyyyk...",
-    "...kyyyyyyyyk...",
-    "...kyykkkkyyk...",
-    "...kyykbbkyyk...",
-    "...kyyyyyyyyk...",
-    "...kyyyyyyyyk...",
-    "...kYYYYYYYYk...",
-    "...kkkkkkkkkk...",
     "................",
+    ".oooo......oooo.",
+    ".oYyyo....oyyso.",
+    ".oYyyyooooyyyso.",
+    ".oYyyyyyyyyyyso.",
+    ".oyyyyyGyyyyyso.",
+    ".ooykkyGyyyyyoo.",
+    "..oykkyGyyyyso..",
+    "..oyyyyGyyyyso..",
+    "..oyyyyGyyyyso..",
+    "..okkkkkkkkkko..",
+    "..oyyyyyyyyyso..",
+    "..osyyyyyyyySo..",
+    "..oooooooooooo..",
     "................",
 ]
 HAZMAT_LEGS = [
     "................",
-    "...kkkkkkkkkk...",
-    "...kbbbbbbbbk...",
-    "...kyyyyyyyyk...",
-    "...kyyyyyyyyk...",
-    "...kyyykkyyyk...",
-    "...kyyyk.kyyk...",
-    "...kyyyk.kyyk...",
-    "...kyyyk.kyyk...",
-    "...kyyyk.kyyk...",
-    "...kyyyk.kyyk...",
-    "...kYYYk.kYYk...",
-    "...kkkkk.kkkk...",
     "................",
+    "..oooooooooooo..",
+    "..okkkkGgkkkko..",
+    "..oYyyyyyyyyso..",
+    "..oYyyyyyyyyso..",
+    "..oYyysooyyyso..",
+    "..oYyso..oYyso..",
+    "..oYyso..oYyso..",
+    "..osyso..osyso..",
+    "..oYyso..oYyso..",
+    "..oyyso..oyyso..",
+    "..osSso..osSso..",
+    "..ooooo..ooooo..",
     "................",
     "................",
 ]
@@ -141,18 +148,20 @@ HAZMAT_BOOTS = [
     "................",
     "................",
     "................",
-    "...kkkk..kkkk...",
-    "...kyyk..kyyk...",
-    "...kyyk..kyyk...",
-    "...kyyk..kyyk...",
-    "...kyyk..kyyk...",
-    "..kbbbk..kbbbk..",
-    ".kbbbbk..kbbbbk.",
-    ".kkkkkk..kkkkkk.",
     "................",
+    "...oooo..oooo...",
+    "...oYyo..oYyo...",
+    "...osSo..osSo...",
+    "...oRro..oRro...",
+    "...oRro..oRro...",
+    "..oRrro..oRrro..",
+    "..orrro..orrro..",
+    "..ooooo..ooooo..",
     "................",
     "................",
 ]
+for _rows in (HAZMAT_HELMET, HAZMAT_SUIT, HAZMAT_LEGS, HAZMAT_BOOTS):
+    assert len(_rows) == 16 and all(len(r) == 16 for r in _rows), _rows
 
 DOOR_ICON = [
     "....kkkkkkkk....",
@@ -221,32 +230,45 @@ def siren_faces():
 
 
 def hazmat_layer(leggings):
-    """A 64x32 armour layer in the humanoid layout: yellow rubberised fabric,
-    darker seams, a dark visor on the helmet and black boots."""
+    """The details of the suit as worn, in the humanoid layout. They lie over the
+    vanilla leather armour, which the equipment asset dyes yellow: a visor and a
+    respirator on the hood, a radiation sign on the chest, black cuffs, black
+    rubber boots and a belt on the leggings. Everything else stays transparent."""
     w, h = 64, 32
     px = [TRANSPARENT] * (w * h)
-    yel, seam, visor, rubber = P.hexc("#e8c13a"), P.hexc("#b8901e"), P.hexc("#1e3a40"), P.hexc("#2a2a2a")
+    c = {k: P.hexc(v) + (255,) for k, v in HAZMAT_PAL.items()}
 
     def fill(x0, y0, x1, y1, colour):
         for y in range(y0, y1):
             for x in range(x0, x1):
-                px[y * w + x] = colour + (255,)
+                px[y * w + x] = colour
 
     if not leggings:
-        fill(0, 0, 32, 16, yel)                 # head
-        fill(8, 10, 16, 14, visor)              # visor on the face
-        fill(16, 16, 40, 32, yel)               # body
-        fill(40, 16, 56, 32, yel)               # arms
-        fill(0, 16, 16, 32, yel)                # legs, as boots
-        fill(0, 27, 16, 32, rubber)
-        for x in range(16, 40, 4):
-            fill(x, 16, x + 1, 32, seam)
+        # hood front (8..16, 8..16): visor with a frame and a glint, the respirator below
+        fill(8, 9, 16, 13, c["o"])
+        fill(9, 10, 15, 12, c["v"])
+        fill(9, 10, 11, 11, c["V"])
+        fill(11, 13, 13, 15, c["g"])
+        fill(11, 13, 12, 14, c["G"])
+        fill(10, 15, 14, 16, c["S"])
+        # chest front (20..28, 20..32): radiation sign
+        for x, y in ((22, 22), (23, 22), (25, 22), (26, 22), (22, 23), (26, 23), (24, 24), (23, 26), (24, 26), (25, 26)):
+            px[y * w + x] = c["k"]
+        fill(20, 29, 28, 30, c["s"])
+        # cuffs at the end of the sleeves
+        fill(40, 25, 56, 26, c["k"])
+        # boots: black rubber over the lower legs, a yellow seam on top
+        fill(0, 26, 16, 32, c["r"])
+        fill(0, 26, 16, 27, c["s"])
+        fill(4, 31, 8, 32, c["R"])
     else:
-        fill(16, 16, 40, 32, yel)               # waist
-        fill(0, 16, 16, 32, yel)                # legs
-        fill(20, 20, 28, 22, rubber)            # belt
-        for x in range(0, 16, 4):
-            fill(x, 16, x + 1, 32, seam)
+        # belt over the waist, with a grey buckle at the front
+        fill(16, 27, 40, 29, c["k"])
+        fill(22, 27, 26, 29, c["g"])
+        fill(23, 27, 25, 28, c["G"])
+        # a darker fold down the front of each leg
+        fill(4, 20, 5, 26, c["s"])
+        fill(8, 20, 9, 26, c["s"])
     return px
 
 
@@ -320,8 +342,10 @@ def generate(root, ns, write_json, lang_en, lang_de):
         write_json(f"{root}/assets/{ns}/items/{name}.json", {"model": {"type": "minecraft:model", "model": f"{ns}:item/{name}"}})
 
     # hazmat suit as worn
-    write_json(f"{root}/assets/{ns}/equipment/hazmat.json", {"layers": {
-        "humanoid": [{"texture": f"{ns}:hazmat"}], "humanoid_leggings": [{"texture": f"{ns}:hazmat"}]}})
+    # worn: the vanilla leather armour dyed hazmat yellow, our details on top
+    leather = [{"texture": "minecraft:leather", "dyeable": {"color_when_undyed": HAZMAT_YELLOW}},
+               {"texture": "minecraft:leather_overlay"}, {"texture": f"{ns}:hazmat"}]
+    write_json(f"{root}/assets/{ns}/equipment/hazmat.json", {"layers": {"humanoid": leather, "humanoid_leggings": leather}})
     P.write_png(f"{tex}/entity/equipment/humanoid/hazmat.png", 64, 32, hazmat_layer(False))
     P.write_png(f"{tex}/entity/equipment/humanoid_leggings/hazmat.png", 64, 32, hazmat_layer(True))
     write_json(f"{root}/data/{ns}/tags/item/repairs_hazmat_suit.json", {"values": ["minecraft:leather"]})

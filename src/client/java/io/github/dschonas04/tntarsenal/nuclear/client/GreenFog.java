@@ -51,6 +51,6 @@ public final class GreenFog {
     private static float rate(ClientLevel level, BlockPos pos) {
         if (!level.hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) return 0f;
         ChunkRadiation radiation = ((AttachmentTarget) level.getChunkAt(pos)).getAttached(Radiation.CHUNK);
-        return radiation == null ? 0f : radiation.at(level.getGameTime(), NukeConfig.get().halfLifeTicks);
+        return radiation == null ? 0f : radiation.at(level.getGameTime(), NukeConfig.get().radiationTicks);
     }
 }

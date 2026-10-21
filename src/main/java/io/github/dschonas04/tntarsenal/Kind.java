@@ -8,9 +8,8 @@ import net.minecraft.world.entity.item.PrimedTnt;
  * Vanilla TNT has a power of 4 and an 80-tick fuse; the numbers below are relative to that.
  */
 public enum Kind {
-    MEGA("mega_tnt", 80, (l, t) -> Detonations.blast(l, t, 8, false)),
+    MEGA("mega_tnt", 80, Detonations::mega),
     GIGA("giga_tnt", 100, Detonations::giga),
-    NUKE("nuke_tnt", 160, Detonations::nuke),
     FIRE("fire_tnt", 80, Detonations::fire),
     LIGHTNING("lightning_tnt", 80, Detonations::lightning),
     CLUSTER("cluster_tnt", 60, Detonations::cluster),
@@ -86,11 +85,6 @@ public enum Kind {
 
     public String id() {
         return id;
-    }
-
-    /** The kinds big enough to sound the siren while lit. */
-    public boolean heavy() {
-        return this == GIGA || this == NUKE || this == ANTIMATTER || this == BLACK_HOLE || this == EARTHQUAKE || this == VOLCANO;
     }
 
     public int fuse() {

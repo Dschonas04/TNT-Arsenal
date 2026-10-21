@@ -19,6 +19,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.registry.FabricRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -117,6 +118,10 @@ public final class NuclearTnt implements ModInitializer {
             Registry.register(BuiltInRegistries.ITEM, itemKey, item);
             ITEMS.add(item);
         }
+
+        // There used to be a second nuke, the arsenal's "Nuke TNT". Those still lying in worlds and chests become the atomic bomb.
+        ((FabricRegistry) BuiltInRegistries.BLOCK).addAlias(id("nuke_tnt"), id(Tier.NUKE.id()));
+        ((FabricRegistry) BuiltInRegistries.ITEM).addAlias(id("nuke_tnt"), id(Tier.NUKE.id()));
 
         ResourceKey<EntityType<?>> entityKey = ResourceKey.create(Registries.ENTITY_TYPE, id("primed_nuke"));
         PRIMED_NUKE = Registry.register(BuiltInRegistries.ENTITY_TYPE, entityKey,

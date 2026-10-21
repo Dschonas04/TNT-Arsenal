@@ -4,6 +4,10 @@ import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.item.Item;
@@ -18,6 +22,7 @@ import net.minecraft.world.level.material.WaterFluid;
 /**
  * Water that fallout has come down on. It behaves like water (it is in the
  * water tag) but does not form new sources, and swimming in it irradiates.
+ * Once the radiation over it is gone it is clean water again.
  */
 public abstract class ContaminatedWater extends WaterFluid {
     /** mSv a player takes in for every tick spent in it. */
@@ -51,6 +56,18 @@ public abstract class ContaminatedWater extends WaterFluid {
     @Override
     public BlockState createLegacyBlock(FluidState state) {
         return Contamination.WATER_BLOCK.defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+    }
+
+    @Override
+    protected boolean isRandomlyTicking() {
+        return true;
+    }
+
+    @Override
+    protected void randomTick(ServerLevel level, BlockPos pos, FluidState state, RandomSource random) {
+        if (random.nextInt(4) != 0 || Radiation.rateAt(level, pos) > 0f) return;
+        level.setBlock(pos, state.isSource() ? Blocks.WATER.defaultBlockState()
+                : Fluids.FLOWING_WATER.getFlowing(state.getAmount(), false).createLegacyBlock(), Block.UPDATE_ALL);
     }
 
     @Override

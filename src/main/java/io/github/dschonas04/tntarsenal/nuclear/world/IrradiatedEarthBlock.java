@@ -16,7 +16,7 @@ public class IrradiatedEarthBlock extends Block {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(16) == 0 && Radiation.rateAt(level, pos) < 0.05f) {
+        if (random.nextInt(4) == 0 && Radiation.rateAt(level, pos) <= 0f) {
             level.setBlock(pos, Blocks.DIRT.defaultBlockState(), UPDATE_ALL);
         }
     }
