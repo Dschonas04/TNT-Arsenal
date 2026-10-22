@@ -6,11 +6,11 @@
 [![Fabric](https://img.shields.io/badge/loader-Fabric-dbd0b4)](https://fabricmc.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Fifty-nine kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
+Sixty-four kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
 look, a little 3D sculpture on top that shows what it does, and its own way of going off. They are crafted at an ordinary crafting table,
 so **JEI and REI show every recipe**.
 
-![All fifty-nine kinds](docs/textures.png)
+![All sixty-four kinds](docs/textures.png)
 
 | Kind | What it does | Recipe (shapeless) |
 |---|---|---|
@@ -73,11 +73,29 @@ so **JEI and REI show every recipe**.
 | Golem TNT | two iron golems guard the area | TNT + iron block + carved pumpkin |
 | Flak TNT | shoots up 40 blocks and bursts — anti-air | TNT + firework rocket + gunpowder |
 | Halloween TNT | a ring of jack o'lanterns and a cloud of bats | TNT + carved pumpkin + torch |
+| Confetti TNT | three waves of confetti and a fanfare, harmless | TNT + paper + red dye + yellow dye |
+| Cake TNT | a ring of cakes with burning candles, and Happy Birthday | TNT + cake |
+| Disco TNT | fifteen seconds of disco: lights, a beat, everyone glows and hops | TNT + note block + glowstone dust |
+| Chicken TNT | it rains chickens | TNT + 2 × egg + feather |
+| Sheep Dye TNT | dyes every sheep around and brings rainbow sheep | TNT + white wool + red dye + blue dye |
 
 They light like TNT: redstone, flint and steel, fire charges, burning arrows and
 other explosions. While the fuse burns they keep their own texture. Kinds that
 build or dig — drill, tunnel and bridge — go the way the player
-faced when placing the block.
+faced when placing the block. The five party kinds at the end break nothing and hurt no one.
+
+## Gimmicks
+
+- **TNT sling.** Throws lit TNT — from the other hand, or else the first one in the
+  inventory, any arsenal kind or plain TNT — in an arc. Sneak while throwing and it is
+  **sticky**: it clings to the first creature it touches, or stays where it lands.
+  Crafted from three sticks and two string.
+- **Handbook.** A book and a TNT give a written book with one page per kind: what it
+  does and what goes into it, in the reader's language.
+- **Advancements.** A tab of its own: the first bang, ten kinds, every kind, a hundred
+  TNT, a salvo of eight bombs from one detonator, sticky TNT on a creature, a party TNT.
+- **Statistics.** "Arsenal TNT set off" and "TNT thrown with the sling" in the
+  statistics screen.
 
 ## The nuke
 
@@ -105,9 +123,10 @@ plain TNT and the nuclear bombs.
   spread over many ticks in zones — core, middle, edge — with a blast wave that
   respects cover and a bang that travels at the speed of sound. A flash, a
   shaking ground and a mushroom cloud go with it.
-- **Remote detonator.** Right-click a bomb — nuclear, any arsenal TNT or plain
-  TNT — to bind it, right-click anywhere to set it off, as long as its chunk is
-  loaded.
+- **Remote detonator.** Right-click up to sixteen bombs — nuclear, any arsenal TNT or
+  plain TNT — to link them (again to unlink one), right-click anywhere to set them all
+  off one after the other, as long as their chunks are loaded. Holding it shows a red
+  marker over each linked bomb; sneak and right-click the air to unlink them all.
 - **Radiation** stays in the chunks around ground zero for two Minecraft days
   (`radiationTicks`), waning steadily, and survives a restart. Players take in a dose in
   mSv; roofs and water shield; out of the radiation it falls by 2 % a second.
@@ -128,8 +147,9 @@ plain TNT and the nuclear bombs.
   whoever stands in it in contaminated land takes in twice as much.
 - **Irradiated zombies.** Zombies in contaminated land turn tougher, faster
   and harder hitting, glow green, and every hit adds 25 mSv.
-- **Timer fuse.** Sneak and right-click to set 10 s to 5 minutes, right-click
-  a bomb (any of them) to start the countdown, shown to everyone within 64 blocks.
+- **Timer fuse.** Sneak and right-click to set 5 s to 5 minutes, right-click
+  a bomb (any of them) to start the countdown: it floats over the bomb, big and
+  turning red at the end, and shows to everyone within 64 blocks.
 - **Siren.** A siren block wails while it gets a redstone signal; every lit
   nuclear bomb sounds the siren over 256 blocks while its fuse burns.
 - **Sounds of its own**, synthesised by `tools/sounds.py`: the air-raid siren,

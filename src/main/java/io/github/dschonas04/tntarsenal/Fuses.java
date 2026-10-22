@@ -43,6 +43,9 @@ final class Fuses {
             case BLESSING -> ParticleTypes.TOTEM_OF_UNDYING;
             case BEE -> ParticleTypes.DRIPPING_HONEY;
             case MEGA -> ParticleTypes.LARGE_SMOKE;
+            case CONFETTI, DISCO, SHEEP -> ParticleTypes.FIREWORK;
+            case CAKE -> ParticleTypes.SMALL_FLAME;
+            case CHICKEN -> ParticleTypes.CLOUD;
         };
     }
 

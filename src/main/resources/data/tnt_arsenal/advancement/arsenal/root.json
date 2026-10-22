@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "tnt_arsenal:mega_tnt"
+    },
+    "title": {
+      "translate": "advancements.tnt_arsenal.arsenal.root.title"
+    },
+    "description": {
+      "translate": "advancements.tnt_arsenal.arsenal.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "background": "minecraft:gui/advancements/backgrounds/stone"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:tnt"
+          }
+        ]
+      }
+    }
+  }
+}

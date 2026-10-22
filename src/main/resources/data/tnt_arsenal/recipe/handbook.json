@@ -1,0 +1,1847 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:tnt"
+  ],
+  "result": {
+    "id": "minecraft:written_book",
+    "count": 1,
+    "components": {
+      "minecraft:written_book_content": {
+        "title": "TNT Arsenal",
+        "author": "Dschonas04",
+        "pages": [
+          {
+            "translate": "book.tnt_arsenal.intro"
+          },
+          {
+            "translate": "book.tnt_arsenal.tools"
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.mega_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.mega_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 4 × ",
+              {
+                "translate": "block.minecraft.tnt"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.giga_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.giga_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 4 × ",
+              {
+                "translate": "block.tnt_arsenal.mega_tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.blaze_powder"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.fire_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.fire_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.fire_charge"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.lightning_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.lightning_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.lightning_rod"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.cluster_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.cluster_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 3 × ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "item.minecraft.gunpowder"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.drill_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.drill_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.iron_pickaxe"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.tunnel_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.tunnel_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.rail"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.leveler_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.leveler_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.iron_shovel"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.miner_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.miner_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.stone_pickaxe"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.redstone"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.water_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.water_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.water_bucket"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.lava_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.lava_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.lava_bucket"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.frost_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.frost_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.packed_ice"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.snowball"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.poison_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.poison_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.fermented_spider_eye"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.gravity_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.gravity_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.iron_block"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.ender_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.ender_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.ender_pearl"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.bounce_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.bounce_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.slime_ball"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.firework_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.firework_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.firework_rocket"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.healing_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.healing_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.glistering_melon_slice"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.black_hole_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.black_hole_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.tnt_arsenal.gravity_tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.ender_eye"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.crying_obsidian"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.antigravity_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.antigravity_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.phantom_membrane"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.feather"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.bridge_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.bridge_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 4 × ",
+              {
+                "translate": "block.minecraft.stone_bricks"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.wall_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.wall_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.cobblestone_wall"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.horde_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.horde_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "item.minecraft.rotten_flesh"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.bone"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.sonic_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.sonic_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.echo_shard"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.smoke_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.smoke_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.campfire"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.xray_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.xray_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.glass"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.nature_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.nature_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 3 × ",
+              {
+                "translate": "item.minecraft.bone_meal"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.antimatter_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.antimatter_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.dragon_breath"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.ender_eye"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.nether_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.nether_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.netherrack"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.blaze_powder"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.meteor_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.meteor_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.magma_block"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.fire_charge"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.arrow_rain_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.arrow_rain_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 4 × ",
+              {
+                "translate": "item.minecraft.arrow"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.cobweb_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.cobweb_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 3 × ",
+              {
+                "translate": "item.minecraft.string"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.storm_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.storm_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.tnt_arsenal.lightning_tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.lightning_rod"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.magnet_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.magnet_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "item.minecraft.iron_ingot"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.redstone"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.sponge_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.sponge_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.sponge"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.torch_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.torch_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 4 × ",
+              {
+                "translate": "block.minecraft.torch"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.shockwave_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.shockwave_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.piston"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.dome_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.dome_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 4 × ",
+              {
+                "translate": "block.minecraft.glass_pane"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.chain_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.chain_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.redstone_torch"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.lumber_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.lumber_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.iron_axe"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.harvest_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.harvest_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.iron_hoe"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.sculk_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.sculk_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.sculk"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.desert_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.desert_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.cactus"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.sand"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.end_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.end_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.end_stone"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.chorus_fruit"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.rainbow_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.rainbow_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.red_dye"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.yellow_dye"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.blue_dye"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.earthquake_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.earthquake_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 3 × ",
+              {
+                "translate": "block.minecraft.gravel"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.volcano_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.volcano_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.magma_block"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.basalt"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.staircase_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.staircase_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.stone_brick_stairs"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.bunker_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.bunker_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.iron_door"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.platform_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.platform_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 3 × ",
+              {
+                "translate": "block.minecraft.stone_brick_slab"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.tower_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.tower_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "block.minecraft.ladder"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.stone_bricks"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.curse_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.curse_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.wither_rose"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.blessing_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.blessing_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.golden_apple"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.stasis_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.stasis_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.clock"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.bee_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.bee_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "item.minecraft.honeycomb"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.wolf_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.wolf_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 3 × ",
+              {
+                "translate": "item.minecraft.bone"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.golem_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.golem_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.iron_block"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.carved_pumpkin"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.flak_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.flak_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.firework_rocket"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.gunpowder"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.halloween_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.halloween_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.carved_pumpkin"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.torch"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.confetti_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.confetti_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.paper"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.red_dye"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.yellow_dye"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.cake_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.cake_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.cake"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.disco_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.disco_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.note_block"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.glowstone_dust"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.chicken_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.chicken_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• 2 × ",
+              {
+                "translate": "item.minecraft.egg"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.feather"
+              }
+            ]
+          },
+          {
+            "text": "",
+            "extra": [
+              {
+                "translate": "block.tnt_arsenal.sheep_tnt",
+                "bold": true,
+                "color": "dark_red"
+              },
+              "\n\n",
+              {
+                "translate": "block.tnt_arsenal.sheep_tnt.desc"
+              },
+              "\n\n",
+              {
+                "translate": "book.tnt_arsenal.recipe",
+                "italic": true
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.tnt"
+              },
+              "\n• ",
+              {
+                "translate": "block.minecraft.white_wool"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.red_dye"
+              },
+              "\n• ",
+              {
+                "translate": "item.minecraft.blue_dye"
+              }
+            ]
+          }
+        ],
+        "resolved": true
+      }
+    }
+  }
+}

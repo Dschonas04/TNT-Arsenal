@@ -106,25 +106,25 @@ final class Detonations {
     }
 
     /** Bang and smoke without breaking anything. */
-    private static void pop(ServerLevel level, PrimedTnt t, float power) {
+    static void pop(ServerLevel level, PrimedTnt t, float power) {
         level.explode(t, t.getX(), y(t), t.getZ(), power, false, Level.ExplosionInteraction.NONE);
     }
 
-    private static void sound(ServerLevel level, Vec3 at, SoundEvent sound, float volume, float pitch) {
+    static void sound(ServerLevel level, Vec3 at, SoundEvent sound, float volume, float pitch) {
         level.playSound(null, at.x, at.y, at.z, sound, SoundSource.BLOCKS, volume, pitch);
     }
 
-    private static void particles(ServerLevel level, ParticleOptions type, Vec3 at, int count, double spread, double speed) {
+    static void particles(ServerLevel level, ParticleOptions type, Vec3 at, int count, double spread, double speed) {
         level.sendParticles(type, at.x, at.y, at.z, count, spread, spread, spread, speed);
     }
 
-    private static <T extends Entity> List<T> around(ServerLevel level, Vec3 center, Class<T> type, double radius) {
+    static <T extends Entity> List<T> around(ServerLevel level, Vec3 center, Class<T> type, double radius) {
         AABB box = AABB.ofSize(center, radius * 2, radius * 2, radius * 2);
         return level.getEntitiesOfClass(type, box,
                 e -> e.isAlive() && !e.isSpectator() && e.distanceToSqr(center) <= radius * radius);
     }
 
-    private static <T extends Entity> List<T> around(ServerLevel level, PrimedTnt t, Class<T> type, double radius) {
+    static <T extends Entity> List<T> around(ServerLevel level, PrimedTnt t, Class<T> type, double radius) {
         return around(level, t.position(), type, radius);
     }
 
@@ -228,7 +228,7 @@ final class Detonations {
     }
 
     /** Puts a block where there is only air, liquid or a plant. */
-    private static boolean place(ServerLevel level, BlockPos pos, BlockState state) {
+    static boolean place(ServerLevel level, BlockPos pos, BlockState state) {
         if (!level.isLoaded(pos) || !level.getBlockState(pos).canBeReplaced()) return false;
         level.setBlock(pos, Block.updateFromNeighbourShapes(state, level, pos), FLAGS);
         return true;
@@ -306,7 +306,7 @@ final class Detonations {
     }
 
     /** Hostile creatures around a point, nearest first. */
-    private static List<LivingEntity> enemies(ServerLevel level, Vec3 c, double radius) {
+    static List<LivingEntity> enemies(ServerLevel level, Vec3 c, double radius) {
         List<LivingEntity> out = new ArrayList<>();
         for (LivingEntity e : around(level, c, LivingEntity.class, radius)) if (e instanceof Enemy) out.add(e);
         out.sort(Comparator.comparingDouble(e -> e.distanceToSqr(c)));
@@ -1420,7 +1420,7 @@ final class Detonations {
     // --- landscapes ----------------------------------------------------------
 
     /** The topmost block of a column near the given height that has air above it. */
-    private static BlockPos surface(ServerLevel level, BlockPos column, int up, int down) {
+    static BlockPos surface(ServerLevel level, BlockPos column, int up, int down) {
         for (int dy = up; dy >= -down; dy--) {
             BlockPos pos = column.above(dy);
             if (!level.isLoaded(pos)) return null;

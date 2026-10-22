@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "tnt_arsenal:giga_tnt"
+    },
+    "title": {
+      "translate": "advancements.tnt_arsenal.arsenal.all_kinds.title"
+    },
+    "description": {
+      "translate": "advancements.tnt_arsenal.arsenal.all_kinds.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "tnt_arsenal:arsenal/ten_kinds"
+}

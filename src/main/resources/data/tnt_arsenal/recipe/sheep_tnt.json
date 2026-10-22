@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:tnt",
+    "minecraft:white_wool",
+    "minecraft:red_dye",
+    "minecraft:blue_dye"
+  ],
+  "result": {
+    "id": "tnt_arsenal:sheep_tnt",
+    "count": 1
+  }
+}

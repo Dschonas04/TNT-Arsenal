@@ -876,6 +876,69 @@ def make(kid, k, T, sign):
         for x in (3.5, 12.5):
             m.box((x - 1, 2, 3.5), (x + 1, 6, 12.5), M("metal", "#2a2a2e"))
         bomb_shell(m, 9.5, 3.8, 10.5, "#2a2a2e", "#c9a227", "#c9a227", sign)
+    elif kid == "confetti_tnt":
+        # a party popper, tilted, with confetti and streamers bursting out of it
+        for i, (y, r) in enumerate(((0, 1.2), (2, 2), (4, 2.8), (6, 3.6), (8, 4.3))):
+            cylinder(m, 8, 8, y, y + 2, r, M("plain", "#e84a9a" if i % 2 == 0 else "#ffd23a"))
+        cylinder(m, 8, 8, 10, 10.6, 4.6, M("plain", "#ffffff"))
+        for x, y, z, c in ((5, 14, 6, "#3bc8ff"), (11, 15, 9, "#4be36b"), (7, 17, 11, "#ffd23a"), (10, 18, 5, "#e84a9a"),
+                           (4, 16, 10, "#6b5bff"), (12, 13, 12, "#ff3b3b"), (8, 19.5, 8, "#3bc8ff"), (6, 12.5, 3.5, "#ff8a1a")):
+            m.box((x - 0.6, y - 0.6, z - 0.15), (x + 0.6, y + 0.6, z + 0.15), M("plain", c), rot=("y", 45 if x % 2 else -22.5, (x, y, z)))
+        for x, z, c, a in ((6, 8, "#3bc8ff", 22.5), (10, 8, "#4be36b", -22.5), (8, 6, "#ff3b3b", 22.5)):
+            m.box((x - 0.25, 10.6, z - 0.25), (x + 0.25, 17, z + 0.25), M("plain", c), rot=("z", a, (x, 10.6, z)))
+        m.box((5.5, 3, 4.6), (10.5, 6.5, 4.7), None, sign=sign, sign_faces=("north",))
+    elif kid == "cake_tnt":
+        # a two-tier birthday cake with icing drips and five burning candles
+        cylinder(m, 8, 8, 0, 5, 6.5, M("plain", "#c8784a"), top=M("plain", "#ffffff"))
+        cylinder(m, 8, 8, 5, 5.6, 6.6, M("plain", "#ffffff"))
+        for x, z in ((2, 6), (2, 10), (14, 7), (14, 10), (6, 2), (10, 2), (7, 14), (11, 14)):
+            m.box((x - 0.5, 3.5, z - 0.5), (x + 0.5, 5.6, z + 0.5), M("plain", "#ffffff"))
+        cylinder(m, 8, 8, 5.6, 9.5, 4.2, M("plain", "#e8a0b8"), top=M("plain", "#ffffff"))
+        for x, z, c in ((8, 8, "#e84a5a"), (6, 6.5, "#3bc8ff"), (10, 6.5, "#ffd23a"), (6, 9.5, "#4be36b"), (10, 9.5, "#e84a9a")):
+            m.box((x - 0.4, 9.5, z - 0.4), (x + 0.4, 12, z + 0.4), M("plain", c))
+            m.box((x - 0.3, 12, z - 0.3), (x + 0.3, 13, z + 0.3), M("glow", "#ffd23a"))
+        m.box((5, 0.8, 1.4), (11, 4.2, 1.5), None, sign=sign, sign_faces=("north",))
+    elif kid == "disco_tnt":
+        # a mirror ball on a stand, a little dance floor of coloured tiles under it
+        for i, (x, z) in enumerate((x, z) for x in (1, 5, 9, 13) for z in (1, 5, 9, 13)):
+            m.box((x, 0, z), (x + 3.8, 1, z + 3.8), M("glow", ("#ff4ad6", "#4ae8ff", "#ffe94a", "#7aff4a")[(i + i // 4) % 4]))
+        m.box((7.4, 1, 7.4), (8.6, 11, 8.6), M("metal", "#9aa0a8"))
+        m.box((6, 11, 7.6), (10, 11.6, 8.4), M("metal", "#9aa0a8"))
+        sphere(m, 8, 15.5, 8, 4.2, M("grid", "#c9d6e8"), slices=5)
+        m.box((7.6, 19.6, 7.6), (8.4, 22, 8.4), M("metal", "#5a5f66"))
+        m.box((5.5, 1, 1.4), (10.5, 5, 1.5), None, sign=sign, sign_faces=("north",))
+    elif kid == "chicken_tnt":
+        # a chicken sitting in a straw nest with eggs
+        cylinder(m, 8, 8, 0, 3, 6.5, M("leaves", "#e0c060"), top=M("leaves", "#c8a040"))
+        for x, z in ((3.5, 11), (12.5, 10.5), (11.5, 4)):
+            m.box((x - 1, 3, z - 1.3), (x + 1, 5, z + 1.3), M("plain", "#f2ead8"))
+        white = M("plain", "#ffffff")
+        m.box((4.5, 3, 5), (11.5, 9, 13), white)
+        m.box((3.8, 4.5, 6), (4.5, 8, 12), M("plain", "#e8e8e8"))
+        m.box((11.5, 4.5, 6), (12.2, 8, 12), M("plain", "#e8e8e8"))
+        m.box((5.5, 8, 12), (10.5, 11, 14), white)
+        m.box((5.5, 7, 3), (10.5, 15, 7), white)
+        m.box((6.5, 10.5, 1.5), (9.5, 12, 3), M("plain", "#f2a81a"))
+        m.box((7, 8.5, 2), (9, 10.5, 3), M("plain", "#d42a2a"))
+        m.box((5.4, 12.5, 4.5), (5.5, 13.5, 5.5), M("plain", "#1a1a1a"))
+        m.box((10.5, 12.5, 4.5), (10.6, 13.5, 5.5), M("plain", "#1a1a1a"))
+        m.box((6.5, 15, 4), (9.5, 16, 6), M("plain", "#d42a2a"))
+        m.box((5.5, 0.5, 1.4), (10.5, 2.8, 1.5), None, sign=sign, sign_faces=("north",))
+    elif kid == "sheep_tnt":
+        # a jeb_ sheep: rainbow wool in stripes
+        stripes = ("#e84a4a", "#ff8a1a", "#ffe94a", "#4be36b", "#3bc8ff", "#6b5bff", "#e84ad6")
+        for i, c in enumerate(stripes):
+            z = 3.5 + i * 1.4
+            m.box((3.5, 5, z), (12.5, 12, z + 1.4), M("leaves", c))
+        for x, z in ((4.5, 5), (10, 5), (4.5, 11.5), (10, 11.5)):
+            m.box((x, 0, z), (x + 1.5, 5, z + 1.5), M("plain", "#3a3a3a"))
+        m.box((5.5, 8, 0.5), (10.5, 13, 3.5), M("plain", "#d8c8b0"))
+        m.box((5, 11.5, 1), (11, 13.5, 3.5), M("leaves", "#f2f2f2"))
+        m.box((6.3, 10, 0.4), (7.3, 11, 0.5), M("plain", "#1a1a1a"))
+        m.box((8.7, 10, 0.4), (9.7, 11, 0.5), M("plain", "#1a1a1a"))
+        m.box((4, 10.5, 1.5), (5.5, 11.5, 3), M("plain", "#d8c8b0"))
+        m.box((10.5, 10.5, 1.5), (12, 11.5, 3), M("plain", "#d8c8b0"))
+        m.box((6, 5.5, 13.4), (10, 10, 13.5), None, sign=sign, sign_faces=("south",))
     else:
         raise KeyError(kid)
     return m

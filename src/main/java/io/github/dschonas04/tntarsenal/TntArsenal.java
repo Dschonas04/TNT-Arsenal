@@ -51,6 +51,7 @@ public final class TntArsenal implements ModInitializer {
     /** Entry point for the mixin: the flash and sparks every kind goes off with. */
     public static void burst(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.item.PrimedTnt tnt, Kind kind) {
         Fuses.burst(level, tnt, kind);
+        Gimmicks.detonated(level, tnt, kind);
     }
 
     @Override
@@ -59,6 +60,7 @@ public final class TntArsenal implements ModInitializer {
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
             if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG)) mob.setNoAi(false);
         });
+        Gimmicks.register();
         for (Kind kind : Kind.values()) {
             ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id(kind.id()));
             Block block = new ArsenalTntBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.TNT).setId(blockKey));
@@ -73,6 +75,11 @@ public final class TntArsenal implements ModInitializer {
             Registry.register(BuiltInRegistries.ITEM, itemKey, item);
             ITEMS.add(item);
         }
+
+        ResourceKey<Item> slingKey = ResourceKey.create(Registries.ITEM, id("tnt_sling"));
+        ITEMS.add(Registry.register(BuiltInRegistries.ITEM, slingKey, new SlingItem(new Item.Properties().setId(slingKey).durability(256)
+                .component(DataComponents.LORE, new ItemLore(List.of(
+                        Component.translatable("item.tnt_arsenal.tnt_sling.desc").withStyle(ChatFormatting.GRAY)))))));
 
         // The vanilla builder keeps its item output type protected, so the items
         // go in through Fabric's event for this tab instead.

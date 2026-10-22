@@ -166,6 +166,11 @@ ICONS = {
     "rocket": ["...a....", "..aaa...", "..aba...", "..aaa...", "..aaa...", ".caaac..", ".c.c.c..", "..c.c..."],
     "mushroom": ["..aaaa..", ".abaaba.", "aaaaaaaa", ".dddddd.", "..fyyf..", "...ss...", "..wssw..", ".gggggg."],
     "pumpkin": ["...v....", "..aaaa..", ".aaaaaa.", "adaadada", "aaaaaaaa", "adaddaad", ".adaada.", "..aaaa.."],
+    "confetti": ["c..e..b.", "..b...c.", ".e..aa..", "...aba.e", "..abab..", ".abab...", "abab....", "aa......"],
+    "cake": ["..c..c..", "..b..b..", ".aaaaaa.", "adaadaad", "aaaaaaaa", "dddddddd", "dddddddd", "oooooooo"],
+    "disco": ["...oo...", "..abab..", ".bababa.", "abababab", "babababa", ".ababab.", "..baba..", "........"],
+    "chicken": ["..aa....", ".aada...", ".aaacc..", "..ab....", ".aaaaaa.", "aaaaaaa.", "..aaaa..", "..c..c.."],
+    "sheep": ["........", ".aaaaa..", "aaaaaaa.", "aaaaaadd", "aaaaaadb", ".aaaaa..", ".d.d.d..", ".d.d...."],
 }
 
 for name, rows in ICONS.items():
@@ -366,6 +371,23 @@ kind("flak_tnt", "Flak TNT", "Flak-TNT", "Shoots up 40 blocks and bursts — ant
 kind("halloween_tnt", "Halloween TNT", "Halloween-TNT", "A ring of jack o'lanterns and a cloud of bats", "Ein Ring aus Kürbislaternen und eine Wolke Fledermäuse",
      "#2a1a2e", ("rope", "#e07a1a"), "#1a1018", "pumpkin", {"a": "#e07a1a", "d": "#ffd23a", "v": "#3a6a1a"},
      "embers", [T, "minecraft:carved_pumpkin", "minecraft:torch"], ["#ff8a1a", "#8a3ad6"])
+
+# --- the party kinds: harmless, just for fun ---
+kind("confetti_tnt", "Confetti TNT", "Konfetti-TNT", "Three waves of confetti and a fanfare, harmless", "Drei Wellen Konfetti und eine Fanfare, harmlos",
+     "#e84a9a", ("rope", "#ffe066"), "#fff4fa", "confetti", {"a": "#ffd23a", "b": "#e84a9a", "c": "#3bc8ff", "e": "#4be36b"},
+     "stars", [T, "minecraft:paper", "minecraft:red_dye", "minecraft:yellow_dye"], ["#3bc8ff", "#ffd23a", "#4be36b"])
+kind("cake_tnt", "Cake TNT", "Kuchen-TNT", "A ring of cakes with burning candles, and Happy Birthday", "Ein Kreis Kuchen mit brennenden Kerzen, dazu Happy Birthday",
+     "#f2d6b0", ("rope", "#e84a5a"), "#fffaf2", "cake", {"a": "#ffffff", "d": "#c8784a", "b": "#e84a5a", "c": "#ffd23a", "o": "#8a5a3a"},
+     "speck", [T, "minecraft:cake"], ["#e84a5a", "#ffffff"])
+kind("disco_tnt", "Disco TNT", "Disco-TNT", "Fifteen seconds of disco: lights, a beat, everyone glows and hops", "15 Sekunden Disco: Lichter, Beat, alle leuchten und hüpfen",
+     "#3a2a5a", ("metal", "#c9c9d6"), "#f2eeff", "disco", {"a": "#e8e8f2", "b": "#9a9ab8", "o": "#5a5a6a"},
+     "stars", [T, "minecraft:note_block", "minecraft:glowstone_dust"], ["#ff4ad6", "#4ae8ff", "#ffe94a"])
+kind("chicken_tnt", "Chicken TNT", "Hühner-TNT", "It rains chickens", "Es regnet Hühner",
+     "#e8e0d0", ("rope", "#c83a2a"), "#fffbe8", "chicken", {"a": "#ffffff", "d": "#1a1a1a", "c": "#f2a81a", "b": "#d42a2a"},
+     "speck", [T, "minecraft:egg", "minecraft:egg", "minecraft:feather"], ["#f2c81a", "#d8cfbf"])
+kind("sheep_tnt", "Sheep Dye TNT", "Schaf-Färbe-TNT", "Dyes every sheep around a new colour and brings rainbow sheep", "Färbt alle Schafe ringsum neu und bringt Regenbogenschafe mit",
+     "#f2f2f2", ("rope", "#4a8ae8"), "#ffffff", "sheep", {"a": "#f2f2f2", "d": "#3a3a3a", "b": "#e8a0a0"},
+     "stars", [T, "minecraft:white_wool", "minecraft:red_dye", "minecraft:blue_dye"], ["#e84a4a", "#4a8ae8", "#4be36b"])
 
 # The arsenal's own nuke is gone (the atomic bomb of the nuclear part is the only one);
 # its drawing stays as the mod icon.
@@ -846,6 +868,8 @@ def main():
     sys.path.insert(0, HERE)
     import nuclear_assets
     nuclear_assets.main()
+    import gimmicks
+    gimmicks.main(ROOT, NS, K, write_json, write_png, hexc)
     # last: the 3D models of every TNT and bomb, which replace the plain cube models written above
     bombs = [dict(b) for b in nuclear_assets.BOMBS]
     for b in bombs:

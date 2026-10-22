@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:tnt",
+    "minecraft:note_block",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "tnt_arsenal:disco_tnt",
+    "count": 1
+  }
+}

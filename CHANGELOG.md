@@ -6,6 +6,21 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-10-22
+
+### Added
+- Five party kinds that break nothing and hurt no one: confetti, cake (with candles
+  and Happy Birthday), disco, chicken rain and sheep dye with rainbow sheep.
+- TNT sling: throws lit TNT in an arc; sneak to throw it sticky, so it clings to the
+  first creature it touches.
+- Handbook: a book and a TNT give a written book with one page per kind.
+- An advancement tab of its own and two statistics (TNT set off, TNT thrown).
+
+### Changed
+- The remote detonator links up to sixteen bombs and fires them as a salvo; holding
+  it marks each linked bomb, sneaking clears them.
+- The timer fuse shows its countdown floating over the bomb and can be set to 5 s.
+
 ## [1.6.0] - 2026-10-21
 
 ### Added

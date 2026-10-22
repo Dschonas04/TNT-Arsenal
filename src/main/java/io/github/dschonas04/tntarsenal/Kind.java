@@ -66,7 +66,17 @@ public enum Kind {
     WOLF("wolf_tnt", 30, Detonations::wolves),
     GOLEM("golem_tnt", 30, Detonations::golems),
     FLAK("flak_tnt", 20, Detonations::flak),
-    HALLOWEEN("halloween_tnt", 40, Detonations::halloween);
+    HALLOWEEN("halloween_tnt", 40, Detonations::halloween),
+    CONFETTI("confetti_tnt", 40, Party::confetti),
+    CAKE("cake_tnt", 40, Party::cake),
+    DISCO("disco_tnt", 40, Party::disco),
+    CHICKEN("chicken_tnt", 40, Party::chickens),
+    SHEEP("sheep_tnt", 40, Party::sheep);
+
+    /** The party kinds break nothing and hurt no one. */
+    public boolean party() {
+        return this == CONFETTI || this == CAKE || this == DISCO || this == CHICKEN || this == SHEEP;
+    }
 
     @FunctionalInterface
     public interface Detonation {

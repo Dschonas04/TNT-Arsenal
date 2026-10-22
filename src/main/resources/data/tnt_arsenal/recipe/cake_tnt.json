@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:tnt",
+    "minecraft:cake"
+  ],
+  "result": {
+    "id": "tnt_arsenal:cake_tnt",
+    "count": 1
+  }
+}

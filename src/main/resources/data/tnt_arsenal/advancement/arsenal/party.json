@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "tnt_arsenal:confetti_tnt"
+    },
+    "title": {
+      "translate": "advancements.tnt_arsenal.arsenal.party.title"
+    },
+    "description": {
+      "translate": "advancements.tnt_arsenal.arsenal.party.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "tnt_arsenal:arsenal/first_bang"
+}

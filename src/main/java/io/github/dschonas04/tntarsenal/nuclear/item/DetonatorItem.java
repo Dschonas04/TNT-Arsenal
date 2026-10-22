@@ -1,12 +1,19 @@
 package io.github.dschonas04.tntarsenal.nuclear.item;
 
-import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.Bombs;
+import io.github.dschonas04.tntarsenal.Gimmicks;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
+import io.github.dschonas04.tntarsenal.nuclear.explosion.Jobs;
+import java.util.ArrayList;
+import java.util.List;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,13 +25,66 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 /**
- * The remote detonator. Right-click a bomb — nuclear, any arsenal TNT or plain TNT — to bind it; right-click anywhere else
- * to light it, wherever you are — as long as its chunk is loaded and you are in
- * the same dimension.
+ * The remote detonator. Right-click bombs — nuclear, any arsenal TNT or plain TNT — to link up to sixteen of them
+ * (right-click a linked one again to unlink it); right-click anywhere else to set them all off, one after the other,
+ * as long as their chunks are loaded and you are in the same dimension. Sneak and right-click the air to unlink all.
+ * Whoever holds a linked detonator sees a red marker above each of its bombs.
  */
 public class DetonatorItem extends Item {
+    public static final int MAX = 16;
+    private static final DustParticleOptions MARKER = new DustParticleOptions(0xFF2020, 1.2f);
+
     public DetonatorItem(Properties properties) {
         super(properties);
+    }
+
+    /** The red markers over linked bombs, for the player holding the detonator only. */
+    public static void register() {
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if (server.getTickCount() % 10 != 0) return;
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                for (InteractionHand hand : InteractionHand.values()) {
+                    ItemStack stack = player.getItemInHand(hand);
+                    if (!(stack.getItem() instanceof DetonatorItem)) continue;
+                    ServerLevel level = player.level();
+                    if (!dimension(stack).equals(level.dimension().identifier().toString())) continue;
+                    for (BlockPos pos : bombs(stack)) {
+                        if (pos.distSqr(player.blockPosition()) > 96 * 96) continue;
+                        level.sendParticles(player, MARKER, true, false, pos.getX() + 0.5, pos.getY() + 1.4, pos.getZ() + 0.5, 3, 0.05, 0.15, 0.05, 0);
+                    }
+                }
+            }
+        });
+    }
+
+    private static CompoundTag tag(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+    }
+
+    private static String dimension(ItemStack stack) {
+        return tag(stack).getStringOr("dimension", "");
+    }
+
+    /** The linked bombs; detonators from before 1.7 held a single "pos". */
+    public static List<BlockPos> bombs(ItemStack stack) {
+        CompoundTag tag = tag(stack);
+        List<BlockPos> out = new ArrayList<>();
+        for (long p : tag.getLongArray("bombs").orElse(new long[0])) out.add(BlockPos.of(p));
+        if (out.isEmpty() && tag.contains("pos")) out.add(BlockPos.of(tag.getLongOr("pos", 0L)));
+        return out;
+    }
+
+    private static void save(ItemStack stack, List<BlockPos> bombs, String dimension) {
+        if (bombs.isEmpty()) {
+            stack.remove(DataComponents.CUSTOM_DATA);
+            stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
+            return;
+        }
+        CompoundTag tag = new CompoundTag();
+        tag.putLongArray("bombs", bombs.stream().mapToLong(BlockPos::asLong).toArray());
+        tag.putString("dimension", dimension);
+        CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
+        stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     @Override
@@ -34,12 +94,21 @@ public class DetonatorItem extends Item {
         if (!Bombs.isBomb(level.getBlockState(pos))) return super.useOn(context);
         Player player = context.getPlayer();
         if (level instanceof ServerLevel && player != null) {
-            CompoundTag tag = new CompoundTag();
-            tag.putLong("pos", pos.asLong());
-            tag.putString("dimension", level.dimension().identifier().toString());
-            CustomData.set(DataComponents.CUSTOM_DATA, context.getItemInHand(), tag);
-            player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.bound", pos.getX(), pos.getY(), pos.getZ()));
-            level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 1.3f);
+            ItemStack stack = context.getItemInHand();
+            String here = level.dimension().identifier().toString();
+            List<BlockPos> bombs = here.equals(dimension(stack)) ? bombs(stack) : new ArrayList<>();
+            if (bombs.remove(pos)) {
+                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.unlinked", bombs.size()));
+                level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 0.8f);
+            } else if (bombs.size() >= MAX) {
+                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.full", MAX));
+                return InteractionResult.FAIL;
+            } else {
+                bombs.add(pos);
+                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.linked", bombs.size(), pos.getX(), pos.getY(), pos.getZ()));
+                level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 1.0f + bombs.size() * 0.05f);
+            }
+            save(stack, bombs, here);
         }
         return InteractionResult.SUCCESS;
     }
@@ -47,30 +116,44 @@ public class DetonatorItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (!(level instanceof ServerLevel)) return InteractionResult.SUCCESS;
-        if (data == null || data.isEmpty() || !data.copyTag().contains("pos")) {
+        if (!(level instanceof ServerLevel server)) return InteractionResult.SUCCESS;
+        List<BlockPos> bombs = bombs(stack);
+        if (bombs.isEmpty()) {
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.unbound"));
             return InteractionResult.FAIL;
         }
-        CompoundTag tag = data.copyTag();
-        BlockPos pos = BlockPos.of(tag.getLongOr("pos", 0L));
-        if (!tag.getStringOr("dimension", "").equals(level.dimension().identifier().toString())) {
+        if (player.isShiftKeyDown()) {
+            save(stack, List.of(), "");
+            player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.cleared"));
+            return InteractionResult.SUCCESS;
+        }
+        if (!dimension(stack).equals(level.dimension().identifier().toString())) {
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.other_dimension"));
             return InteractionResult.FAIL;
         }
-        if (!level.isLoaded(pos)) {
-            player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.not_loaded"));
-            return InteractionResult.FAIL;
-        }
-        if (!Bombs.ignite((ServerLevel) level, pos, player, 0)) {
-            player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.gone"));
-            stack.remove(DataComponents.CUSTOM_DATA);
-            return InteractionResult.FAIL;
-        }
-        stack.remove(DataComponents.CUSTOM_DATA);
-        player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.fired"));
+        // a salvo: one bomb every three ticks, in the order they were linked
+        List<BlockPos> salvo = new ArrayList<>(bombs);
+        Jobs.add(new Jobs.Job() {
+            private int age;
+
+            @Override
+            public ServerLevel level() {
+                return server;
+            }
+
+            @Override
+            public boolean tick() {
+                if (age % 3 == 0 && age / 3 < salvo.size()) {
+                    BlockPos pos = salvo.get(age / 3);
+                    if (server.isLoaded(pos)) Bombs.ignite(server, pos, player, 0);
+                }
+                return ++age > salvo.size() * 3;
+            }
+        });
+        save(stack, List.of(), "");
+        player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.fired", salvo.size()));
         level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.DETONATOR, SoundSource.PLAYERS, 1.0f, 1.0f);
+        if (salvo.size() >= 8 && player instanceof ServerPlayer sp) Gimmicks.award(sp, "salvo");
         return InteractionResult.SUCCESS;
     }
 }

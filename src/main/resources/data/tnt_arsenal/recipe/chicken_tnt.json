@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:tnt",
+    "minecraft:egg",
+    "minecraft:egg",
+    "minecraft:feather"
+  ],
+  "result": {
+    "id": "tnt_arsenal:chicken_tnt",
+    "count": 1
+  }
+}

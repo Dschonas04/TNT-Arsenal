@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "tnt_arsenal:cluster_tnt"
+    },
+    "title": {
+      "translate": "advancements.tnt_arsenal.arsenal.ten_kinds.title"
+    },
+    "description": {
+      "translate": "advancements.tnt_arsenal.arsenal.ten_kinds.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "tnt_arsenal:arsenal/first_bang"
+}

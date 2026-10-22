@@ -131,8 +131,11 @@ public final class NuclearTnt implements ModInitializer {
 
         ResourceKey<Item> detonatorKey = ResourceKey.create(Registries.ITEM, id("detonator"));
         DETONATOR = Registry.register(BuiltInRegistries.ITEM, detonatorKey,
-                new DetonatorItem(new Item.Properties().setId(detonatorKey).stacksTo(1)));
+                new DetonatorItem(new Item.Properties().setId(detonatorKey).stacksTo(1)
+                        .component(DataComponents.LORE, new ItemLore(List.of(
+                                Component.translatable("item.tnt_arsenal.detonator.desc").withStyle(ChatFormatting.GRAY))))));
         ITEMS.add(DETONATOR);
+        DetonatorItem.register();
 
         ResourceKey<Item> geigerKey = ResourceKey.create(Registries.ITEM, id("geiger_counter"));
         GEIGER_COUNTER = Registry.register(BuiltInRegistries.ITEM, geigerKey,
