@@ -365,7 +365,7 @@ kind("wolf_tnt", "Wolf Pack TNT", "Wolfsrudel-TNT", "Four wolves, tamed to you",
 kind("golem_tnt", "Golem TNT", "Golem-TNT", "Two iron golems guard the area", "Zwei Eisengolems bewachen die Gegend",
      "#b8b0a4", ("metal", "#6a6a6a"), "#f2f0ea", "golem", {"a": "#c9c2b8", "b": "#e2dcd2", "d": "#8a1a1a", "c": "#9a9288", "v": "#4a8a2a"},
      "moss", [T, "minecraft:iron_block", "minecraft:carved_pumpkin"], ["#4a8a2a", "#2f6a1a"])
-kind("flak_tnt", "Flak TNT", "Flak-TNT", "Shoots up 40 blocks and bursts — anti-air", "Schießt 40 Blöcke hoch und platzt — gegen Phantome",
+kind("flak_tnt", "Flak TNT", "Flak-TNT", "Fires three Giga TNT into the sky, where they burst", "Schießt drei Giga-TNT in den Himmel, wo sie zerplatzen",
      "#4a5a3a", ("hazard",), "#e8e4d4", "rocket", {"a": "#8a949b", "b": "#2a2a2a", "c": "#ff7a1a"},
      "rivets", [T, "minecraft:firework_rocket", "minecraft:gunpowder"])
 kind("halloween_tnt", "Halloween TNT", "Halloween-TNT", "A ring of jack o'lanterns and a cloud of bats", "Ein Ring aus Kürbislaternen und eine Wolke Fledermäuse",

@@ -71,7 +71,7 @@ so **JEI and REI show every recipe**.
 | Bee TNT | eight bees that hunt the monsters around | TNT + 2 × honeycomb |
 | Wolf Pack TNT | four wolves, tamed to you | TNT + 3 × bone |
 | Golem TNT | two iron golems guard the area | TNT + iron block + carved pumpkin |
-| Flak TNT | shoots up 40 blocks and bursts — anti-air | TNT + firework rocket + gunpowder |
+| Flak TNT | fires three Giga TNT into the sky, where they burst | TNT + firework rocket + gunpowder |
 | Halloween TNT | a ring of jack o'lanterns and a cloud of bats | TNT + carved pumpkin + torch |
 | Confetti TNT | three waves of confetti and a fanfare, harmless | TNT + paper + red dye + yellow dye |
 | Cake TNT | a ring of cakes with burning candles, and Happy Birthday | TNT + cake |

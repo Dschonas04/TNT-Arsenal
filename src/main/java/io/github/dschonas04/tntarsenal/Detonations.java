@@ -1887,25 +1887,46 @@ final class Detonations {
     }
 
     /**
-     * Anti-air: the charge shoots straight up for up to 40 blocks and bursts —
-     * at the first thing in its way, or at the top. Hurts what flies, breaks nothing.
+     * Flak: three Giga TNT shoot up out of it, trailing fire, and burst forty blocks up in the sky.
+     * Under a roof (less than 22 blocks of open air above it) it fires a single harmless flak burst instead.
      */
     static void flak(ServerLevel level, PrimedTnt t) {
         Vec3 start = t.position();
-        sound(level, start, SoundEvents.FIREWORK_ROCKET_LAUNCH, 3.0f, 0.6f);
-        Tasks.start(age -> {
-            Vec3 at = start.add(0, 1 + age * 2.0, 0);
-            BlockPos pos = BlockPos.containing(at);
-            boolean blocked = !level.isLoaded(pos) || !level.getBlockState(pos).canBeReplaced();
-            boolean target = !around(level, at, LivingEntity.class, 2.5).isEmpty();
-            level.sendParticles(ParticleTypes.FLAME, at.x, at.y, at.z, 6, 0.1, 0.3, 0.1, 0.01);
-            level.sendParticles(ParticleTypes.LARGE_SMOKE, at.x, at.y - 0.5, at.z, 3, 0.1, 0.2, 0.1, 0.01);
-            if (!blocked && !target && age < 20) return false;
-            Vec3 burst = blocked ? at.subtract(0, 1.5, 0) : at;
-            level.explode(t, burst.x, burst.y, burst.z, 4, false, Level.ExplosionInteraction.NONE);
-            level.sendParticles(ParticleTypes.FIREWORK, burst.x, burst.y, burst.z, 80, 1, 1, 1, 0.3);
-            return true;
-        });
+        sound(level, start, SoundEvents.FIREWORK_ROCKET_LAUNCH, 3.0f, 0.5f);
+        // measured from two blocks up, so a redstone block or a lever right on top does not count as a roof
+        BlockPos from = t.blockPosition().above(2);
+        if (openAbove(level, from, 40) - from.getY() < 22) {
+            Tasks.start(age -> {
+                Vec3 at = start.add(0, 1 + age * 2.0, 0);
+                BlockPos pos = BlockPos.containing(at);
+                boolean blocked = !level.isLoaded(pos) || !level.getBlockState(pos).canBeReplaced();
+                level.sendParticles(ParticleTypes.FLAME, at.x, at.y, at.z, 6, 0.1, 0.3, 0.1, 0.01);
+                if (!blocked && age < 20) return false;
+                Vec3 burst = blocked ? at.subtract(0, 1.5, 0) : at;
+                level.explode(t, burst.x, burst.y, burst.z, 4, false, Level.ExplosionInteraction.NONE);
+                level.sendParticles(ParticleTypes.FIREWORK, burst.x, burst.y, burst.z, 80, 1, 1, 1, 0.3);
+                return true;
+            });
+            return;
+        }
+        RandomSource random = level.getRandom();
+        BlockState giga = BuiltInRegistries.BLOCK.getValue(TntArsenal.id(Kind.GIGA.id())).defaultBlockState();
+        for (int i = 0; i < 3; i++) {
+            PrimedTnt shell = new PrimedTnt(level, start.x, start.y + 0.5, start.z, t.getOwner());
+            shell.setBlockState(giga);
+            double angle = Math.PI * 2 * i / 3 + random.nextDouble() * 0.5;
+            shell.setDeltaMovement(Math.cos(angle) * 0.18, 1.55 + random.nextDouble() * 0.15, Math.sin(angle) * 0.18);
+            shell.setFuse(30 + i * 6);
+            level.addFreshEntity(shell);
+            Tasks.start(age -> {
+                if (!shell.isAlive()) return true;
+                level.sendParticles(ParticleTypes.FLAME, shell.getX(), shell.getY(), shell.getZ(), 4, 0.1, 0.1, 0.1, 0.02);
+                level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, shell.getX(), shell.getY() - 0.3, shell.getZ(), 1, 0.05, 0.05, 0.05, 0.01);
+                level.sendParticles(Particles.FUSE_SPARK, shell.getX(), shell.getY(), shell.getZ(), 3, 0.1, 0.1, 0.1, 0.2);
+                return age > 60;
+            });
+        }
+        level.sendParticles(ParticleTypes.LARGE_SMOKE, start.x, start.y + 0.5, start.z, 30, 0.5, 0.2, 0.5, 0.05);
     }
 
     /** Halloween: a ring of jack o'lanterns on the ground and a cloud of bats. */

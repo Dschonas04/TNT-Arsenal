@@ -519,7 +519,125 @@ def make(kid, k, T, sign):
             m.box(a, b, M("plain", "#1a1a1a"))
         m.box((6.6, 1.5, 3.4), (9.4, 4.5, 3.5), M("beam", "#6b4a2b"))
         m.box((5.5, 0.2, 0.9), (10.5, 1.3, 1), None, sign=sign, sign_faces=("north",))
-    elif kid in ("bridge_tnt", "wall_tnt", "platform_tnt", "staircase_tnt", "bunker_tnt", "dome_tnt", "torch_tnt"):
+    elif kid == "drill_tnt":
+        # a drilling rig: a steel frame over a hole, the motor on top, the spiral bit boring into the ground
+        m.box((0.5, 0, 0.5), (15.5, 2, 15.5), M("stone", "#7a5a3a"), faces={"up": M("leaves", "#5f9a3a")})
+        m.box((5, 1.9, 5), (11, 2.05, 11), M("plain", "#1a1410"))
+        for x, z in ((2, 2), (12.6, 2), (2, 12.6), (12.6, 12.6)):
+            m.box((x, 2, z), (x + 1.4, 16, z + 1.4), M("metal", "#e0b21a"))
+        m.box((2, 12, 12.6), (14, 12.8, 14), M("metal", "#c89a10"))
+        m.box((12.6, 12, 2), (14, 12.8, 14), M("metal", "#c89a10"))
+        m.box((1.5, 16, 1.5), (14.5, 17.5, 14.5), M("metal", "#c89a10"))
+        m.box((5, 17.5, 5), (11, 21, 11), M("metal", "#3a3f44"), faces={"up": M("lid", "#5a5f66")})
+        m.box((10.5, 18, 6.5), (12.5, 20, 9.5), M("metal", "#5a5f66"))
+        m.box((7.4, 11, 7.4), (8.6, 17.5, 8.6), M("metal", "#9aa0a8"))
+        for i in range(8):
+            r = 3.2 - i * 0.38
+            m.box((8 - r, 10.6 - i * 1.1, 8 - r), (8 + r, 11.5 - i * 1.1, 8 + r), M("metal", "#dfe5ec" if i % 2 else "#a8b0ba"),
+                  rot=("y", (22.5, -22.5, 45, 0)[i % 4], (8, 10, 8)))
+        m.box((5.5, 3, 1.95), (10.5, 6.5, 2.05), None, sign=sign, sign_faces=("north",))
+    elif kid == "tunnel_tnt":
+        # a tunnel portal cut into a block of rock, rails running out of it and a loaded mine cart
+        rock = M("stone", "#8a8a8a")
+        m.box((1, 0, 6), (15, 13, 15.5), rock, faces={"up": M("leaves", "#5f9a3a")})
+        m.box((5, 0, 5.9), (11, 8, 6), M("plain", "#141414"))
+        m.box((4, 8, 5.6), (12, 9.5, 6.2), M("beam", "#6b4a2b"))
+        m.box((4, 0, 5.6), (5, 8, 6.2), M("beam", "#6b4a2b"))
+        m.box((11, 0, 5.6), (12, 8, 6.2), M("beam", "#6b4a2b"))
+        for x in (6, 9.6):
+            m.box((x, 0, 0), (x + 0.5, 0.5, 6), M("metal", "#9aa0a8"))
+        for z in (0.5, 2.5, 4.5):
+            m.box((5.5, 0, z), (10.6, 0.3, z + 0.8), M("beam", "#6b4a2b"))
+        m.box((5.5, 0.8, 0.5), (10.6, 4, 4.5), M("metal", "#5a5f66"))
+        m.box((6, 4, 1), (10, 4.6, 4), M("stone", "#3a3a3a"))
+        for x, z in ((6, 1), (9.6, 1), (6, 3.5), (9.6, 3.5)):
+            m.box((x - 0.1, 0.3, z - 0.4), (x + 0.6, 1.2, z + 0.4), M("plain", "#2a2a2a"))
+        m.box((12.6, 3, 5.4), (13.4, 7, 6.2), M("beam", "#8a5a2b"))
+        m.box((12.5, 7, 5.3), (13.5, 8, 6.3), M("glow", "#ffb12b"))
+        m.box((2, 9.5, 5.9), (4, 11.5, 6), None, sign=sign, sign_faces=("north",))
+    elif kid == "leveler_tnt":
+        # a bulldozer: tracks, a yellow body, the cab and a broad blade in front
+        for x in (2, 11):
+            m.box((x, 0, 3), (x + 3, 3, 14), M("plain", "#2a2a2a"))
+            for z in (3.5, 6, 8.5, 11, 13):
+                m.box((x - 0.1, 0.4, z), (x + 3.1, 2.6, z + 0.6), M("metal", "#4a4a4a"))
+        yellow = M("metal", "#e8b81a")
+        m.box((3, 3, 4), (13, 7, 13), yellow)
+        m.box((4.5, 7, 7.5), (11.5, 12.5, 12.5), yellow, faces={"north": M("glass", "#bfe8ff"), "west": M("glass", "#bfe8ff"), "east": M("glass", "#bfe8ff")})
+        m.box((4, 12.5, 7), (12, 13.2, 13), M("metal", "#c89a10"))
+        m.box((10, 7, 4.5), (11, 11, 5.5), M("metal", "#3a3a3a"))
+        m.box((1, 0.2, 0.6), (15, 5.5, 1.6), M("metal", "#c9a01a"))
+        m.box((1, 5.5, 0), (15, 6.3, 1.2), M("metal", "#c9a01a"))
+        m.box((1, 0, 0), (15, 0.6, 1), M("metal", "#8a8f96"))
+        for x in (3.5, 11.5):
+            m.box((x, 2, 1), (x + 1, 3, 4), M("metal", "#3a3a3a"))
+        m.box((5, 3.5, 3.9), (11, 6.5, 4), None, sign=sign, sign_faces=("north",))
+    elif kid == "miner_tnt":
+        # a mine cart heaped with ore on a short stretch of rails, a pickaxe leaning on it
+        for x in (3.5, 12):
+            m.box((x, 0, 0.5), (x + 0.5, 0.5, 15.5), M("metal", "#9aa0a8"))
+        for z in (1.5, 5, 8.5, 12):
+            m.box((2.5, 0, z), (13.5, 0.3, z + 1), M("beam", "#6b4a2b"))
+        cart = M("metal", "#6a6f76")
+        m.box((3, 1.2, 3), (13, 7.5, 13), cart, faces={"up": M("stone", "#4a4a4a")})
+        m.box((2.8, 6.8, 2.8), (13.2, 7.6, 13.2), M("band", "#4a4f55"))
+        for x, z in ((4, 3.5), (11, 3.5), (4, 11.5), (11, 11.5)):
+            m.box((x - 0.5, 0.3, z - 0.5), (x + 1, 1.8, z + 1), M("plain", "#2a2a2a"))
+        for x, y, z, c in ((5, 7.5, 5, "#5ae8e8"), (8.5, 7.5, 6, "#f2c84a"), (6, 7.5, 9, "#e8342a"), (10, 7.5, 9.5, "#3ad672"),
+                           (7.5, 9, 7, "#5ae8e8"), (9.5, 8.8, 4.5, "#8a8a8a"), (4.8, 8.6, 10, "#f2c84a")):
+            m.box((x - 1, y, z - 1), (x + 1, y + 1.8, z + 1), M("glow", c), rot=("y", 22.5, (x, y, z)))
+        m.box((13.3, 1, 6), (14, 12, 6.7), M("beam", "#8a5a2b"), rot=("z", -22.5, (13.6, 1, 6.3)))
+        m.box((11.5, 10.5, 5.8), (16, 11.6, 6.9), M("metal", "#b8bec6"), rot=("z", -22.5, (13.6, 1, 6.3)))
+        m.box((5, 2, 2.9), (11, 6, 3), None, sign=sign, sign_faces=("north",))
+    elif kid == "bridge_tnt":
+        # an arched stone bridge over a stream, with railings
+        m.box((0, 0, 0), (16, 1, 16), M("leaves", "#5f9a3a"))
+        m.box((0, 0.9, 5.5), (16, 1.1, 10.5), M("glass", "#3a7ad8"))
+        stone = M("bricks", "#9a9a9a")
+        for z in (1, 11.5):
+            m.box((5, 1, z), (11, 8, z + 3.5), stone)
+        m.box((5, 6, 4.5), (11, 8, 11.5), stone)
+        m.box((6, 5, 4.5), (10, 6, 11.5), stone)
+        m.box((4.5, 8, 0), (11.5, 9, 16), M("stone", "#8a8a8a"), faces={"up": M("planks", "#9a6a3a")})
+        for x in (4.5, 10.8):
+            m.box((x, 9, 0), (x + 0.7, 10.5, 16), M("bricks", "#7a7a7a"))
+        m.box((5.5, 2, 0.95), (10.5, 6.5, 1), None, sign=sign, sign_faces=("north",))
+    elif kid == "wall_tnt":
+        # a castle wall with battlements, a gate with a wooden door and two little towers
+        stone = M("bricks", "#9a9a9a")
+        m.box((3, 0, 6), (13, 10, 10), stone)
+        for x in (3, 5.5, 8, 10.5):
+            m.box((x, 10, 6), (x + 1.5, 11.5, 10), stone)
+        for x in (0, 12.5):
+            m.box((x, 0, 5), (x + 3.5, 13, 11), M("bricks", "#8a8a8a"))
+            for dx, dz in ((0, 0), (2.5, 0), (0, 5), (2.5, 5)):
+                m.box((x + dx, 13, 5 + dz), (x + dx + 1, 14.5, 6 + dz), M("bricks", "#8a8a8a"))
+            m.box((x + 1.2, 7, 4.9), (x + 2.3, 9.5, 5), M("plain", "#1a1a1a"))
+        m.box((6, 0, 5.8), (10, 6, 6), M("planks", "#6b4a2b"))
+        m.box((5.6, 6, 5.7), (10.4, 6.8, 6), M("bricks", "#7a7a7a"))
+        m.box((6.5, 7.5, 5.9), (9.5, 9.5, 6), None, sign=sign, sign_faces=("north",))
+    elif kid == "staircase_tnt":
+        # a spiral staircase: broad stone steps winding up round a central pillar, a lantern at the top
+        cylinder(m, 8, 8, 0, 1, 7.2, M("stone", "#7a7a7a"), top=M("bricks", "#8a8a8a"))
+        cylinder(m, 8, 8, 1, 19.5, 1.8, M("bricks", "#9a9a9a"))
+        # the shaft's back walls, so the steps stand out against them
+        m.box((1, 1, 14), (15, 20, 15.5), M("bricks", "#6a6a6a"))
+        m.box((14, 1, 1), (15.5, 20, 14), M("bricks", "#6a6a6a"))
+        for y in (6, 12, 18):
+            m.box((12.6, y, 12.6), (13.6, y + 1.4, 13.6), M("glow", "#ffb12b"))
+        boxes = {0: ((9.5, 6), (14, 10)), 1: ((6, 9.5), (10, 14)), 2: ((2, 6), (6.5, 10)), 3: ((6, 2), (10, 6.5))}
+        for i in range(17):
+            (x1, z1), (x2, z2) = boxes[(i // 2) % 4]
+            y = 1 + i * 1.05
+            tex = M("stone", "#d8d2c4" if i % 2 else "#b8b0a0")
+            if i % 2:
+                m.box((x1, y, z1), (x2, y + 1.1, z2), tex, rot=("y", -45, (8, y, 8)))
+            else:
+                m.box((x1, y, z1), (x2, y + 1.1, z2), tex)
+        m.box((6.8, 19.5, 6.8), (9.2, 21.8, 9.2), M("glow", "#ffcf6a"))
+        m.box((6.4, 21.8, 6.4), (9.6, 22.4, 9.6), M("metal", "#3a3f44"))
+        m.box((5, 0.1, 0.75), (11, 0.9, 0.8), None, sign=sign, sign_faces=("north",))
+    elif kid in ("platform_tnt", "bunker_tnt", "dome_tnt", "torch_tnt"):
         crate(m, "#b98a4a", "#6b4a2b", sign)
         stone = M("bricks", "#8e8e8e")
         if kid == "bridge_tnt":
@@ -549,7 +667,7 @@ def make(kid, k, T, sign):
             for x, z in ((5, 5), (11, 5), (8, 10)):
                 m.box((x - 0.6, 13.5, z - 0.6), (x + 0.6, 18, z + 0.6), M("beam", "#8a5a2b"))
                 m.box((x - 0.8, 18, z - 0.8), (x + 0.8, 19.4, z + 0.8), M("glow", "#ffb12b"))
-    elif kid in ("drill_tnt", "tunnel_tnt", "miner_tnt", "leveler_tnt"):
+    elif kid in ():
         machine(m, {"drill_tnt": "#e0b21a", "tunnel_tnt": "#c87a1a", "miner_tnt": "#4a5a6a", "leveler_tnt": "#5f9a3a"}[kid], sign)
         steel = M("metal", "#b8bec6")
         if kid == "drill_tnt":

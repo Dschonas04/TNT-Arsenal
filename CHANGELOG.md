@@ -6,6 +6,16 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.8.1] - 2026-10-22
+
+### Changed
+- Flak TNT fires three Giga TNT into the sky, trailing fire, where they burst; under
+  a roof it still fires its single harmless flak burst.
+- New figures for drill (a drilling rig over its hole), tunnel (a portal in the rock
+  with rails and a mine cart), leveler (a bulldozer), miner (a mine cart full of ore),
+  bridge (an arched bridge over a stream), wall (a castle wall with gate and towers)
+  and staircase (a spiral staircase in its shaft).
+
 ## [1.8.0] - 2026-10-22
 
 ### Added
