@@ -34,6 +34,11 @@ public final class Detonation {
                 if (player.distanceToSqr(origin) < 1000 * 1000) Achievements.award(player, "destroyer");
             }
         }
+        io.github.dschonas04.tntarsenal.Particles.ring(level, origin, radius * 1.6);
+        level.sendParticles(io.github.dschonas04.tntarsenal.Particles.RADIATION, true, true, origin.x, origin.y + 2, origin.z,
+                300, radius * 0.5, radius * 0.25, radius * 0.5, 0.05);
+        level.sendParticles(io.github.dschonas04.tntarsenal.Particles.EMBER, true, true, origin.x, origin.y + 2, origin.z,
+                400, radius * 0.3, radius * 0.2, radius * 0.3, 0.4);
         NukeDetonatedPayload payload = new NukeDetonatedPayload(nuke.blockPosition(), nuke.tier().ordinal(), radius);
         for (ServerPlayer player : level.players()) {
             if (player.distanceToSqr(origin) < 1000 * 1000 && ServerPlayNetworking.canSend(player, NukeDetonatedPayload.TYPE)) {

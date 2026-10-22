@@ -6,6 +6,19 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-10-22
+
+### Added
+- Nine particles of the mod's own, with their own sprites: fuse sparks, a shock wave
+  ring flat on the ground, swelling smoke balls, glowing embers, tumbling confetti,
+  frost twinkles, dark motes that spiral into black holes and ender TNT, crackling
+  electric arcs and green radiation motes.
+- Every TNT goes off with a shock wave ring and smoke sized to how hard it hits;
+  fire, frost, lightning, ender and party kinds add their own particles.
+- Big detonations shake the camera of players nearby, and kinds with a mood of
+  their own tint the screen (icy blue, poison green, blessing gold, fire orange ...).
+- In contaminated land green motes of radiation float around the player.
+
 ## [1.7.0] - 2026-10-22
 
 ### Added

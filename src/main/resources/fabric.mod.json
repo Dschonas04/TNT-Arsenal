@@ -21,7 +21,8 @@
       "io.github.dschonas04.tntarsenal.nuclear.NuclearTnt"
     ],
     "client": [
-      "io.github.dschonas04.tntarsenal.nuclear.client.NuclearTntClient"
+      "io.github.dschonas04.tntarsenal.nuclear.client.NuclearTntClient",
+      "io.github.dschonas04.tntarsenal.client.ArsenalClient"
     ]
   },
   "mixins": [

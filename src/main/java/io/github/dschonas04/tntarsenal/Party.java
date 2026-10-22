@@ -58,10 +58,8 @@ final class Party {
             }
             if (age % 4 == 0 && age / 4 < fanfare.length) note(level, c, SoundEvents.NOTE_BLOCK_BELL.value(), fanfare[age / 4], 2.0f);
             // the confetti drifts down over a wide area
-            for (int i = 0; i < 12; i++) {
-                level.sendParticles(dust(random, 1.2f), c.x + (random.nextDouble() - 0.5) * 16, c.y + 6 + random.nextDouble() * 4,
-                        c.z + (random.nextDouble() - 0.5) * 16, 1, 0, -0.2, 0, 0);
-            }
+            level.sendParticles(Particles.CONFETTI, c.x, c.y + 8, c.z, 14, 8, 2, 8, 0.02);
+            if (age % 12 == 0) level.sendParticles(Particles.CONFETTI, c.x, c.y + 1, c.z, 200, 0.5, 0.5, 0.5, 0.7);
             return age >= 60;
         });
     }

@@ -94,6 +94,10 @@ faced when placing the block. The five party kinds at the end break nothing and 
   does and what goes into it, in the reader's language.
 - **Advancements.** A tab of its own: the first bang, ten kinds, every kind, a hundred
   TNT, a salvo of eight bombs from one detonator, sticky TNT on a creature, a party TNT.
+- **Particles and screen effects.** Every TNT goes off with a shock wave ring on the
+  ground and smoke sized to how hard it hits, and its own particles — embers, frost
+  twinkles, electric arcs, dark motes spiralling into the centre, confetti. Big ones
+  shake the camera of everyone nearby; some tint the screen in their colour.
 - **Statistics.** "Arsenal TNT set off" and "TNT thrown with the sling" in the
   statistics screen.
 

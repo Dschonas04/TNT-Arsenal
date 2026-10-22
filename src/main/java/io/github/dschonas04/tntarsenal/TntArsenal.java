@@ -61,6 +61,7 @@ public final class TntArsenal implements ModInitializer {
             if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG)) mob.setNoAi(false);
         });
         Gimmicks.register();
+        Particles.init();
         for (Kind kind : Kind.values()) {
             ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id(kind.id()));
             Block block = new ArsenalTntBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.TNT).setId(blockKey));

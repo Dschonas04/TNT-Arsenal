@@ -870,6 +870,8 @@ def main():
     nuclear_assets.main()
     import gimmicks
     gimmicks.main(ROOT, NS, K, write_json, write_png, hexc)
+    import particles
+    particles.main(ROOT, NS, write_png, write_json)
     # last: the 3D models of every TNT and bomb, which replace the plain cube models written above
     bombs = [dict(b) for b in nuclear_assets.BOMBS]
     for b in bombs:

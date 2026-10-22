@@ -48,7 +48,8 @@ public final class GreenFog {
         fog.color.set(Mth.lerp(mix, fog.color.x, RED), Mth.lerp(mix, fog.color.y, GREEN), Mth.lerp(mix, fog.color.z, BLUE), fog.color.w);
     }
 
-    private static float rate(ClientLevel level, BlockPos pos) {
+    /** The dose rate of the chunk at {@code pos}, as the client knows it. */
+    public static float rate(ClientLevel level, BlockPos pos) {
         if (!level.hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) return 0f;
         ChunkRadiation radiation = ((AttachmentTarget) level.getChunkAt(pos)).getAttached(Radiation.CHUNK);
         return radiation == null ? 0f : radiation.at(level.getGameTime(), NukeConfig.get().radiationTicks);
