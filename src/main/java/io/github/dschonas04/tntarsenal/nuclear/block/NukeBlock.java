@@ -3,7 +3,6 @@ package io.github.dschonas04.tntarsenal.nuclear.block;
 import io.github.dschonas04.tntarsenal.nuclear.alarm.Siren;
 import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
 import io.github.dschonas04.tntarsenal.nuclear.entity.PrimedNuke;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -33,23 +32,16 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class NukeBlock extends TntBlock {
     private final Tier tier;
-    private final MapCodec<TntBlock> codec;
 
-    @SuppressWarnings("unchecked")
     public NukeBlock(Tier tier, Properties properties) {
         super(properties);
         this.tier = tier;
-        this.codec = (MapCodec<TntBlock>) (MapCodec<?>) simpleCodec(p -> new NukeBlock(tier, p));
     }
 
     public Tier tier() {
         return tier;
     }
 
-    @Override
-    public MapCodec<TntBlock> codec() {
-        return codec;
-    }
 
     /** Replaces the block with a lit bomb. Returns false on the client. */
     public boolean ignite(Level level, BlockPos pos, LivingEntity igniter, int fuse) {

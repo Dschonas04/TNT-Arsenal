@@ -2,11 +2,11 @@
 
 [![Build](https://github.com/Dschonas04/tnt-arsenal/actions/workflows/build.yml/badge.svg)](https://github.com/Dschonas04/tnt-arsenal/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/Dschonas04/tnt-arsenal)](https://github.com/Dschonas04/tnt-arsenal/releases/latest)
-[![Minecraft 26.2](https://img.shields.io/badge/Minecraft-26.2-62b47a)](https://www.minecraft.net)
+[![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62b47a)](https://www.minecraft.net)
 [![Fabric](https://img.shields.io/badge/loader-Fabric-dbd0b4)](https://fabricmc.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Sixty-four kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
+Sixty-four kinds of TNT for Minecraft 26.3 (Fabric), each with its own hand-drawn
 look, a little 3D sculpture on top that shows what it does, and its own way of going off. They are crafted at an ordinary crafting table,
 so **JEI and REI show every recipe**.
 
@@ -188,7 +188,7 @@ work over several ticks instead of stalling one, and never load chunks.
 
 ## Install
 
-1. Minecraft 26.2 with Fabric Loader 0.19 or newer and
+1. Minecraft 26.3 with Fabric Loader 0.20.1 or newer and
    [Fabric API](https://modrinth.com/mod/fabric-api).
 2. Download `tnt-arsenal-<version>.jar` from the
    [releases](https://github.com/Dschonas04/tnt-arsenal/releases/latest).
@@ -198,7 +198,7 @@ work over several ticks instead of stalling one, and never load chunks.
 
 ## How it works
 
-Minecraft 26.2 ships without obfuscation, so the mod is compiled straight against
+Minecraft 26.3 ships without obfuscation, so the mod is compiled straight against
 the game jars — no mappings, no Loom, plain Gradle and Java 25:
 
 ```bash

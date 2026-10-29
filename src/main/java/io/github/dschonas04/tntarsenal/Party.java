@@ -113,7 +113,7 @@ final class Party {
                     dancer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 30, 0, false, false));
                     if (dancer.onGround()) {
                         dancer.setDeltaMovement(dancer.getDeltaMovement().add(0, 0.42, 0));
-                        dancer.hurtMarked = true;
+                        dancer.needsSync = true;
                     }
                 }
             }

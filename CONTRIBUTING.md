@@ -10,7 +10,7 @@ the mod, Minecraft and Fabric Loader versions and the relevant part of
 
 ## Building
 
-Minecraft 26.2 ships without obfuscation, so the mod builds with plain Gradle
+Minecraft 26.3 ships without obfuscation, so the mod builds with plain Gradle
 against the server jar, without Loom or mappings. You need Java 25 and Gradle.
 
 ```bash

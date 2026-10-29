@@ -1,5 +1,7 @@
 package io.github.dschonas04.tntarsenal;
 
+import net.minecraft.world.level.block.BonemealSource;
+
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -278,7 +280,7 @@ final class Detonations {
         Vec3 to = center.subtract(entity.position());
         if (to.lengthSqr() < 0.25) return;
         entity.setDeltaMovement(entity.getDeltaMovement().scale(0.7).add(to.normalize().scale(strength)).add(0, 0.03, 0));
-        entity.hurtMarked = true;
+        entity.needsSync = true;
     }
 
     /**
@@ -400,7 +402,7 @@ final class Detonations {
             if (target.isAlive()) {
                 // a bolt alone barely scratches a zombie; the chain is meant to clear them out,
                 // so the extra hit comes first, before the bolt's own hit starts the hurt cooldown
-                target.invulnerableTime = 0;
+                target.setInvulnerableTime(0);
                 target.hurtServer(level, level.damageSources().lightningBolt(), 24);
                 strike(level, target.getX(), target.getY(), target.getZ());
             }
@@ -602,7 +604,7 @@ final class Detonations {
             Vec3 away = entity.position().subtract(c).multiply(1, 0, 1);
             if (away.lengthSqr() > 0.01) {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(away.normalize().scale(0.8)).add(0, 0.3, 0));
-                entity.hurtMarked = true;
+                entity.needsSync = true;
             }
         }
         level.sendParticles(ParticleTypes.SPLASH, c.x, c.y + 1, c.z, 600, 6, 1, 6, 0.5);
@@ -688,7 +690,7 @@ final class Detonations {
                 List<LivingEntity> targets = age % 16 == 0 ? enemies(level, c, 20) : List.of();
                 if (!targets.isEmpty()) {
                     LivingEntity target = targets.get(random.nextInt(targets.size()));
-                    target.invulnerableTime = 0;
+                    target.setInvulnerableTime(0);
                     target.hurtServer(level, level.damageSources().lightningBolt(), 20);
                     strike(level, target.getX(), target.getY(), target.getZ());
                 } else {
@@ -772,7 +774,7 @@ final class Detonations {
                 double x = entity.getX() + Math.cos(angle) * (32 + random.nextInt(24));
                 double y = entity.getY() + random.nextInt(16) - 8;
                 double z = entity.getZ() + Math.sin(angle) * (32 + random.nextInt(24));
-                if (entity.randomTeleport(x, y, z, true)) break;
+                if (entity.randomTeleport(x, y, z, true, BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO)) break;
             }
         }
         sound(level, t.position(), SoundEvents.ENDERMAN_TELEPORT, 2.0f, 0.8f);
@@ -804,7 +806,7 @@ final class Detonations {
                 Vec3 swirl = new Vec3(-to.z, 0, to.x).normalize().scale(0.25);
                 block.setDeltaMovement(to.scale(0.12).add(swirl));
                 block.time = 1;
-                block.hurtMarked = true;
+                block.needsSync = true;
             }
             level.sendParticles(ParticleTypes.REVERSE_PORTAL, eye.x, eye.y, eye.z, 40, 4, 3, 4, 0.4);
             if (age < 50) return false;
@@ -815,7 +817,7 @@ final class Detonations {
                 Vec3 dir = out.lengthSqr() < 0.01 ? new Vec3(random.nextDouble() - 0.5, 0, random.nextDouble() - 0.5).normalize() : out.normalize();
                 block.setNoGravity(false);
                 block.setDeltaMovement(dir.scale(1.0 + random.nextDouble() * 1.2).add(0, 0.6 + random.nextDouble() * 0.7, 0));
-                block.hurtMarked = true;
+                block.needsSync = true;
             }
             return true;
         }, () -> {
@@ -882,7 +884,7 @@ final class Detonations {
                 Vec3 swirl = new Vec3(-to.z, 0, to.x).normalize().scale(0.3);
                 block.setDeltaMovement(to.normalize().scale(0.25 + age * 0.004).add(swirl));
                 block.time = 1;
-                block.hurtMarked = true;
+                block.needsSync = true;
             }
             for (int arm = 0; arm < 4; arm++) {
                 double angle = age * 0.35 + arm * Math.PI / 2;
@@ -955,7 +957,7 @@ final class Detonations {
             Vec3 away = entity.position().subtract(t.position()).multiply(1, 0, 1);
             Vec3 push = away.lengthSqr() < 0.01 ? Vec3.ZERO : away.normalize().scale(0.8);
             entity.setDeltaMovement(push.x, 2.4, push.z);
-            entity.hurtMarked = true;
+            entity.needsSync = true;
             if (entity instanceof LivingEntity living) living.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 200, 0));
         }
         sound(level, t.position(), SoundEvents.SLIME_BLOCK_FALL, 2.0f, 0.6f);
@@ -973,7 +975,7 @@ final class Detonations {
             double near = 1 - Math.sqrt(entity.distanceToSqr(c)) / 14;
             Vec3 dir = away.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : away.normalize();
             entity.setDeltaMovement(dir.scale(0.5 + near * 3).add(0, 0.4 + near * 0.4, 0));
-            entity.hurtMarked = true;
+            entity.needsSync = true;
             if (entity instanceof LivingEntity living) {
                 living.hurtServer(level, level.damageSources().explosion(t, owner), (float) (1 + near * 4));
             }
@@ -1023,7 +1025,7 @@ final class Detonations {
                 Vec3 away = entity.position().subtract(c).multiply(1, 0, 1);
                 if (away.lengthSqr() > 0.01) {
                     entity.setDeltaMovement(entity.getDeltaMovement().add(away.normalize().scale(1.2)).add(0, 0.3, 0));
-                    entity.hurtMarked = true;
+                    entity.needsSync = true;
                 }
             }
             return r >= 16;
@@ -1046,7 +1048,7 @@ final class Detonations {
                     double dist = to.length();
                     entity.setDeltaMovement(dist < 1 ? Vec3.ZERO : to.normalize().scale(Math.min(1.2, 0.2 + dist * 0.08)));
                 }
-                entity.hurtMarked = true;
+                entity.needsSync = true;
             }
             level.sendParticles(ParticleTypes.ELECTRIC_SPARK, c.x, c.y, c.z, 10, 1.5, 1.5, 1.5, 0.1);
             return age >= 60;
@@ -1172,8 +1174,8 @@ final class Detonations {
             if (state.is(Blocks.GRASS_BLOCK) && random.nextFloat() > 0.12f) continue;
             for (int round = 0; round < 4; round++) {
                 BlockState now = level.getBlockState(pos);
-                if (!(now.getBlock() instanceof BonemealableBlock grow) || !grow.isValidBonemealTarget(level, pos, now)) break;
-                grow.performBonemeal(level, random, pos, now);
+                if (!(now.getBlock() instanceof BonemealableBlock grow) || !grow.isValidBonemealTarget(level, pos, now, BonemealSource.INTERACTION)) break;
+                grow.performBonemeal(level, random, pos, now, BonemealSource.INTERACTION);
             }
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 3, 0.3, 0.3, 0.3, 0);
         }
@@ -1582,7 +1584,7 @@ final class Detonations {
                     entity.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 160, 0));
                     if (entity.onGround()) {
                         entity.setDeltaMovement(entity.getDeltaMovement().add((random.nextDouble() - 0.5) * 0.6, 0.35, (random.nextDouble() - 0.5) * 0.6));
-                        entity.hurtMarked = true;
+                        entity.needsSync = true;
                         entity.hurtServer(level, level.damageSources().fall(), 1.5f);
                     }
                 }

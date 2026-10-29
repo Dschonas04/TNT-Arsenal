@@ -1,9 +1,9 @@
-// Minecraft 26.2 ships with readable class names, so this mod is compiled straight
+// Minecraft 26.3 ships with readable class names, so this mod is compiled straight
 // against the game jars — no mappings, no Loom, plain Gradle.
 //
 //   libs/server.jar   the dedicated server jar (common code is checked against it)
 //   libs/client.jar   the client jar (only the client source set sees it)
-//   libs/mc/          the libraries listed in the 26.2 version manifest
+//   libs/mc/          the libraries listed in the 26.3 version manifest
 //   libs/fabric/      the modules nested in the fabric-api jar (META-INF/jars/)
 //
 // tools/fetch-libs.sh fills libs/. Common code that touches a client class does not

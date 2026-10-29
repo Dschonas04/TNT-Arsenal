@@ -6,6 +6,11 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-10-29
+
+- Minecraft **26.3** (Fabric Loader 0.20.1, Fabric API 0.165.0). For 26.2 stay on 1.8.1.
+- 26.3 API: `needsSync` instead of `hurtMarked`, `setInvulnerableTime`, `randomTeleport` with a block tag, bone meal with `BonemealSource`, blocks without `codec()`.
+
 ## [1.8.1] - 2026-10-22
 
 ### Changed

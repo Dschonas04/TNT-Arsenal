@@ -1,6 +1,5 @@
 package io.github.dschonas04.tntarsenal;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -40,23 +39,16 @@ public class ArsenalTntBlock extends TntBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final Kind kind;
-    private final MapCodec<TntBlock> codec;
 
-    @SuppressWarnings("unchecked")
     public ArsenalTntBlock(Kind kind, Properties properties) {
         super(properties);
         this.kind = kind;
-        this.codec = (MapCodec<TntBlock>) (MapCodec<?>) simpleCodec(p -> new ArsenalTntBlock(kind, p));
     }
 
     public Kind kind() {
         return kind;
     }
 
-    @Override
-    public MapCodec<TntBlock> codec() {
-        return codec;
-    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

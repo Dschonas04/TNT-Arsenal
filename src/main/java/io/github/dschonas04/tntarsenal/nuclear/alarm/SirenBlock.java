@@ -15,7 +15,6 @@ import net.minecraft.world.phys.Vec3;
 
 /** A siren that wails as long as it gets a redstone signal. */
 public class SirenBlock extends Block {
-    public static final MapCodec<SirenBlock> CODEC = simpleCodec(SirenBlock::new);
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public SirenBlock(Properties properties) {
@@ -23,10 +22,6 @@ public class SirenBlock extends Block {
         registerDefaultState(stateDefinition.any().setValue(POWERED, false));
     }
 
-    @Override
-    public MapCodec<SirenBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

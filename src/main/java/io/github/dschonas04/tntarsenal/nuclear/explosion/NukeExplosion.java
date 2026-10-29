@@ -235,7 +235,7 @@ public final class NukeExplosion implements Jobs.Job {
             Vec3 away = entity.position().subtract(origin);
             Vec3 dir = away.lengthSqr() < 0.01 ? new Vec3(0, 1, 0) : away.normalize();
             entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(strength * 4.0 * factor)).add(0, strength * factor, 0));
-            entity.hurtMarked = true;
+            entity.needsSync = true;
             if (entity instanceof LivingEntity living) {
                 float damage = (float) (radius * 2.5 * strength * strength * factor);
                 living.hurtServer(level, level.damageSources().explosion(source, owner), damage);
