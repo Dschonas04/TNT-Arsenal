@@ -29,13 +29,13 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * A TNT block of one {@link Kind}. It primes like vanilla TNT — redstone, flint and steel, fire
- * charges, burning arrows, other explosions — but the primed entity carries this block's state. The
- * entity therefore renders with this block's texture, and the mixin recognises the kind when the
- * fuse runs out.
+ * Ein TNT-Block einer {@link Kind}. Er wird gezündet wie Vanilla-TNT – Redstone, Feuerzeug,
+ * Feuerkugeln, brennende Pfeile, andere Explosionen –, aber die gezündete Entity trägt den Zustand
+ * dieses Blocks. Deshalb wird sie mit der Textur dieses Blocks gezeichnet, und das Mixin erkennt
+ * die Art, wenn die Lunte abgebrannt ist.
  */
 public class ArsenalTntBlock extends TntBlock {
-    /** Where the player faced when placing it; only the tunnel kind uses it. */
+    /** Wohin der Spieler beim Setzen geschaut hat; nur die Tunnel-Art nutzt das. */
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final Kind kind;
@@ -60,7 +60,7 @@ public class ArsenalTntBlock extends TntBlock {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
-    /** Replaces the block with a primed copy of itself. */
+    /** Ersetzt den Block durch eine gezündete Kopie seiner selbst. */
     public void ignite(
             Level level, BlockPos pos, BlockState state, LivingEntity igniter, int fuse) {
         if (!(level instanceof ServerLevel)) return;
@@ -79,7 +79,9 @@ public class ArsenalTntBlock extends TntBlock {
                 1.0f,
                 1.0f);
         level.gameEvent(igniter, GameEvent.PRIME_FUSE, pos);
-        // Only the nuclear bombs sound the siren; every TNT here sparks its own way instead.
+        // Nur die Atombomben lösen die Sirene aus; jedes TNT hier sprüht stattdessen auf seine
+        // eigene Art
+        // Funken.
         Fuses.burn((ServerLevel) level, primed, kind);
     }
 
@@ -112,7 +114,7 @@ public class ArsenalTntBlock extends TntBlock {
 
     @Override
     public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
-        // The block is already gone; prime a fresh one with a short fuse, as vanilla does.
+        // Der Block ist schon weg; ein neues mit kurzer Lunte zünden, wie Vanilla es tut.
         int fuse = PrimedTnt.getRandomShortFuse(kind.fuse(), level.getRandom());
         ignite(level, pos, defaultBlockState(), explosion.getIndirectSourceEntity(), fuse);
     }

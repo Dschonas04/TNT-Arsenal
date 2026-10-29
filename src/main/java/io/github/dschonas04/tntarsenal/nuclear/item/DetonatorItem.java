@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The remote detonator. Right-click bombs — nuclear, any arsenal TNT or plain TNT — to link up to
- * sixteen of them (right-click a linked one again to unlink it); right-click anywhere else to set
- * them all off, one after the other, as long as their chunks are loaded and you are in the same
- * dimension. Sneak and right-click the air to unlink all. Whoever holds a linked detonator sees a
- * red marker above each of its bombs.
+ * Der Fernzünder. Rechtsklick auf Bomben – atomare, jedes Arsenal-TNT oder einfaches TNT –
+ * verknüpft bis zu sechzehn davon (Rechtsklick auf eine verknüpfte löst sie wieder); Rechtsklick
+ * irgendwo sonst zündet sie alle nacheinander, solange ihre Chunks geladen sind und man in
+ * derselben Dimension ist. Schleichend in die Luft rechtsklicken löst alle. Wer einen verknüpften
+ * Zünder hält, sieht über jeder seiner Bomben eine rote Markierung.
  */
 public class DetonatorItem extends Item {
     public static final int MAX = 16;
@@ -41,7 +41,7 @@ public class DetonatorItem extends Item {
         super(properties);
     }
 
-    /** The red markers over linked bombs, for the player holding the detonator only. */
+    /** Die roten Markierungen über verknüpften Bomben, nur für den Spieler, der den Zünder hält. */
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(
                 server -> {
@@ -82,7 +82,7 @@ public class DetonatorItem extends Item {
         return tag(stack).getStringOr("dimension", "");
     }
 
-    /** The linked bombs; detonators from before 1.7 held a single "pos". */
+    /** Die verknüpften Bomben; Zünder von vor 1.7 hatten ein einzelnes „pos“. */
     public static List<BlockPos> bombs(ItemStack stack) {
         CompoundTag tag = tag(stack);
         List<BlockPos> out = new ArrayList<>();
@@ -164,7 +164,7 @@ public class DetonatorItem extends Item {
                     Component.translatable("item.tnt_arsenal.detonator.other_dimension"));
             return InteractionResult.FAIL;
         }
-        // a salvo: one bomb every three ticks, in the order they were linked
+        // eine Salve: alle drei Ticks eine Bombe, in der Reihenfolge, in der sie verknüpft wurden
         List<BlockPos> salvo = new ArrayList<>(bombs);
         Jobs.add(
                 new Jobs.Job() {

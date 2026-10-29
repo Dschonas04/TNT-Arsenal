@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Everything a player sees of a detonation: the flash (blinding if you look at it, a glare if you
- * do not), the mushroom cloud and the shaking ground, which arrives with the shock wave — later,
- * the further away you are.
+ * Alles, was ein Spieler von einer Detonation sieht: den Blitz (blendend, wenn man hinsieht, ein
+ * Gleißen, wenn nicht), den Atompilz und den bebenden Boden, der mit der Druckwelle ankommt –
+ * später, je weiter man weg ist.
  */
 final class NukeEffects {
     private NukeEffects() {}
@@ -50,7 +50,7 @@ final class NukeEffects {
         double dist = to.length();
         double facing = dist < 1 ? 1 : player.getViewVector(1.0f).dot(to.normalize());
         double near = Mth.clamp(1 - dist / (payload.radius() * 20.0), 0, 1);
-        // looking at it: blinding; looking away: a glare from behind
+        // hinsehen: blendend; wegsehen: ein Gleißen von hinten
         flash = Math.max(flash, (float) (near * (facing > 0 ? 0.35 + 0.65 * facing : 0.25)));
         shakeIn = (int) (dist / (343.0 / 20.0));
         shake = (float) Mth.clamp(1.2 - dist / (payload.radius() * 12.0), 0, 1.2);
@@ -70,7 +70,8 @@ final class NukeEffects {
         if (shakeIn > 0) {
             shakeIn--;
         } else if (shake > 0.01f && player != null) {
-            // jitter and undo the last jitter, so the view shakes but does not drift
+            // wackeln und das letzte Wackeln zurücknehmen, damit die Sicht bebt, aber nicht
+            // abdriftet
             double x = (RANDOM.nextDouble() - 0.5) * shake * 30;
             double y = (RANDOM.nextDouble() - 0.5) * shake * 30;
             player.turn(x - shakeX, y - shakeY);

@@ -19,8 +19,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Settings in {@code config/tnt_arsenal-nuclear.json}. Missing entries keep their defaults, and the
- * file is rewritten on load so new entries show up in it.
+ * Einstellungen in {@code config/tnt_arsenal-nuclear.json}. Fehlende Einträge behalten ihre
+ * Standardwerte, und die Datei wird beim Laden neu geschrieben, damit neue Einträge darin
+ * auftauchen.
  */
 public final class NukeConfig {
     public int miniRadius = 15;
@@ -31,16 +32,16 @@ public final class NukeConfig {
     public int nukeFuseTicks = 200;
     public int tsarFuseTicks = 400;
 
-    /** How many blocks the explosion may change per server tick. */
+    /** Wie viele Blöcke die Explosion pro Server-Tick ändern darf. */
     public int blocksPerTick = 2000;
 
     /**
-     * Radiation: how long contaminated land stays radioactive; it wanes steadily until then (48000
-     * ticks = two Minecraft days).
+     * Strahlung: wie lange verseuchtes Land radioaktiv bleibt; bis dahin nimmt sie gleichmäßig ab
+     * (48000 Ticks = zwei Minecraft-Tage).
      */
     public long radiationTicks = 48000;
 
-    /** Radiation: the dose rate at ground zero right after the blast, in mSv per second. */
+    /** Strahlung: die Dosisleistung am Nullpunkt direkt nach der Explosion, in mSv pro Sekunde. */
     public float miniPeakRate = 2f;
 
     public float nukePeakRate = 8f;
@@ -55,17 +56,17 @@ public final class NukeConfig {
     }
 
     /**
-     * Fallout: ticks after the detonation before the ash starts to come down, and how long it
-     * takes.
+     * Fallout: Ticks nach der Detonation, bevor die Asche zu fallen beginnt, und wie lange das
+     * dauert.
      */
     public int falloutDelayTicks = 200;
 
     public int falloutTicks = 600;
 
-    /** Client: how thick the green fog in contaminated land gets, 0 turns it off. */
+    /** Client: wie dicht der grüne Nebel in verseuchtem Land wird, 0 schaltet ihn ab. */
     public float fogStrength = 1f;
 
-    /** Client: how many particles the mushroom cloud may spawn per tick. */
+    /** Client: wie viele Partikel der Atompilz pro Tick erzeugen darf. */
     public int cloudParticlesPerTick = 160;
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -104,7 +105,10 @@ public final class NukeConfig {
         save();
     }
 
-    /** Writes the current settings back, so the file lists every key with its value. */
+    /**
+     * Schreibt die aktuellen Einstellungen zurück, damit die Datei jeden Schlüssel mit seinem Wert
+     * auflistet.
+     */
     public static void save() {
         Path file = FabricLoader.getInstance().getConfigDir().resolve("tnt_arsenal-nuclear.json");
         try (Writer writer = Files.newBufferedWriter(file)) {
@@ -114,7 +118,7 @@ public final class NukeConfig {
         }
     }
 
-    /** The settings by name, as {@code /nuclear config} lists them. */
+    /** Die Einstellungen nach Namen, wie {@code /nuclear config} sie auflistet. */
     public static Map<String, Object> values() {
         Map<String, Object> out = new TreeMap<>();
         for (Field field : NukeConfig.class.getFields()) {
@@ -129,8 +133,8 @@ public final class NukeConfig {
     }
 
     /**
-     * Sets one setting from text and saves the file. Returns null on success, otherwise what was
-     * wrong. Takes effect for the next bomb.
+     * Setzt eine Einstellung aus Text und speichert die Datei. Gibt bei Erfolg null zurück, sonst,
+     * was falsch war. Gilt ab der nächsten Bombe.
      */
     public static String set(String name, String text) {
         Field field;

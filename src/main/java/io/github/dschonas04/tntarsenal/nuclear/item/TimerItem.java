@@ -25,10 +25,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The timer fuse. Sneak and right-click to set the time (5 s, 10 s, 30 s, 1, 2 or 5 minutes), then
- * right-click a bomb (nuclear, arsenal or plain TNT) to fix it there: the countdown runs above the
- * hotbar of everyone within 64 blocks and floats over the bomb, beeping faster at the end, and
- * lights the bomb at zero. The fuse is used up.
+ * Der Zeitzünder. Schleichend rechtsklicken stellt die Zeit ein (5 s, 10 s, 30 s, 1, 2 oder 5
+ * Minuten), dann Rechtsklick auf eine Bombe (atomar, Arsenal oder einfaches TNT), um ihn dort
+ * anzubringen: Der Countdown läuft über der Hotbar aller im Umkreis von 64 Blöcken und schwebt über
+ * der Bombe, piept am Ende schneller und zündet die Bombe bei null. Der Zünder ist danach
+ * verbraucht.
  */
 public class TimerItem extends Item {
     private static final int[] STEPS = {5, 10, 30, 60, 120, 300};
@@ -84,7 +85,7 @@ public class TimerItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    /** Runs a command quietly, as the server, in the bomb's dimension. */
+    /** Führt einen Befehl still als Server in der Dimension der Bombe aus. */
     private static void command(ServerLevel level, String command) {
         var server = level.getServer();
         server.getCommands()
@@ -93,7 +94,7 @@ public class TimerItem extends Item {
                         "execute in " + level.dimension().identifier() + " run " + command);
     }
 
-    /** The seconds left, floating over the bomb: big, red, always facing you. */
+    /** Die verbleibenden Sekunden, über der Bombe schwebend: groß, rot, immer dir zugewandt. */
     private static void label(
             ServerLevel level, BlockPos pos, String tag, int seconds, boolean create) {
         String text =

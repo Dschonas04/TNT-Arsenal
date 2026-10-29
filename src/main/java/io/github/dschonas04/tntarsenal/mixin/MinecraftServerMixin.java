@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
 
-/** Drives the detonations that take more than one tick. */
+/** Treibt die Detonationen an, die länger als einen Tick dauern. */
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin {
     @Inject(method = "tickServer", at = @At("TAIL"))

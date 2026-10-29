@@ -11,9 +11,9 @@ import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * One way to light anything that explodes in this mod: the nuclear bombs, every arsenal TNT and
- * plain vanilla TNT. The remote detonator and the timer fuse go through here, so they work on all
- * of them.
+ * Ein Weg, alles zu zünden, was in dieser Mod explodiert: die Atombomben, jedes Arsenal-TNT und
+ * einfaches Vanilla-TNT. Fernzünder und Zeitzünder laufen hier durch, damit sie bei allen
+ * funktionieren.
  */
 public final class Bombs {
     private Bombs() {}
@@ -23,8 +23,8 @@ public final class Bombs {
     }
 
     /**
-     * Lights the bomb at {@code pos}; {@code fuse} below 1 means the bomb's own fuse. Returns false
-     * if there is none.
+     * Zündet die Bombe bei {@code pos}; {@code fuse} unter 1 heißt die eigene Lunte der Bombe. Gibt
+     * false zurück, wenn dort keine ist.
      */
     public static boolean ignite(ServerLevel level, BlockPos pos, LivingEntity igniter, int fuse) {
         BlockState state = level.getBlockState(pos);

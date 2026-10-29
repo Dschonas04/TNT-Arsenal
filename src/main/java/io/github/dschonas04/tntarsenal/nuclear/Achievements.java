@@ -4,9 +4,9 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * The advancements the game cannot see on its own (dose, a detonation). They carry an impossible
- * criterion named "done" and are granted from here; the rest in
- * data/tnt_arsenal/advancement/nuclear/ trigger by themselves.
+ * Die Fortschritte, die das Spiel nicht selbst erkennt (Dosis, eine Detonation). Sie tragen ein
+ * unerfüllbares Kriterium namens „done“ und werden von hier vergeben; die übrigen in
+ * data/tnt_arsenal/advancement/nuclear/ lösen von selbst aus.
  */
 public final class Achievements {
     private Achievements() {}

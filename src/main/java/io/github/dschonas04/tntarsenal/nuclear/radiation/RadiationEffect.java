@@ -11,21 +11,22 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * Radiation sickness as one effect, shown like poison or regeneration with its own icon and a
- * level. It replaces the bundle of nausea, weakness, hunger, slowness and wither that radiation
- * used to cause.
+ * Strahlenkrankheit als ein Effekt, angezeigt wie Gift oder Regeneration mit eigenem Symbol und
+ * einer Stufe. Er ersetzt das Bündel aus Übelkeit, Schwäche, Hunger, Langsamkeit und Verdorren, das
+ * Strahlung früher verursacht hat.
  *
  * <ul>
- *   <li>I (from 100 mSv): the player gets hungry faster, blows and pace suffer a little
- *   <li>II (from 250 mSv): more of the same
- *   <li>III (from 500 mSv): also half a heart of damage every two seconds
- *   <li>IV (from 1000 mSv): a whole heart every second
+ *   <li>I (ab 100 mSv): Der Spieler wird schneller hungrig, Schläge und Tempo leiden etwas
+ *   <li>II (ab 250 mSv): mehr davon
+ *   <li>III (ab 500 mSv): dazu alle zwei Sekunden ein halbes Herz Schaden
+ *   <li>IV (ab 1000 mSv): jede Sekunde ein ganzes Herz
  * </ul>
  */
 public final class RadiationEffect extends MobEffect {
     public RadiationEffect() {
         super(MobEffectCategory.HARMFUL, 0x7CFF3A);
-        // Vanilla scales both by the level (amplifier + 1): -8 % damage and -3 % speed per level.
+        // Vanilla skaliert beides mit der Stufe (Verstärker + 1): -8 % Schaden und -3 % Tempo pro
+        // Stufe.
         addAttributeModifier(
                 Attributes.ATTACK_DAMAGE,
                 NuclearTnt.id("radiation_weakness"),

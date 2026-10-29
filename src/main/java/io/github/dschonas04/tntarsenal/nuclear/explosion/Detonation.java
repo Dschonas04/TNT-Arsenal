@@ -16,8 +16,8 @@ import net.minecraft.world.level.saveddata.WeatherData;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * What happens when a bomb's fuse runs out: the explosion job, the travelling bang and word to the
- * clients.
+ * Was passiert, wenn die Lunte einer Bombe abgebrannt ist: der Explosionsauftrag, der wandernde
+ * Knall und die Nachricht an die Clients.
  */
 public final class Detonation {
     private Detonation() {}
@@ -82,7 +82,7 @@ public final class Detonation {
         }
     }
 
-    /** Black rain: the sky opens over the dimension, longer the bigger the bomb. */
+    /** Schwarzer Regen: Der Himmel öffnet sich über der Dimension, länger, je größer die Bombe. */
     private static void falloutRain(ServerLevel level, Tier tier) {
         if (!level.dimensionType().hasSkyLight()) return;
         int ticks =

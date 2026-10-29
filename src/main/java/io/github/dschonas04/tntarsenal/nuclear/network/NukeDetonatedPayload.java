@@ -9,7 +9,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 /**
- * Tells a client that a bomb went off, so it can draw the flash, the shake and the mushroom cloud.
+ * Sagt einem Client, dass eine Bombe hochgegangen ist, damit er Blitz, Beben und Atompilz zeichnen
+ * kann.
  */
 public record NukeDetonatedPayload(BlockPos pos, int tier, int radius)
         implements CustomPacketPayload {

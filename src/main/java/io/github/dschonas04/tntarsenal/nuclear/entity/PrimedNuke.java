@@ -14,10 +14,10 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
 
 /**
- * A lit bomb. It is a primed TNT in every respect the client cares about — it falls, flashes and
- * renders with the bomb's block — but it has its own entity type, beeps faster and faster as the
- * fuse runs down, and does not explode the vanilla way: a mixin hands the moment of detonation to
- * {@link Detonation}.
+ * Eine gezündete Bombe. In allem, was den Client betrifft, ist sie ein gezündetes TNT – sie fällt,
+ * blinkt und wird mit dem Block der Bombe gezeichnet –, aber sie hat ihren eigenen Entity-Typ,
+ * piept immer schneller, je weiter die Lunte abbrennt, und explodiert nicht auf Vanilla-Art: Ein
+ * Mixin übergibt den Moment der Detonation an {@link Detonation}.
  */
 public class PrimedNuke extends PrimedTnt {
     private LivingEntity igniter;
@@ -60,7 +60,7 @@ public class PrimedNuke extends PrimedTnt {
         super.tick();
         if (!(level() instanceof ServerLevel level) || isRemoved()) return;
         int fuse = getFuse();
-        // A slow beep at first, then faster and higher towards the end.
+        // Erst ein langsamer Piepton, gegen Ende schneller und höher.
         int every = fuse > 200 ? 20 : fuse > 100 ? 10 : fuse > 40 ? 5 : 2;
         if (fuse % every == 0) {
             float pitch = fuse > 100 ? 0.8f : fuse > 40 ? 1.0f : 1.25f;
@@ -69,7 +69,7 @@ public class PrimedNuke extends PrimedTnt {
         }
     }
 
-    /** Called by the mixin instead of the vanilla explosion. */
+    /** Wird vom Mixin statt der Vanilla-Explosion aufgerufen. */
     public void detonate(ServerLevel level) {
         Detonation.start(level, this);
     }

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The job queue: work that is spread over many ticks — the explosion, delayed sounds — runs here at
- * the end of each level tick until it reports that it is done.
+ * Die Auftragswarteschlange: Arbeit, die auf viele Ticks verteilt ist – die Explosion, verzögerte
+ * Geräusche –, läuft hier am Ende jedes Welt-Ticks, bis sie meldet, dass sie fertig ist.
  */
 public final class Jobs {
     private Jobs() {}
@@ -17,24 +17,26 @@ public final class Jobs {
     public interface Job {
         ServerLevel level();
 
-        /** One tick of work. Returns true when finished. */
+        /** Ein Tick Arbeit. Gibt true zurück, wenn fertig. */
         boolean tick();
 
-        /** A job that changes blocks in bulk; only a few of those run at a time. */
+        /**
+         * Ein Auftrag, der Blöcke in großen Mengen ändert; davon laufen nur wenige gleichzeitig.
+         */
         default boolean heavy() {
             return false;
         }
 
-        /** The server is stopping; release whatever the job holds (forced chunks). */
+        /** Der Server stoppt; freigeben, was der Auftrag hält (erzwungene Chunks). */
         default void abort() {}
     }
 
     private static final List<Job> RUNNING = new ArrayList<>();
 
     /**
-     * How many heavy jobs run per level and tick. Each has its own block budget per tick, so
-     * without a cap a row of bombs set off together would add up to a frozen server; the rest wait
-     * their turn in the order they were lit.
+     * Wie viele schwere Aufträge pro Welt und Tick laufen. Jeder hat sein eigenes Blockbudget pro
+     * Tick, ohne Obergrenze ergäbe eine Reihe gleichzeitig gezündeter Bomben also einen
+     * eingefrorenen Server; der Rest wartet in der Reihenfolge, in der gezündet wurde.
      */
     private static final int MAX_HEAVY = 2;
 
@@ -45,7 +47,7 @@ public final class Jobs {
     public static void register() {
         ServerTickEvents.END_LEVEL_TICK.register(
                 level -> {
-                    // a copy, because a job may add another
+                    // eine Kopie, weil ein Auftrag einen weiteren hinzufügen kann
                     int heavy = 0;
                     for (Job job : List.copyOf(RUNNING)) {
                         if (job.level() != level) continue;

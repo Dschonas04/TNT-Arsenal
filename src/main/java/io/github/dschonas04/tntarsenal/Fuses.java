@@ -9,9 +9,9 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * A burning fuse that tells what is coming: every kind sparks in its own way — frost TNT snows,
- * fire TNT spits flames, the ender TNT shimmers purple — and the closer it gets to going off, the
- * more it sparks.
+ * Eine brennende Lunte, die verrät, was kommt: Jede Art sprüht auf ihre eigene Weise – Frost-TNT
+ * schneit, Feuer-TNT spuckt Flammen, das Ender-TNT schimmert violett –, und je näher es dem
+ * Hochgehen kommt, desto mehr sprüht es.
  */
 final class Fuses {
     private Fuses() {}
@@ -52,8 +52,8 @@ final class Fuses {
     }
 
     /**
-     * How hard a kind hits, for the size of its shock wave and how much the screen shakes: 0 =
-     * harmless, 3 = huge.
+     * Wie hart eine Art zuschlägt, für die Größe ihrer Druckwelle und wie stark der Bildschirm
+     * wackelt: 0 = harmlos, 3 = gewaltig.
      */
     static int weight(Kind kind) {
         return switch (kind) {
@@ -87,7 +87,7 @@ final class Fuses {
         };
     }
 
-    /** A screen tint for kinds with a mood of their own; 0 = none. */
+    /** Eine Bildschirmtönung für Arten mit eigener Stimmung; 0 = keine. */
     private static int tint(Kind kind) {
         return switch (kind) {
             case FROST, STASIS -> 0x5A9ED8FF;
@@ -103,8 +103,8 @@ final class Fuses {
     }
 
     /**
-     * The moment it goes off: a flash, the kind's own sparks, a shock wave and smoke, whatever it
-     * does next.
+     * Der Moment des Hochgehens: ein Blitz, die eigenen Funken der Art, eine Druckwelle und Rauch,
+     * was immer sie danach tut.
      */
     static void burst(ServerLevel level, PrimedTnt primed, Kind kind) {
         double x = primed.getX(), y = primed.getY() + 0.5, z = primed.getZ();
@@ -146,7 +146,8 @@ final class Fuses {
             case LIGHTNING, STORM, MAGNET, SHOCKWAVE, SONIC ->
                     level.sendParticles(Particles.ARC, x, y, z, 40, 2.5, 1.5, 2.5, 0);
             case ENDER, END, BLACK_HOLE, ANTIMATTER, GRAVITY, ANTIGRAVITY, CURSE -> {
-                // motes all around that spiral into the TNT: velocity = the way to the centre
+                // Flocken ringsum, die spiralförmig ins TNT ziehen: Geschwindigkeit = der Weg zur
+                // Mitte
                 RandomSource random = level.getRandom();
                 for (int i = 0; i < 80; i++) {
                     double dx = (random.nextDouble() - 0.5) * 10,
@@ -163,7 +164,7 @@ final class Fuses {
         else if (tint(kind) != 0) Particles.screen(level, at, 16, 0, tint(kind), 30);
     }
 
-    /** Sparks over the TNT for as long as it burns. */
+    /** Funken über dem TNT, solange es brennt. */
     static void burn(ServerLevel level, PrimedTnt primed, Kind kind) {
         ParticleOptions spark = spark(kind);
         Tasks.start(

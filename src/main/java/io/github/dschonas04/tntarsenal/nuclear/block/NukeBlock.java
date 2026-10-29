@@ -27,8 +27,9 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * A bomb block. It lights like TNT — redstone, flint and steel, fire charges, burning arrows,
- * explosions — and the detonator item lights it from afar. The lit bomb is a {@link PrimedNuke}.
+ * Ein Bombenblock. Er wird gezündet wie TNT – Redstone, Feuerzeug, Feuerkugeln, brennende Pfeile,
+ * Explosionen –, und der Zünder zündet ihn aus der Ferne. Die gezündete Bombe ist eine {@link
+ * PrimedNuke}.
  */
 public class NukeBlock extends TntBlock {
     private final Tier tier;
@@ -42,7 +43,7 @@ public class NukeBlock extends TntBlock {
         return tier;
     }
 
-    /** Replaces the block with a lit bomb. Returns false on the client. */
+    /** Ersetzt den Block durch eine gezündete Bombe. Gibt auf dem Client false zurück. */
     public boolean ignite(Level level, BlockPos pos, LivingEntity igniter, int fuse) {
         if (!(level instanceof ServerLevel)) return false;
         PrimedNuke nuke =
@@ -92,7 +93,7 @@ public class NukeBlock extends TntBlock {
 
     @Override
     public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
-        // Already gone from the world; light a fresh one with a short fuse, as TNT does.
+        // Schon aus der Welt verschwunden; eine neue mit kurzer Lunte zünden, wie TNT es tut.
         Entity source = explosion.getIndirectSourceEntity();
         PrimedNuke nuke =
                 PrimedNuke.create(

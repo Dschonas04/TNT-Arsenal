@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Turns the fog green and draws it in when the camera is in contaminated land. */
+/** Färbt den Nebel grün und zieht ihn heran, wenn die Kamera in verstrahltem Land ist. */
 @Mixin(FogRenderer.class)
 public class FogRendererMixin {
     @Inject(method = "setupFog", at = @At("RETURN"))

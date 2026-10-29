@@ -10,7 +10,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** When a bomb's fuse runs out, its own detonation runs instead of the vanilla explosion. */
+/**
+ * Wenn die Lunte einer Bombe abgebrannt ist, läuft ihre eigene Detonation statt der
+ * Vanilla-Explosion.
+ */
 @Mixin(PrimedTnt.class)
 public abstract class PrimedTntMixin {
     @Inject(method = "explode", at = @At("HEAD"), cancellable = true)

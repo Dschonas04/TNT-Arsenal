@@ -13,9 +13,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
 
 /**
- * The green haze over contaminated land. Its strength follows the dose rate of the chunk the camera
- * is in, synced from the server, and eases in and out so that crossing a chunk border does not make
- * the fog jump.
+ * Der grüne Dunst über verstrahltem Land. Seine Stärke folgt der Dosisleistung des Chunks, in dem
+ * die Kamera ist, vom Server synchronisiert, und blendet weich ein und aus, damit der Nebel an
+ * einer Chunkgrenze nicht springt.
  */
 public final class GreenFog {
     private GreenFog() {}
@@ -57,7 +57,7 @@ public final class GreenFog {
                 fog.color.w);
     }
 
-    /** The dose rate of the chunk at {@code pos}, as the client knows it. */
+    /** Die Dosisleistung des Chunks bei {@code pos}, wie der Client sie kennt. */
     public static float rate(ClientLevel level, BlockPos pos) {
         if (!level.hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) return 0f;
         ChunkRadiation radiation =

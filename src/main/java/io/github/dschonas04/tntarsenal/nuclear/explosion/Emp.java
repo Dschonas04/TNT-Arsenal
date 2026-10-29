@@ -18,10 +18,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The electromagnetic pulse of a detonation, reaching twice the blast radius: detonators, timer
- * fuses and Geiger counters in a player's inventory go dead for a minute, eyes are dazzled for a
- * moment, and lit redstone lamps and copper bulbs near the ground go out. The lamps are switched
- * off over many ticks, a few thousand blocks at a time.
+ * Der elektromagnetische Impuls einer Detonation, bis zum doppelten Explosionsradius: Zünder,
+ * Zeitzünder und Geigerzähler im Inventar eines Spielers fallen eine Minute lang aus, die Augen
+ * sind kurz geblendet, und leuchtende Redstone-Lampen und Kupferbirnen in Bodennähe gehen aus. Die
+ * Lampen werden über viele Ticks abgeschaltet, ein paar Tausend Blöcke auf einmal.
  */
 public final class Emp {
     private Emp() {}
@@ -83,7 +83,7 @@ public final class Emp {
                 });
     }
 
-    /** Whether an item is dead from a pulse right now. */
+    /** Ob ein Gegenstand gerade durch einen Impuls ausgefallen ist. */
     public static boolean dead(ServerPlayer player, ItemStack stack) {
         return player.getCooldowns().isOnCooldown(stack);
     }

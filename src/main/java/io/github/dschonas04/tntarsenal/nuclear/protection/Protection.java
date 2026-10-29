@@ -35,15 +35,15 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * What stands between a player and the radiation: iodine tablets, RadAway, the hazmat suit and
- * lead.
+ * Was zwischen einem Spieler und der Strahlung steht: Jodtabletten, RadAway, der
+ * Strahlenschutzanzug und Blei.
  *
  * <ul>
- *   <li><b>Iodine tablets</b> give ten minutes of the iodine effect, which halves what the body
- *       takes in.
- *   <li><b>RadAway</b> washes 200 mSv out at once, at the price of a moment of nausea.
- *   <li><b>Hazmat suit</b>: every worn piece keeps a fifth out, the whole suit 90 %.
- *   <li><b>Lead blocks</b> overhead shield four times as well as stone.
+ *   <li><b>Jodtabletten</b> geben zehn Minuten den Jod-Effekt, der halbiert, was der Körper
+ *       aufnimmt.
+ *   <li><b>RadAway</b> spült auf einmal 200 mSv aus, um den Preis einer kurzen Übelkeit.
+ *   <li><b>Strahlenschutzanzug</b>: Jedes getragene Teil hält ein Fünftel ab, der ganze Anzug 90 %.
+ *   <li><b>Bleiblöcke</b> über dem Kopf schirmen viermal so gut ab wie Stein.
  * </ul>
  */
 public final class Protection {
@@ -86,7 +86,7 @@ public final class Protection {
         }
     }
 
-    /** RadAway: drunk like a potion, takes 200 mSv off the dose. */
+    /** RadAway: wie ein Trank getrunken, senkt die Dosis um 200 mSv. */
     private static final class RadAway extends Item {
         RadAway(Properties properties) {
             super(properties);
@@ -165,7 +165,7 @@ public final class Protection {
         }
     }
 
-    /** How much of the radiation outside reaches the body, from 1 (none of this) down. */
+    /** Wie viel der Strahlung von außen den Körper erreicht, von 1 (nichts davon) abwärts. */
     public static float factor(ServerPlayer player) {
         int pieces = 0;
         for (Map.Entry<ArmorType, Item> piece : SUIT.entrySet()) {

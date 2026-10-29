@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.MapColor;
 
-/** What a detonation leaves behind: fallout, irradiated earth, trinitite and contaminated water. */
+/** Was eine Detonation zurücklässt: Fallout, verstrahlte Erde, Trinitit und verseuchtes Wasser. */
 public final class Contamination {
     private Contamination() {}
 

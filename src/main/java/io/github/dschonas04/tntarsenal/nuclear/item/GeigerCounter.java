@@ -13,10 +13,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The Geiger counter. Held in either hand it reads the dose rate where the player stands, after
- * shielding, and the player's own dose, and shows both above the hotbar. It ticks the way a real
- * one does: the higher the rate, the more often. Everything runs on the server, so the counter
- * needs nothing on the client.
+ * Der Geigerzähler. In einer der beiden Hände gehalten, misst er die Dosisleistung dort, wo der
+ * Spieler steht, nach Abschirmung, und die eigene Dosis des Spielers, und zeigt beides über der
+ * Hotbar. Er tickt wie ein echter: je höher die Leistung, desto öfter. Alles läuft auf dem Server,
+ * der Zähler braucht auf dem Client also nichts.
  */
 public final class GeigerCounter {
     private GeigerCounter() {}
@@ -39,7 +39,7 @@ public final class GeigerCounter {
     }
 
     private static boolean holds(ServerPlayer player) {
-        // A counter knocked out by an EMP is on cooldown and stays silent.
+        // Ein Zähler, den ein EMP ausgeschaltet hat, hat eine Abklingzeit und bleibt still.
         for (ItemStack stack :
                 new ItemStack[] {player.getMainHandItem(), player.getOffhandItem()}) {
             if (stack.is(NuclearTnt.GEIGER_COUNTER) && !player.getCooldowns().isOnCooldown(stack))
@@ -48,7 +48,7 @@ public final class GeigerCounter {
         return false;
     }
 
-    /** Background radiation clicks now and then; a hot zone turns it into a rattle. */
+    /** Hintergrundstrahlung klickt ab und zu; eine heiße Zone macht daraus ein Rattern. */
     private static void tick(ServerLevel level, ServerPlayer player, float rate) {
         float chance = Math.min(0.9f, 0.01f + rate * 0.15f);
         if (player.getRandom().nextFloat() >= chance) return;

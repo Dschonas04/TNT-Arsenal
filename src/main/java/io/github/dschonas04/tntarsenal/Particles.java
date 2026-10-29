@@ -15,36 +15,41 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The mod's own particles, drawn by the client side (see ArsenalParticlesClient), and the screen
- * effects a big detonation sends to the players near it: the camera shakes and the screen takes on
- * a tint.
+ * Die eigenen Partikel der Mod, gezeichnet von der Client-Seite (siehe ArsenalParticlesClient), und
+ * die Bildschirmeffekte, die eine große Detonation an die Spieler in der Nähe schickt: Die Kamera
+ * wackelt, und der Bildschirm nimmt eine Tönung an.
  */
 public final class Particles {
-    /** A bright spark that flies off a burning fuse. */
+    /** Ein heller Funke, der von einer brennenden Lunte fliegt. */
     public static final SimpleParticleType FUSE_SPARK = register("fuse_spark", false);
 
-    /** A ring flat on the ground that races outwards; its velocity x is the radius it reaches. */
+    /**
+     * Ein Ring flach auf dem Boden, der nach außen rast; seine Geschwindigkeit x ist der Radius,
+     * den er erreicht.
+     */
     public static final SimpleParticleType SHOCKWAVE = register("shockwave", true);
 
-    /** A big ball of smoke that swells, rises and thins out. */
+    /** Ein großer Rauchball, der anschwillt, aufsteigt und dünner wird. */
     public static final SimpleParticleType SMOKE_BALL = register("smoke_ball", true);
 
-    /** A glowing ember that rises, sways and cools from yellow to dark red. */
+    /** Eine glühende Glut, die aufsteigt, schwankt und von Gelb zu Dunkelrot abkühlt. */
     public static final SimpleParticleType EMBER = register("ember", false);
 
-    /** A scrap of coloured paper that tumbles down. */
+    /** Ein Fetzen buntes Papier, der herabtaumelt. */
     public static final SimpleParticleType CONFETTI = register("confetti", false);
 
-    /** An icy twinkle. */
+    /** Ein eisiges Funkeln. */
     public static final SimpleParticleType FROST_SPARKLE = register("frost_sparkle", false);
 
-    /** A dark mote that spirals into the point its velocity points at. */
+    /**
+     * Eine dunkle Flocke, die spiralförmig in den Punkt zieht, auf den ihre Geschwindigkeit zeigt.
+     */
     public static final SimpleParticleType VOID_SWIRL = register("void_swirl", false);
 
-    /** A green, pulsing mote of radiation. */
+    /** Eine grüne, pulsierende Strahlungsflocke. */
     public static final SimpleParticleType RADIATION = register("radiation", false);
 
-    /** A crackling electric arc. */
+    /** Ein knisternder elektrischer Bogen. */
     public static final SimpleParticleType ARC = register("arc", false);
 
     private Particles() {}
@@ -60,7 +65,10 @@ public final class Particles {
         PayloadTypeRegistry.clientboundPlay().register(ScreenEffect.TYPE, ScreenEffect.CODEC);
     }
 
-    /** Shake (0..1) and tint (ARGB, alpha = strength) for one player; the client fades both out. */
+    /**
+     * Wackeln (0..1) und Tönung (ARGB, Alpha = Stärke) für einen Spieler; der Client blendet beides
+     * aus.
+     */
     public record ScreenEffect(float shake, int tint, int ticks) implements CustomPacketPayload {
         public static final Type<ScreenEffect> TYPE = new Type<>(TntArsenal.id("screen_effect"));
         public static final StreamCodec<RegistryFriendlyByteBuf, ScreenEffect> CODEC =
@@ -80,7 +88,8 @@ public final class Particles {
     }
 
     /**
-     * Sends a screen effect to everyone within {@code radius}, weaker the further away they are.
+     * Schickt einen Bildschirmeffekt an alle im Umkreis {@code radius}, schwächer, je weiter sie
+     * weg sind.
      */
     public static void screen(
             ServerLevel level, Vec3 at, double radius, float shake, int tint, int ticks) {
@@ -95,7 +104,7 @@ public final class Particles {
         }
     }
 
-    /** A shock wave ring of the given radius at the TNT's feet. */
+    /** Ein Druckwellenring mit dem angegebenen Radius zu Füßen des TNT. */
     public static void ring(ServerLevel level, Vec3 at, double radius) {
         level.sendParticles(SHOCKWAVE, true, true, at.x, at.y + 0.1, at.z, 0, radius, 0, 0, 1);
     }

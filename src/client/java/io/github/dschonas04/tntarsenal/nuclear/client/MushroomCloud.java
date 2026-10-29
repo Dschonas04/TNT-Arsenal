@@ -10,16 +10,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The mushroom cloud, drawn with particles that stay visible at any distance. Its size follows the
- * bomb's radius; it lives for sixty seconds:
+ * Der Atompilz, gezeichnet mit Partikeln, die auf jede Entfernung sichtbar bleiben. Seine Größe
+ * folgt dem Radius der Bombe; er lebt sechzig Sekunden:
  *
  * <ol>
- *   <li>fireball — a glowing ball that swells for half a second;
- *   <li>stem — a column that climbs for six seconds, particles streaming upwards;
- *   <li>cap — a torus on top of the stem that grows and rolls outwards: over the top, down the
- *       outside, in underneath and up through the middle;
- *   <li>condensation ring — a white ring halfway up that spreads out;
- *   <li>fade — after thirty seconds fewer and fewer particles, gone at sixty.
+ *   <li>Feuerball – eine glühende Kugel, die eine halbe Sekunde anschwillt;
+ *   <li>Stamm – eine Säule, die sechs Sekunden lang aufsteigt, die Partikel strömen nach oben;
+ *   <li>Hut – ein Torus oben auf dem Stamm, der wächst und nach außen rollt: oben drüber, außen
+ *       herunter, unten herein und durch die Mitte hinauf;
+ *   <li>Kondensationsring – ein weißer Ring auf halber Höhe, der sich ausbreitet;
+ *   <li>Ausblenden – nach dreißig Sekunden immer weniger Partikel, nach sechzig weg.
  * </ol>
  */
 final class MushroomCloud {
@@ -41,7 +41,7 @@ final class MushroomCloud {
         this.cap = radius * 0.9;
     }
 
-    /** One client tick. Returns false once the cloud is gone. */
+    /** Ein Client-Tick. Gibt false zurück, sobald die Wolke weg ist. */
     boolean tick(ClientLevel level) {
         age++;
         int budget = NukeConfig.get().cloudParticlesPerTick;
@@ -96,20 +96,22 @@ final class MushroomCloud {
         }
     }
 
-    /** Particles on a torus around the top of the stem, moving the way the cap rolls. */
+    /**
+     * Partikel auf einem Torus um die Spitze des Stamms, die sich so bewegen, wie der Hut rollt.
+     */
     private void capTorus(ClientLevel level, int count, double stemTop) {
         double grow = Math.min(1.0, (age - 30) / 200.0);
         double major = cap * (0.4 + 0.6 * grow);
         double minor = cap * 0.35 * (0.5 + 0.5 * grow);
         double cy = ground.y + stemTop;
         for (int i = 0; i < count; i++) {
-            double around = random.nextDouble() * Math.PI * 2; // around the stem
-            double roll = random.nextDouble() * Math.PI * 2; // around the tube
+            double around = random.nextDouble() * Math.PI * 2; // um den Stamm
+            double roll = random.nextDouble() * Math.PI * 2; // um die Röhre
             double r = major + Math.cos(roll) * minor;
             double x = ground.x + Math.cos(around) * r;
             double y = cy + Math.sin(roll) * minor;
             double z = ground.z + Math.sin(around) * r;
-            // rolling outwards: tangent to the tube, top moving out, outside moving down
+            // nach außen rollen: tangential zur Röhre, oben nach außen, außen nach unten
             double speed = 0.08 + 0.12 * (1 - grow);
             double radial = -Math.sin(roll) * speed;
             double up = Math.cos(roll) * speed;

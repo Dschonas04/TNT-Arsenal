@@ -25,10 +25,10 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 /**
- * The TNT sling. Right-click throws a lit TNT — the one in the other hand, or else the first one in
- * the inventory, any arsenal kind or plain TNT, never a nuclear bomb. It flies in an arc and goes
- * off when its fuse is done. Sneaking throws it sticky: it clings to the first creature it touches,
- * or to the ground where it lands.
+ * Die TNT-Schleuder. Rechtsklick wirft ein gezündetes TNT – das in der anderen Hand, sonst das
+ * erste im Inventar, jede Arsenal-Art oder einfaches TNT, nie eine Atombombe. Es fliegt im Bogen
+ * und geht hoch, wenn seine Lunte abgebrannt ist. Schleichend wirft man es klebend: Es haftet an
+ * der ersten Kreatur, die es berührt, oder am Boden, wo es landet.
  */
 public class SlingItem extends Item {
     private static final String STICKY_TAG = "tnt_arsenal.sticky";
@@ -44,7 +44,7 @@ public class SlingItem extends Item {
                         instanceof io.github.dschonas04.tntarsenal.nuclear.block.NukeBlock);
     }
 
-    /** The TNT to throw: the other hand first, then the inventory from the hotbar on. */
+    /** Das TNT zum Werfen: zuerst die andere Hand, dann das Inventar ab der Hotbar. */
     private static ItemStack ammo(Player player, InteractionHand hand) {
         ItemStack other =
                 player.getItemInHand(
@@ -113,8 +113,8 @@ public class SlingItem extends Item {
     }
 
     /**
-     * Sticky TNT: rides the first creature it touches, or stops dead where it hits the ground or a
-     * wall.
+     * Klebendes TNT: reitet auf der ersten Kreatur, die es berührt, oder bleibt schlagartig liegen,
+     * wo es auf den Boden oder eine Wand trifft.
      */
     private static void stick(ServerLevel level, PrimedTnt tnt, Player thrower) {
         Tasks.start(

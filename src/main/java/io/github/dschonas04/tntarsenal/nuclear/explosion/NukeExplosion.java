@@ -31,24 +31,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The nuclear explosion, spread over many ticks instead of Minecraft's explosion, which would
- * freeze the server at this size. It works outwards shell by shell from ground zero; the distance
- * is measured with the depth stretched by 1.3, so the crater comes out a little flatter than a
- * ball.
+ * Die Atomexplosion, auf viele Ticks verteilt statt über die Explosion von Minecraft, die den
+ * Server in dieser Größe einfrieren würde. Sie arbeitet sich Schale für Schale vom Nullpunkt nach
+ * außen; der Abstand wird mit einer um 1.3 gestreckten Tiefe gemessen, damit der Krater etwas
+ * flacher als eine Kugel wird.
  *
  * <ul>
- *   <li><b>core</b> (under 0.55 R) and <b>crater</b> (up to 0.8 R): everything goes except what TNT
- *       Arsenal never touches: bedrock and other unbreakables, obsidian-hard blocks and blocks with
- *       contents such as chests;
- *   <li><b>rim</b> (up to R): a ragged edge — the further in, the more is torn out; what stays is
- *       charred: grass and dirt turn to coarse dirt, logs to charred logs, leaves and plants burn
- *       away;
- *   <li><b>outer zone</b> (up to 1.6 R): glass and ice shatter, leaves fall, fires start.
+ *   <li><b>Kern</b> (unter 0.55 R) und <b>Krater</b> (bis 0.8 R): Alles verschwindet außer dem, was
+ *       TNT Arsenal nie anfasst: Grundgestein und anderes Unzerstörbare, obsidianharte Blöcke und
+ *       Blöcke mit Inhalt wie Truhen;
+ *   <li><b>Rand</b> (bis R): eine ausgefranste Kante – je weiter innen, desto mehr wird
+ *       herausgerissen; was bleibt, ist verkohlt: Gras und Erde werden zu grober Erde, Stämme zu
+ *       verkohlten Stämmen, Laub und Pflanzen verbrennen;
+ *   <li><b>Außenzone</b> (bis 1.6 R): Glas und Eis zerspringen, Laub fällt, Feuer brechen aus.
  * </ul>
  *
- * The blast wave travels with the shells: whatever the front reaches is hurt and thrown outwards,
- * less if a wall stands between it and ground zero; inside the core nothing survives. Each player
- * hears the bang when the sound gets there.
+ * Die Druckwelle wandert mit den Schalen: Was die Front erreicht, wird verletzt und nach außen
+ * geworfen, weniger, wenn eine Wand zwischen ihm und dem Nullpunkt steht; im Kern überlebt nichts.
+ * Jeder Spieler hört den Knall, wenn der Schall bei ihm ankommt.
  */
 public final class NukeExplosion implements Jobs.Job {
     private static final double CORE = 0.55;
@@ -85,7 +85,7 @@ public final class NukeExplosion implements Jobs.Job {
         this.source = source;
         this.owner = owner;
         this.random = level.getRandom();
-        // Keep the whole crater loaded until it is done, even if everyone runs.
+        // Den ganzen Krater geladen halten, bis er fertig ist, auch wenn alle wegrennen.
         int reach = radius + 8;
         for (int cx = (center.getX() - reach) >> 4; cx <= (center.getX() + reach) >> 4; cx++) {
             for (int cz = (center.getZ() - reach) >> 4; cz <= (center.getZ() + reach) >> 4; cz++) {
@@ -134,7 +134,7 @@ public final class NukeExplosion implements Jobs.Job {
         return false;
     }
 
-    /** All positions whose stretched distance lies in [r, r + 1). */
+    /** Alle Positionen, deren gestreckter Abstand in [r, r + 1) liegt. */
     private void buildShell(int r) {
         count = 0;
         index = 0;
@@ -158,7 +158,7 @@ public final class NukeExplosion implements Jobs.Job {
         }
     }
 
-    /** Changes one block according to its zone. Returns true if anything changed. */
+    /** Ändert einen Block nach seiner Zone. Gibt true zurück, wenn sich etwas geändert hat. */
     private boolean affect(BlockPos pos, int dx, int dy, int dz) {
         if (!level.isLoaded(pos) || pos.getY() < level.getMinY() || pos.getY() > level.getMaxY())
             return false;
@@ -166,8 +166,8 @@ public final class NukeExplosion implements Jobs.Job {
         if (state.isAir()) return false;
         double stretch = dy < 0 ? dy * DEPTH : dy;
         double e = Math.sqrt(dx * dx + dz * dz + stretch * stretch) / radius;
-        // Chests, furnaces and the like keep their contents; so does every other
-        // block with a block entity.
+        // Truhen, Öfen und Ähnliches behalten ihren Inhalt, ebenso jeder andere Block mit
+        // Block-Entity.
         if (state.hasBlockEntity()) return false;
         boolean hard =
                 state.getDestroySpeed(level, pos) < 0
@@ -176,7 +176,7 @@ public final class NukeExplosion implements Jobs.Job {
             return !hard && vaporise(pos);
         }
         if (e < 1.0) {
-            // the further in, the more of the rim is torn out
+            // je weiter innen, desto mehr vom Rand wird herausgerissen
             if (!hard && random.nextDouble() < (1.0 - e) / (1.0 - CRATER) * 0.85)
                 return vaporise(pos);
             return !hard && burn(pos, state);
@@ -197,7 +197,7 @@ public final class NukeExplosion implements Jobs.Job {
     }
 
     private boolean vaporise(BlockPos pos) {
-        // No drops and no spilled container contents: vaporised is vaporised.
+        // Keine Drops und kein verschütteter Containerinhalt: Verdampft ist verdampft.
         level.setBlock(
                 pos,
                 Blocks.AIR.defaultBlockState(),
@@ -205,7 +205,7 @@ public final class NukeExplosion implements Jobs.Job {
         return true;
     }
 
-    /** Burns a block that survived at the crater's edge. */
+    /** Verbrennt einen Block, der am Kraterrand überlebt hat. */
     private boolean burn(BlockPos pos, BlockState state) {
         BlockState into = null;
         if (state.is(BlockTags.SUBSTRATE_OVERWORLD)) {
@@ -232,7 +232,7 @@ public final class NukeExplosion implements Jobs.Job {
         return true;
     }
 
-    /** Hits every entity the front has reached since the last tick. */
+    /** Trifft jede Entity, die die Front seit dem letzten Tick erreicht hat. */
     private void blastWave(double front) {
         double reach = Math.min(front, radius * 2.0);
         if (reach <= waveDone) return;

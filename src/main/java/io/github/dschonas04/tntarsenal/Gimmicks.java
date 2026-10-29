@@ -11,17 +11,17 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.PrimedTnt;
 
 /**
- * Statistics and advancements: how many TNT a player has set off and thrown, which kinds they have
- * tried, and the advancements of the "TNT Arsenal" tab, which the game cannot detect on its own and
- * are awarded here.
+ * Statistiken und Fortschritte: wie viele TNT ein Spieler gezündet und geworfen hat, welche Arten
+ * er ausprobiert hat, und die Fortschritte des Reiters „TNT Arsenal“, die das Spiel nicht selbst
+ * erkennen kann und die hier vergeben werden.
  */
 public final class Gimmicks {
     public static final Identifier DETONATED = TntArsenal.id("tnt_detonated");
     public static final Identifier THROWN = TntArsenal.id("tnt_thrown");
 
     /**
-     * Each kind a player has set off is remembered as an entity tag on the player, which survives
-     * relogs.
+     * Jede Art, die ein Spieler gezündet hat, wird als Entity-Tag am Spieler gemerkt, der ein
+     * Neu-Einloggen übersteht.
      */
     private static final String KIND_TAG = "tnt_arsenal.kind.";
 
@@ -35,8 +35,8 @@ public final class Gimmicks {
     }
 
     /**
-     * Awards one advancement of the arsenal tab; the advancements all have a single criterion
-     * "done".
+     * Vergibt einen Fortschritt des Arsenal-Reiters; die Fortschritte haben alle ein einziges
+     * Kriterium „done“.
      */
     public static void award(ServerPlayer player, String name) {
         AdvancementHolder holder =
@@ -44,7 +44,10 @@ public final class Gimmicks {
         if (holder != null) player.getAdvancements().award(holder, "done");
     }
 
-    /** Called for every arsenal TNT that goes off; the player who lit it gets the credit. */
+    /**
+     * Wird für jedes Arsenal-TNT aufgerufen, das hochgeht; der Spieler, der es gezündet hat,
+     * bekommt es angerechnet.
+     */
     static void detonated(ServerLevel level, PrimedTnt tnt, Kind kind) {
         if (!(tnt.getOwner() instanceof ServerPlayer player)) return;
         player.awardStat(DETONATED);

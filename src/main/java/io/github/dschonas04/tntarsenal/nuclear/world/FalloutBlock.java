@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Fallout: a faintly glowing layer of radioactive ash. It does not melt like snow; once the
- * radiation around it is over it soon blows away.
+ * Fallout: eine schwach leuchtende Schicht radioaktiver Asche. Sie schmilzt nicht wie Schnee;
+ * sobald die Strahlung ringsum vorbei ist, weht sie bald davon.
  */
 public class FalloutBlock extends SnowLayerBlock {
     public FalloutBlock(Properties properties) {

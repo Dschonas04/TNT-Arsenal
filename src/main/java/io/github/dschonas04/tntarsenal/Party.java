@@ -24,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-/** The party kinds: they break nothing and hurt no one, they are only there for the fun of it. */
+/** Die Party-Arten: Sie zerstören nichts und verletzen niemanden, sie sind nur zum Spaß da. */
 final class Party {
     private static final int[] COLOURS = {
         0xFF3B3B, 0xFFB12B, 0xFFE94A, 0x4BE36B, 0x3BC8FF, 0x6B5BFF, 0xE35BFF, 0xFFFFFF
@@ -32,7 +32,10 @@ final class Party {
 
     private Party() {}
 
-    /** A note at a note block step, 0 = F#3 ... 24 = F#5, like a note block clicked that often. */
+    /**
+     * Ein Ton auf einer Notenblock-Stufe, 0 = Fis3 ... 24 = Fis5, wie ein so oft angeklickter
+     * Notenblock.
+     */
     private static void note(
             ServerLevel level, Vec3 at, SoundEvent instrument, int step, float volume) {
         level.playSound(
@@ -50,7 +53,7 @@ final class Party {
         return new DustParticleOptions(COLOURS[random.nextInt(COLOURS.length)], size);
     }
 
-    /** Three waves of confetti shoot up and rain down, with a little fanfare. */
+    /** Drei Wellen Konfetti schießen hoch und regnen herab, mit einer kleinen Fanfare. */
     static void confetti(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -84,7 +87,7 @@ final class Party {
                     }
                     if (age % 4 == 0 && age / 4 < fanfare.length)
                         note(level, c, SoundEvents.NOTE_BLOCK_BELL.value(), fanfare[age / 4], 2.0f);
-                    // the confetti drifts down over a wide area
+                    // das Konfetti treibt über eine weite Fläche herab
                     level.sendParticles(Particles.CONFETTI, c.x, c.y + 8, c.z, 14, 8, 2, 8, 0.02);
                     if (age % 12 == 0)
                         level.sendParticles(
@@ -93,7 +96,7 @@ final class Party {
                 });
     }
 
-    /** A ring of cakes with burning candles, and "Happy Birthday" on the harp. */
+    /** Ein Ring aus Kuchen mit brennenden Kerzen und „Happy Birthday“ auf der Harfe. */
     static void cake(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         BlockPos center = t.blockPosition();
@@ -112,7 +115,7 @@ final class Party {
                         Blocks.CANDLE_CAKE.defaultBlockState().setValue(CandleCakeBlock.LIT, true));
         }
         level.sendParticles(ParticleTypes.FIREWORK, c.x, c.y + 1, c.z, 60, 1.5, 0.5, 1.5, 0.1);
-        // Happy Birthday, one note every four ticks, a rest is -1
+        // Happy Birthday, alle vier Ticks ein Ton, eine Pause ist -1
         int[] song = {
             6, 6, 8, -1, 6, -1, 11, -1, 10, -1, -1, -1, 6, 6, 8, -1, 6, -1, 13, -1, 11, -1, -1, -1,
             6, 6, 18, -1, 15, -1, 11, -1, 10, -1, 8, -1, -1, -1, 16, 16, 15, -1, 11, -1, 13, -1, 11
@@ -128,7 +131,7 @@ final class Party {
                 });
     }
 
-    /** Fifteen seconds of disco: coloured spotlights, a beat, everyone glows and hops. */
+    /** Fünfzehn Sekunden Disco: bunte Scheinwerfer, ein Beat, alle leuchten und hüpfen. */
     static void disco(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -169,7 +172,7 @@ final class Party {
                 });
     }
 
-    /** It rains chickens. */
+    /** Es regnet Hühner. */
     static void chickens(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -202,7 +205,7 @@ final class Party {
         level.sendParticles(ParticleTypes.CLOUD, c.x, c.y + 14, c.z, 80, 5, 0.5, 5, 0.02);
     }
 
-    /** Every sheep around gets a new colour, and a few rainbow sheep join them. */
+    /** Jedes Schaf ringsum bekommt eine neue Farbe, und ein paar Regenbogenschafe kommen dazu. */
     static void sheep(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();

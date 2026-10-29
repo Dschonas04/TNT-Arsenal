@@ -21,12 +21,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.WaterFluid;
 
 /**
- * Water that fallout has come down on. It behaves like water (it is in the water tag) but does not
- * form new sources, and swimming in it irradiates. Once the radiation over it is gone it is clean
- * water again.
+ * Wasser, auf das Fallout niedergegangen ist. Es verhält sich wie Wasser (es steht im Wasser-Tag),
+ * bildet aber keine neuen Quellen, und Schwimmen darin verstrahlt. Sobald die Strahlung darüber weg
+ * ist, ist es wieder sauberes Wasser.
  */
 public abstract class ContaminatedWater extends WaterFluid {
-    /** mSv a player takes in for every tick spent in it. */
+    /** mSv, die ein Spieler für jeden Tick darin aufnimmt. */
     private static final float DOSE_PER_TICK = 0.25f;
 
     @Override

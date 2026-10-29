@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Registers one block and one block item per {@link Kind}, plus a creative tab that lists them all.
- * Everything else lives in the blocks themselves and in the mixin that hands a detonation to the
- * right kind.
+ * Registriert einen Block und ein Block-Item je {@link Kind}, dazu einen Kreativ-Reiter, der sie
+ * alle auflistet. Alles andere steckt in den Blöcken selbst und in dem Mixin, das eine Detonation
+ * an die richtige Art übergibt.
  */
 public final class TntArsenal implements ModInitializer {
     public static final String MOD_ID = "tnt_arsenal";
@@ -41,7 +41,7 @@ public final class TntArsenal implements ModInitializer {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    /** Entry points for the server mixin; the task list itself stays package-private. */
+    /** Einstiegspunkte für das Server-Mixin; die Aufgabenliste selbst bleibt paketintern. */
     public static void tickTasks() {
         Tasks.tickAll();
     }
@@ -50,7 +50,7 @@ public final class TntArsenal implements ModInitializer {
         Tasks.clear();
     }
 
-    /** Entry point for the mixin: the flash and sparks every kind goes off with. */
+    /** Einstiegspunkt für das Mixin: der Blitz und die Funken, mit denen jede Art hochgeht. */
     public static void burst(
             net.minecraft.server.level.ServerLevel level,
             net.minecraft.world.entity.item.PrimedTnt tnt,
@@ -61,8 +61,9 @@ public final class TntArsenal implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // A mob that was frozen by stasis TNT and unloaded before it thawed thaws when it loads
-        // again.
+        // Ein Mob, den Stasis-TNT eingefroren hat und der vor dem Auftauen entladen wurde, taut
+        // auf, wenn er
+        // wieder geladen wird.
         ServerEntityEvents.ENTITY_LOAD.register(
                 (entity, level) -> {
                     if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG))
@@ -78,7 +79,7 @@ public final class TntArsenal implements ModInitializer {
             Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
             ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id(kind.id()));
-            // One line under the name says what this kind does.
+            // Eine Zeile unter dem Namen sagt, was diese Art tut.
             ItemLore lore =
                     new ItemLore(
                             List.of(
@@ -115,8 +116,9 @@ public final class TntArsenal implements ModInitializer {
                                                                                 ChatFormatting
                                                                                         .GRAY)))))));
 
-        // The vanilla builder keeps its item output type protected, so the items
-        // go in through Fabric's event for this tab instead.
+        // Der Vanilla-Builder hält den Typ seiner Item-Ausgabe geschützt, deshalb kommen die
+        // Gegenstände
+        // stattdessen über Fabrics Ereignis für diesen Reiter hinein.
         ResourceKey<CreativeModeTab> tabKey =
                 ResourceKey.create(Registries.CREATIVE_MODE_TAB, id("tnt"));
         CreativeModeTab tab =
@@ -128,9 +130,9 @@ public final class TntArsenal implements ModInitializer {
         CreativeModeTabEvents.modifyOutputEvent(tabKey)
                 .register(
                         output -> {
-                            // TabVisibility is protected as well; the stack lists are not.
-                            // the ordinary arsenal first, then the nuclear one: bombs, fuses,
-                            // protection, alarms
+                            // TabVisibility ist ebenfalls geschützt, die Stapellisten nicht.
+                            // erst das gewöhnliche Arsenal, dann das atomare: Bomben, Zünder,
+                            // Schutz, Alarme
                             List<Item> all = new ArrayList<>(ITEMS);
                             all.addAll(NuclearTnt.ITEMS);
                             for (Item item : all) {

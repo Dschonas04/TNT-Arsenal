@@ -34,18 +34,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Radiation: a dose rate per chunk, a dose per player, and what the dose does.
+ * Strahlung: eine Dosisleistung je Chunk, eine Dosis je Spieler und was die Dosis bewirkt.
  *
- * <p>Chunks carry their rate as an attachment that is saved with them and sent to clients. A
- * detonation raises the rate of every loaded chunk within three blast radii and is remembered by
- * the level; a chunk that loads later catches up on the blasts it missed. Rates wane steadily and
- * are gone after two Minecraft days ({@code radiationTicks}).
+ * <p>Chunks tragen ihre Leistung als Attachment, das mit ihnen gespeichert und an die Clients
+ * geschickt wird. Eine Detonation erhöht die Leistung jedes geladenen Chunks im Umkreis von drei
+ * Explosionsradien und wird von der Welt gemerkt; ein später geladener Chunk holt die verpassten
+ * Explosionen nach. Die Leistung nimmt gleichmäßig ab und ist nach zwei Minecraft-Tagen weg ({@code
+ * radiationTicks}).
  *
- * <p>Players carry their dose in mSv, saved and sent to their own client. Every second they take in
- * the rate of the chunk they stand in, less what the blocks over their head and water around them
- * shield. Out of the radiation the dose goes down again, two percent a second (at least 1 mSv).
- * What the dose does is one effect, {@link RadiationEffect}, at four levels: from 100, 250, 500 and
- * 1000 mSv.
+ * <p>Spieler tragen ihre Dosis in mSv, gespeichert und an ihren eigenen Client geschickt. Jede
+ * Sekunde nehmen sie die Leistung des Chunks auf, in dem sie stehen, abzüglich dessen, was die
+ * Blöcke über ihrem Kopf und Wasser ringsum abschirmen. Außerhalb der Strahlung sinkt die Dosis
+ * wieder, zwei Prozent pro Sekunde (mindestens 1 mSv). Was die Dosis bewirkt, ist ein Effekt,
+ * {@link RadiationEffect}, in vier Stufen: ab 100, 250, 500 und 1000 mSv.
  */
 public final class Radiation {
     private Radiation() {}
@@ -91,8 +92,8 @@ public final class Radiation {
     }
 
     /**
-     * Fabric injects AttachmentTarget into these classes at runtime; without Loom the compiler does
-     * not know.
+     * Fabric fügt AttachmentTarget zur Laufzeit in diese Klassen ein; ohne Loom weiß der Compiler
+     * das nicht.
      */
     private static AttachmentTarget at(Object target) {
         return (AttachmentTarget) target;
@@ -102,7 +103,7 @@ public final class Radiation {
         return NukeConfig.get().radiationTicks;
     }
 
-    /** The current dose rate in the chunk at a position, in mSv per second. */
+    /** Die aktuelle Dosisleistung im Chunk an einer Position, in mSv pro Sekunde. */
     public static float rateAt(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) return 0f;
         ChunkRadiation radiation = at(level.getChunkAt(pos)).getAttached(CHUNK);
@@ -119,12 +120,12 @@ public final class Radiation {
         else at(player).setAttached(DOSE, dose);
     }
 
-    /** Contaminates the land around a detonation and remembers it for chunks loaded later. */
+    /** Verseucht das Land um eine Detonation und merkt sie sich für später geladene Chunks. */
     public static void contaminate(ServerLevel level, BlockPos center, int radius, float peak) {
         long now = level.getGameTime();
         Blast blast = new Blast(center, radius, peak, now);
         List<Blast> blasts = new ArrayList<>(at(level).getAttachedOrElse(BLASTS, List.of()));
-        // blasts whose radiation is over are forgotten
+        // Explosionen, deren Strahlung vorbei ist, werden vergessen
         blasts.removeIf(old -> ChunkRadiation.left(now - old.time(), lifetime()) <= 0);
         blasts.add(blast);
         at(level).setAttached(BLASTS, List.copyOf(blasts));
@@ -145,9 +146,9 @@ public final class Radiation {
     }
 
     /**
-     * Removes all radiation within {@code radius} blocks of a position: every chunk there is loaded
-     * and set to zero, and blasts that went off there are forgotten so that nothing comes back when
-     * a chunk loads later. Returns the chunks cleared.
+     * Entfernt alle Strahlung im Umkreis von {@code radius} Blöcken um eine Position: Jeder Chunk
+     * dort wird geladen und auf null gesetzt, und Explosionen dort werden vergessen, damit nichts
+     * zurückkommt, wenn ein Chunk später lädt. Gibt die bereinigten Chunks zurück.
      */
     public static int clear(ServerLevel level, BlockPos center, int radius) {
         long now = level.getGameTime();
@@ -163,7 +164,7 @@ public final class Radiation {
                 LevelChunk chunk = level.getChunk(cx, cz);
                 ChunkRadiation old = at(chunk).getAttached(CHUNK);
                 if (old == null || old.at(now, lifetime()) <= 0f) continue;
-                // zero as of now, so that catchUp does not replay older blasts
+                // null ab jetzt, damit catchUp ältere Explosionen nicht erneut abspielt
                 at(chunk).setAttached(CHUNK, new ChunkRadiation(0f, now));
                 chunk.markUnsaved();
                 cleared++;
@@ -173,8 +174,8 @@ public final class Radiation {
     }
 
     /**
-     * A chunk that was unloaded during a blast gets that blast's radiation now, less what has waned
-     * since.
+     * Ein Chunk, der während einer Explosion entladen war, bekommt jetzt ihre Strahlung, abzüglich
+     * dessen, was seither abgeklungen ist.
      */
     private static void catchUp(ServerLevel level, LevelChunk chunk) {
         List<Blast> blasts = at(level).getAttached(BLASTS);
@@ -190,7 +191,7 @@ public final class Radiation {
         if (missed > 0.001f) add(chunk, missed, now);
     }
 
-    /** How much of the outside radiation reaches a player: roofs and water shield. */
+    /** Wie viel der Strahlung von außen einen Spieler erreicht: Dächer und Wasser schirmen ab. */
     public static float shielding(ServerLevel level, ServerPlayer player) {
         BlockPos head = BlockPos.containing(player.getEyePosition());
         float factor = 1f;
@@ -210,7 +211,7 @@ public final class Radiation {
                 rateAt(level, player.blockPosition())
                         * shielding(level, player)
                         * Protection.factor(player);
-        // Fallout rain washes the dust down on whoever stands in it.
+        // Fallout-Regen wäscht den Staub auf jeden herab, der darin steht.
         if (rate > 0.001f && level.isRainingAt(player.blockPosition().above())) rate *= 2f;
         float dose = dose(player);
         if (rate > 0.001f) dose += rate;
@@ -219,18 +220,21 @@ public final class Radiation {
         if (dose >= 500) Achievements.award(player, "survivor");
         if (dose >= 1000) Achievements.award(player, "glowing");
         int stage = stage(dose);
-        // Refreshed every second while the dose is high enough; runs out by itself three seconds
-        // after.
+        // Jede Sekunde aufgefrischt, solange die Dosis hoch genug ist; läuft drei Sekunden danach
+        // von selbst
+        // aus.
         if (stage >= 0)
             player.addEffect(new MobEffectInstance(EFFECT, 60, stage, false, true, true));
     }
 
-    /** The radiation effect's amplifier for a dose, or -1 below 100 mSv. */
+    /** Die Effektstärke der Strahlung für eine Dosis, oder -1 unter 100 mSv. */
     public static int stage(float dose) {
         return dose >= 1000 ? 3 : dose >= 500 ? 2 : dose >= 250 ? 1 : dose >= 100 ? 0 : -1;
     }
 
-    /** Radiation sickness for a mob or a player without going through the dose, e.g. in fallout. */
+    /**
+     * Strahlenkrankheit für einen Mob oder Spieler, ohne über die Dosis zu gehen, z. B. im Fallout.
+     */
     public static void sicken(LivingEntity entity, int amplifier, int ticks) {
         MobEffectInstance current = entity.getEffect(EFFECT);
         if (current != null && current.getAmplifier() > amplifier) return;

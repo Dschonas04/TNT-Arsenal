@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 
 /**
- * A detonation as the world remembers it, so that chunks which were not loaded at the time still
- * get their share of the radiation when they load.
+ * Eine Detonation, wie die Welt sie sich merkt, damit Chunks, die damals nicht geladen waren, beim
+ * Laden trotzdem ihren Anteil an der Strahlung bekommen.
  */
 public record Blast(BlockPos center, int radius, float peak, long time) {
     public static final Codec<Blast> CODEC =
@@ -22,12 +22,15 @@ public record Blast(BlockPos center, int radius, float peak, long time) {
                                             Codec.LONG.fieldOf("time").forGetter(Blast::time))
                                     .apply(i, Blast::new));
 
-    /** Contamination reaches three times the blast radius. */
+    /** Die Verseuchung reicht bis zum dreifachen Explosionsradius. */
     public int reach() {
         return radius * 3;
     }
 
-    /** The dose rate this blast left at a chunk's centre, at the time of the blast. */
+    /**
+     * Die Dosisleistung, die diese Explosion in der Mitte eines Chunks hinterlassen hat, zum
+     * Zeitpunkt der Explosion.
+     */
     public float rateAt(int chunkX, int chunkZ) {
         double dx = (chunkX << 4) + 8 - center.getX();
         double dz = (chunkZ << 4) + 8 - center.getZ();

@@ -77,36 +77,38 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * What each kind does when its fuse runs out. Every method gets the level and the primed entity,
- * which is already discarded but still knows its position, its owner and the block state it
- * carried.
+ * Was jede Art tut, wenn ihre Lunte abgebrannt ist. Jede Methode bekommt die Welt und die gezündete
+ * Entity, die schon entfernt ist, aber noch ihre Position, ihren Besitzer und den getragenen
+ * Blockzustand kennt.
  *
- * <p>Kinds that remove or replace blocks directly, without an explosion, all go through {@link
- * #removable}: bedrock, obsidian and anything else an explosion could not break stays, and so does
- * every block with contents.
+ * <p>Arten, die Blöcke direkt entfernen oder ersetzen, ohne Explosion, laufen alle über {@link
+ * #removable}: Grundgestein, Obsidian und alles, was eine Explosion nicht brechen könnte, bleibt
+ * stehen, ebenso jeder Block mit Inhalt.
  */
 final class Detonations {
     private Detonations() {}
 
     private static final int FLAGS = Block.UPDATE_ALL;
 
-    /** Bulk edits skip neighbour updates: no sand avalanches, no lag spike. */
+    /** Massenänderungen überspringen Nachbar-Updates: keine Sandlawinen, keine Ruckler. */
     private static final int QUIET = Block.UPDATE_CLIENTS;
 
-    /** Ores as every mod tags them; the tunnel and drill drop these instead of deleting them. */
+    /**
+     * Erze, wie jede Mod sie markiert; Tunnel und Bohrer lassen sie fallen, statt sie zu löschen.
+     */
     private static final TagKey<Block> ORES =
             TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "ores"));
 
     /**
-     * Marks a mob frozen by stasis TNT, so it thaws even if its chunk unloads in between (see
-     * TntArsenal).
+     * Markiert einen von Stasis-TNT eingefrorenen Mob, damit er auftaut, auch wenn sein Chunk
+     * zwischendurch entladen wird (siehe TntArsenal).
      */
     static final String STASIS_TAG = "tnt_arsenal.stasis";
 
     private static final TagKey<Block> GLASS_PANES =
             TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "glass_panes"));
 
-    // --- helpers -------------------------------------------------------
+    // --- Helfer -------------------------------------------------------
 
     private static double y(PrimedTnt t) {
         return t.getY(0.0625);
@@ -116,7 +118,7 @@ final class Detonations {
         level.explode(t, t.getX(), y(t), t.getZ(), power, fire, Level.ExplosionInteraction.TNT);
     }
 
-    /** Bang and smoke without breaking anything. */
+    /** Knall und Rauch, ohne etwas zu zerstören. */
     static void pop(ServerLevel level, PrimedTnt t, float power) {
         level.explode(t, t.getX(), y(t), t.getZ(), power, false, Level.ExplosionInteraction.NONE);
     }
@@ -150,11 +152,11 @@ final class Detonations {
     }
 
     /**
-     * Whether a kind may delete or swap this block. No for air, for bedrock and anything else
-     * unbreakable, for obsidian-hard blocks (blast resistance 600 and up: obsidian, crying
-     * obsidian, ancient debris, netherite, anvils, reinforced deepslate), for anything with a block
-     * entity (chests, furnaces, spawners, signs) and for TNT, which should go off rather than
-     * vanish.
+     * Ob eine Art diesen Block löschen oder tauschen darf. Nein für Luft, für Grundgestein und
+     * alles andere Unzerstörbare, für obsidianharte Blöcke (Explosionsfestigkeit ab 600: Obsidian,
+     * weinender Obsidian, antiker Schrott, Netherit, Ambosse, verstärkter Tiefenschiefer), für
+     * alles mit Block-Entity (Truhen, Öfen, Spawner, Schilder) und für TNT, das lieber hochgehen
+     * als verschwinden soll.
      */
     static boolean removable(ServerLevel level, BlockPos pos, BlockState state) {
         if (state.isAir() || state.hasBlockEntity()) return false;
@@ -164,9 +166,9 @@ final class Detonations {
     }
 
     /**
-     * Plain ground: stone of every dimension, dirt, sand, gravel — and the rock and soil of modded
-     * dimensions (Aerial Hell, Limbo, Chrono Dawn and the like), which the vanilla tags do not
-     * know.
+     * Einfacher Boden: Stein jeder Dimension, Erde, Sand, Kies – und Fels und Erde aus
+     * Mod-Dimensionen (Aerial Hell, Limbo, Chrono Dawn und Ähnliche), die die Vanilla-Tags nicht
+     * kennen.
      */
     static boolean ground(BlockState state) {
         if (state.is(BlockTags.BASE_STONE_OVERWORLD)
@@ -257,8 +259,8 @@ final class Detonations {
     };
 
     /**
-     * Guesses from a modded block's name whether it is natural rock or soil rather than a building
-     * block or an ore.
+     * Rät aus dem Namen eines Mod-Blocks, ob er natürlicher Fels oder Boden ist und kein Baublock
+     * oder Erz.
      */
     static boolean naturalName(String path) {
         for (String built : BUILT) if (path.contains(built)) return false;
@@ -267,9 +269,9 @@ final class Detonations {
     }
 
     /**
-     * The highest air block straight above {@code from}, at most {@code up} blocks higher. Under
-     * the Nether roof, in a cave or under the islands of a sky dimension that is just below the
-     * ceiling.
+     * Der höchste Luftblock direkt über {@code from}, höchstens {@code up} Blöcke höher. Unter dem
+     * Netherdach, in einer Höhle oder unter den Inseln einer Himmelsdimension ist das knapp unter
+     * der Decke.
      */
     private static int openAbove(ServerLevel level, BlockPos from, int up) {
         int limit = Math.min(level.getMaxY() - 2, from.getY() + up);
@@ -281,8 +283,8 @@ final class Detonations {
     }
 
     /**
-     * The ground under a column. With an open sky that is the heightmap; in a dimension with a roof
-     * the heightmap would be the roof, so the search starts under the ceiling above the TNT.
+     * Der Boden unter einer Säule. Bei freiem Himmel ist das die Höhenkarte; in einer Dimension mit
+     * Dach wäre die Höhenkarte das Dach, deshalb beginnt die Suche unter der Decke über dem TNT.
      */
     private static BlockPos groundAt(ServerLevel level, double x, double y, double z) {
         BlockPos column = BlockPos.containing(x, y, z);
@@ -305,7 +307,7 @@ final class Detonations {
                 .toList();
     }
 
-    /** The blocks between radius - 1 (exclusive) and radius (inclusive). */
+    /** Die Blöcke zwischen Radius - 1 (ausschließlich) und Radius (einschließlich). */
     private static List<BlockPos> shell(BlockPos center, int radius) {
         double inner = (radius - 1.0) * (radius - 1.0);
         double outer = (double) radius * radius;
@@ -328,14 +330,14 @@ final class Detonations {
                 : Direction.NORTH;
     }
 
-    /** Puts a block where there is only air, liquid or a plant. */
+    /** Setzt einen Block, wo nur Luft, Flüssigkeit oder eine Pflanze ist. */
     static boolean place(ServerLevel level, BlockPos pos, BlockState state) {
         if (!level.isLoaded(pos) || !level.getBlockState(pos).canBeReplaced()) return false;
         level.setBlock(pos, Block.updateFromNeighbourShapes(state, level, pos), FLAGS);
         return true;
     }
 
-    /** Liquids next to a dug passage turn to cobblestone so nothing floods in. */
+    /** Flüssigkeiten neben einem gegrabenen Gang werden zu Bruchstein, damit nichts hineinläuft. */
     private static void seal(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) return;
         BlockState state = level.getBlockState(pos);
@@ -343,7 +345,10 @@ final class Detonations {
             level.setBlock(pos, Blocks.COBBLESTONE.defaultBlockState(), FLAGS);
     }
 
-    /** Digs one block out of a passage: ores drop, liquids go, protected blocks stay. */
+    /**
+     * Gräbt einen Block aus einem Gang: Erze fallen, Flüssigkeiten verschwinden, geschützte Blöcke
+     * bleiben.
+     */
     private static void dig(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) return;
         BlockState state = level.getBlockState(pos);
@@ -352,7 +357,7 @@ final class Detonations {
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), FLAGS);
     }
 
-    /** Collects drops in one pile instead of a hundred scattered items. */
+    /** Sammelt Drops auf einem Haufen statt in hundert verstreuten Gegenständen. */
     private static void addDrops(List<ItemStack> pile, List<ItemStack> drops) {
         for (ItemStack drop : drops) {
             for (ItemStack stack : pile) {
@@ -390,8 +395,8 @@ final class Detonations {
     }
 
     /**
-     * The show of a real blast: dust and chunks of the ground it stood on fly up, smoke billows, a
-     * ring of dust runs out over the ground and the boom rolls on for a moment.
+     * Die Schau einer echten Explosion: Staub und Brocken des Bodens fliegen hoch, Rauch quillt,
+     * ein Staubring läuft über den Boden, und der Knall rollt noch einen Moment nach.
      */
     static void debris(ServerLevel level, Vec3 c, double radius) {
         BlockState ground = level.getBlockState(BlockPos.containing(c).below());
@@ -468,7 +473,7 @@ final class Detonations {
                 });
     }
 
-    /** Hostile creatures around a point, nearest first. */
+    /** Feindliche Kreaturen um einen Punkt, die nächste zuerst. */
     static List<LivingEntity> enemies(ServerLevel level, Vec3 c, double radius) {
         List<LivingEntity> out = new ArrayList<>();
         for (LivingEntity e : around(level, c, LivingEntity.class, radius))
@@ -477,18 +482,18 @@ final class Detonations {
         return out;
     }
 
-    // --- raw power -----------------------------------------------------
+    // --- rohe Kraft -----------------------------------------------------
 
     /**
-     * Four times TNT. Big blasts use block-explosion rules, under which only a share of the broken
-     * blocks drops: a giga crater would otherwise leave thousands of items lying around and drag
-     * the server down.
+     * Viermal TNT. Große Explosionen nutzen die Regeln für Blockexplosionen, bei denen nur ein Teil
+     * der zerstörten Blöcke droppt: Ein Giga-Krater hinterließe sonst Tausende Gegenstände und zöge
+     * den Server in die Knie.
      */
     static void giga(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         debris(level, c, 16);
         level.explode(t, t.getX(), y(t), t.getZ(), 16, false, Level.ExplosionInteraction.BLOCK);
-        // a column of smoke rises over the crater and spreads at the top
+        // eine Rauchsäule steigt über dem Krater auf und breitet sich oben aus
         Tasks.start(
                 age -> {
                     double h = Math.min(age, 30) * 0.8;
@@ -517,15 +522,15 @@ final class Detonations {
                 });
     }
 
-    /** Twice TNT, with the show of a big blast. */
+    /** Zweimal TNT, mit der Schau einer großen Explosion. */
     static void mega(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 8);
         blast(level, t, 8, false);
     }
 
     /**
-     * Napalm: an explosion, then a ring of fire that runs out to ten blocks and sets every creature
-     * it reaches alight — except whoever lit it.
+     * Napalm: eine Explosion, dann ein Feuerring, der bis zehn Blöcke hinausläuft und jede Kreatur
+     * in Brand setzt, die er erreicht – außer der, die ihn gezündet hat.
      */
     static void fire(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 4);
@@ -568,8 +573,8 @@ final class Detonations {
     }
 
     /**
-     * Chain lightning: one bolt after another into the eight nearest monsters within 24 blocks,
-     * with an arc of sparks to each. Without monsters, a ring of lightning.
+     * Kettenblitz: ein Blitz nach dem anderen in die acht nächsten Monster im Umkreis von 24
+     * Blöcken, mit einem Funkenbogen zu jedem. Ohne Monster ein Blitzring.
      */
     static void lightning(ServerLevel level, PrimedTnt t) {
         blast(level, t, 2, false);
@@ -609,10 +614,11 @@ final class Detonations {
                                 0.05);
                     }
                     if (target.isAlive()) {
-                        // a bolt alone barely scratches a zombie; the chain is meant to clear them
-                        // out,
-                        // so the extra hit comes first, before the bolt's own hit starts the hurt
-                        // cooldown
+                        // ein einzelner Blitz kratzt einen Zombie kaum; die Kette soll sie
+                        // wegräumen,
+                        // deshalb kommt der Zusatztreffer zuerst, bevor der eigene Treffer des
+                        // Blitzes die
+                        // Schutzzeit startet
                         target.setInvulnerableTime(0);
                         target.hurtServer(level, level.damageSources().lightningBolt(), 24);
                         strike(level, target.getX(), target.getY(), target.getZ());
@@ -628,7 +634,7 @@ final class Detonations {
         level.addFreshEntity(bolt);
     }
 
-    /** Bursts and flings eight ordinary TNT in all directions. */
+    /** Platzt auf und schleudert acht gewöhnliche TNT in alle Richtungen. */
     static void cluster(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 3);
         blast(level, t, 2, false);
@@ -644,12 +650,12 @@ final class Detonations {
         }
     }
 
-    // --- digging ---------------------------------------------------------
+    // --- Graben ---------------------------------------------------------
 
     /**
-     * A clean 3×3 shaft straight down, up to 64 deep and never into bedrock, with a ladder on the
-     * side the player faced. Liquids in the walls become cobblestone, ores drop, protected blocks
-     * stay where they are.
+     * Ein sauberer 3×3-Schacht senkrecht nach unten, bis 64 tief und nie ins Grundgestein, mit
+     * einer Leiter an der Seite, in die der Spieler geschaut hat. Flüssigkeiten in den Wänden
+     * werden zu Bruchstein, Erze fallen, geschützte Blöcke bleiben, wo sie sind.
      */
     static void drill(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -696,8 +702,9 @@ final class Detonations {
     }
 
     /**
-     * A clean tunnel, three wide and three high, 48 long, the way the player faced when placing it.
-     * A torch every eight blocks; ores drop, liquids are sealed.
+     * Ein sauberer Tunnel, drei breit und drei hoch, 48 lang, in die Richtung, in die der Spieler
+     * beim Setzen geschaut hat. Alle acht Blöcke eine Fackel; Erze fallen, Flüssigkeiten werden
+     * abgedichtet.
      */
     static void tunnel(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -738,8 +745,8 @@ final class Detonations {
     }
 
     /**
-     * Clears a round building plot from the TNT's height up: radius 10, sixteen high, one layer per
-     * tick from the top. Nothing below the TNT is touched.
+     * Räumt einen runden Bauplatz ab der Höhe des TNT nach oben: Radius 10, sechzehn hoch, pro Tick
+     * eine Schicht von oben. Unter dem TNT wird nichts angefasst.
      */
     static void leveler(ServerLevel level, PrimedTnt t) {
         pop(level, t, 2);
@@ -774,8 +781,8 @@ final class Detonations {
     }
 
     /**
-     * Clears the rock and soil around it and collects every ore: their yield lands in one pile
-     * where the TNT stood, as if mined by hand.
+     * Räumt Fels und Erde ringsum ab und sammelt jedes Erz: Der Ertrag landet auf einem Haufen
+     * dort, wo das TNT stand, als wäre er von Hand abgebaut.
      */
     static void miner(ServerLevel level, PrimedTnt t) {
         pop(level, t, 2);
@@ -805,8 +812,8 @@ final class Detonations {
     }
 
     /**
-     * Turns stone and dirt into glass for thirty seconds, so every ore and cave around shows
-     * through, then puts the original blocks back.
+     * Verwandelt Stein und Erde für dreißig Sekunden in Glas, damit jedes Erz und jede Höhle
+     * ringsum durchscheint, und setzt dann die ursprünglichen Blöcke zurück.
      */
     static void xray(ServerLevel level, PrimedTnt t) {
         sound(level, t.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 3.0f, 0.7f);
@@ -822,8 +829,9 @@ final class Detonations {
         Tasks.start(
                 age -> {
                     if (age < 600) return false;
-                    // Chunks out of range keep their glass until they are loaded again (for an hour
-                    // at most).
+                    // Chunks außer Reichweite behalten ihr Glas, bis sie wieder geladen werden
+                    // (höchstens eine
+                    // Stunde).
                     swapped.entrySet()
                             .removeIf(
                                     entry -> {
@@ -837,8 +845,9 @@ final class Detonations {
                     return swapped.isEmpty() || age > 72000;
                 },
                 () -> {
-                    // the server stops before the thirty seconds are up: put back what can be put
-                    // back, not leave glass forever
+                    // der Server stoppt, bevor die dreißig Sekunden um sind: zurücksetzen, was sich
+                    // zurücksetzen lässt,
+                    // statt für immer Glas zu hinterlassen
                     swapped.forEach(
                             (pos, state) -> {
                                 if (level.isLoaded(pos)
@@ -848,11 +857,11 @@ final class Detonations {
                 });
     }
 
-    // --- liquids and weather -------------------------------------------
+    // --- Flüssigkeiten und Wetter -------------------------------------------
 
     /**
-     * A flood: explodes, fills the crater, puts out every fire within twelve blocks and washes
-     * creatures back with a wave.
+     * Eine Flut: explodiert, füllt den Krater, löscht jedes Feuer im Umkreis von zwölf Blöcken und
+     * spült Kreaturen mit einer Welle zurück.
      */
     static void water(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 3);
@@ -878,8 +887,8 @@ final class Detonations {
     }
 
     /**
-     * A lava fountain: explodes, fills the crater with lava, sprays glowing drops and sets what is
-     * near alight.
+     * Eine Lavafontäne: explodiert, füllt den Krater mit Lava, versprüht glühende Tropfen und setzt
+     * Nahes in Brand.
      */
     static void lava(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 3);
@@ -917,7 +926,10 @@ final class Detonations {
         }
     }
 
-    /** Soaks up all water and lava within ten blocks, waterlogged blocks included. */
+    /**
+     * Saugt alles Wasser und alle Lava im Umkreis von zehn Blöcken auf, geflutete Blöcke
+     * eingeschlossen.
+     */
     static void sponge(ServerLevel level, PrimedTnt t) {
         for (BlockPos pos : sphere(t.blockPosition(), 10)) {
             if (!level.isLoaded(pos)) continue;
@@ -938,7 +950,7 @@ final class Detonations {
         particles(level, ParticleTypes.SPLASH, t.position(), 400, 5, 0.3);
     }
 
-    /** Freezes water and lava, drops snow and chills every creature around. */
+    /** Friert Wasser und Lava ein, lässt Schnee fallen und kühlt jede Kreatur ringsum. */
     static void frost(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         BlockPos center = t.blockPosition();
@@ -968,7 +980,7 @@ final class Detonations {
                 ParticleTypes.SNOWFLAKE, t.getX(), y(t) + 1, t.getZ(), 400, 5, 2, 5, 0.05);
     }
 
-    /** Eight seconds of thunderstorm: twenty lightning strikes within twenty blocks. */
+    /** Acht Sekunden Gewitter: zwanzig Blitzeinschläge im Umkreis von zwanzig Blöcken. */
     static void storm(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         Vec3 c = t.position();
@@ -978,7 +990,7 @@ final class Detonations {
                     level.sendParticles(
                             ParticleTypes.FALLING_WATER, c.x, c.y + 14, c.z, 40, 14, 1, 14, 0);
                     if (age % 8 == 0) {
-                        // every other bolt goes for a monster in the storm, if there is one
+                        // jeder zweite Blitz geht auf ein Monster im Sturm, wenn es eines gibt
                         List<LivingEntity> targets =
                                 age % 16 == 0 ? enemies(level, c, 20) : List.of();
                         if (!targets.isEmpty()) {
@@ -997,15 +1009,15 @@ final class Detonations {
                 });
     }
 
-    // --- creatures -------------------------------------------------------
+    // --- Kreaturen -------------------------------------------------------
 
-    /** A small bang that leaves a lingering cloud of poison. */
+    /** Ein kleiner Knall, der eine anhaltende Giftwolke hinterlässt. */
     static void poison(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         cloud(level, t, 6, 600, new MobEffectInstance(MobEffects.POISON, 200, 1));
     }
 
-    /** A cloud that heals and cures poison and wither — nothing breaks. */
+    /** Eine Wolke, die heilt und Gift und Verdorren kuriert – nichts geht kaputt. */
     static void healing(ServerLevel level, PrimedTnt t) {
         sound(level, t.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 2.0f, 1.0f);
         cloud(level, t, 6, 400, new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
@@ -1017,7 +1029,7 @@ final class Detonations {
         level.sendParticles(ParticleTypes.HEART, t.getX(), y(t) + 1, t.getZ(), 40, 3, 1, 3, 0.1);
     }
 
-    /** A thick smoke screen: everyone inside is blinded and slowed for twenty seconds. */
+    /** Eine dichte Rauchwand: Jeder darin ist zwanzig Sekunden geblendet und verlangsamt. */
     static void smoke(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         cloud(
@@ -1062,7 +1074,7 @@ final class Detonations {
         level.addFreshEntity(cloud);
     }
 
-    /** Five zombies and three skeletons climb out of the smoke. */
+    /** Fünf Zombies und drei Skelette klettern aus dem Rauch. */
     static void horde(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         RandomSource random = level.getRandom();
@@ -1078,8 +1090,8 @@ final class Detonations {
     }
 
     /**
-     * Sends every monster within 16 blocks far away, like a chorus fruit but stronger. Players and
-     * animals stay.
+     * Schickt jedes Monster im Umkreis von 16 Blöcken weit weg, wie eine Chorusfrucht, aber
+     * stärker. Spieler und Tiere bleiben.
      */
     static void ender(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -1108,12 +1120,12 @@ final class Detonations {
         level.sendParticles(ParticleTypes.PORTAL, t.getX(), y(t) + 1, t.getZ(), 400, 4, 2, 4, 0.5);
     }
 
-    // --- forces ----------------------------------------------------------
+    // --- Kräfte ----------------------------------------------------------
 
     /**
-     * Gravity: tears loose the blocks around it for one and a half seconds and pulls them, and
-     * every creature within 16 blocks, into a whirl above the TNT — then explodes and hurls the
-     * whole lot outwards.
+     * Schwerkraft: reißt anderthalb Sekunden lang die Blöcke ringsum los und zieht sie und jede
+     * Kreatur im Umkreis von 16 Blöcken in einen Wirbel über dem TNT – explodiert dann und
+     * schleudert alles nach außen.
      */
     static void gravity(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
@@ -1160,16 +1172,16 @@ final class Detonations {
                     return true;
                 },
                 () -> {
-                    // weightless rubble would otherwise hang in the air for good after a restart
+                    // schwereloser Schutt hinge nach einem Neustart sonst für immer in der Luft
                     for (FallingBlockEntity block : rubble)
                         if (block.isAlive()) block.setNoGravity(false);
                 });
     }
 
     /**
-     * Turns up to {@code count} exposed blocks from the list into weightless falling blocks. Only
-     * blocks with air above come loose, so the ground is peeled away from the top and nothing gets
-     * stuck inside the earth.
+     * Macht bis zu {@code count} freiliegende Blöcke aus der Liste zu schwerelosen fallenden
+     * Blöcken. Nur Blöcke mit Luft darüber lösen sich, damit der Boden von oben abgeschält wird und
+     * nichts im Erdreich stecken bleibt.
      */
     private static void tearLoose(
             ServerLevel level,
@@ -1186,7 +1198,7 @@ final class Detonations {
                     || !state.isCollisionShapeFullBlock(level, pos)
                     || !level.getBlockState(pos.above()).isAir()) {
                 if (!state.isAir() && removable(level, pos, state))
-                    loose.add(pos); // try again once it is exposed
+                    loose.add(pos); // noch einmal versuchen, sobald er freiliegt
                 continue;
             }
             FallingBlockEntity block = FallingBlockEntity.fall(level, pos, state);
@@ -1199,9 +1211,9 @@ final class Detonations {
     }
 
     /**
-     * Five seconds of vortex: pulls everything within 24 blocks, tears the ground loose and
-     * swallows it block by block, hurts what it catches, then collapses and swallows a ball of
-     * blocks fifteen wide.
+     * Fünf Sekunden Wirbel: zieht alles im Umkreis von 24 Blöcken an, reißt den Boden los und
+     * verschluckt ihn Block für Block, verletzt, was er erwischt, fällt dann in sich zusammen und
+     * verschluckt eine Blockkugel von fünfzehn Breite.
      */
     static void blackHole(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position().add(0, 2.5, 0);
@@ -1279,8 +1291,8 @@ final class Detonations {
     }
 
     /**
-     * Wipes a ball of blocks twenty wide out of existence, from the inside outwards, without a
-     * single drop. Protected blocks survive it.
+     * Löscht eine Blockkugel von zwanzig Breite aus dem Dasein, von innen nach außen, ohne einen
+     * einzigen Drop. Geschützte Blöcke überstehen das.
      */
     static void antimatter(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
@@ -1324,7 +1336,9 @@ final class Detonations {
                 });
     }
 
-    /** Lifts the blocks around it into the air; creatures nearby float up and glide down. */
+    /**
+     * Hebt die Blöcke ringsum in die Luft; Kreaturen in der Nähe schweben hoch und gleiten herab.
+     */
     static void antigravity(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         RandomSource random = level.getRandom();
@@ -1347,7 +1361,8 @@ final class Detonations {
     }
 
     /**
-     * Launches everything around it into the air without breaking a block — and lets it glide down.
+     * Schleudert alles ringsum in die Luft, ohne einen Block zu zerstören – und lässt es
+     * herabgleiten.
      */
     static void bounce(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -1363,8 +1378,8 @@ final class Detonations {
     }
 
     /**
-     * A flat blast wave: throws everything within 14 blocks outwards, hurts a little, shatters
-     * glass and leaves — and breaks nothing else.
+     * Eine flache Druckwelle: wirft alles im Umkreis von 14 Blöcken nach außen, verletzt ein wenig,
+     * zerschlägt Glas und Laub – und zerstört sonst nichts.
      */
     static void shockwave(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
@@ -1412,8 +1427,8 @@ final class Detonations {
     }
 
     /**
-     * The warden's scream: charges for a second, then a ring of sonic booms runs out to 16 blocks.
-     * It goes through walls and ignores armour.
+     * Der Schrei des Wärters: lädt eine Sekunde, dann läuft ein Ring aus Schallschlägen bis 16
+     * Blöcke hinaus. Er geht durch Wände und ignoriert Rüstung.
      */
     static void sonic(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position().add(0, 1, 0);
@@ -1462,7 +1477,10 @@ final class Detonations {
                 });
     }
 
-    /** Pulls every dropped item and experience orb within 40 blocks into one pile. */
+    /**
+     * Zieht jeden fallen gelassenen Gegenstand und jede Erfahrungskugel im Umkreis von 40 Blöcken
+     * auf einen Haufen.
+     */
     static void magnet(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position().add(0, 0.5, 0);
         sound(level, c, SoundEvents.BEACON_ACTIVATE, 2.0f, 1.6f);
@@ -1472,7 +1490,7 @@ final class Detonations {
                         if (!(entity instanceof ItemEntity) && !(entity instanceof ExperienceOrb))
                             continue;
                         if (age >= 60) {
-                            // Whatever got stuck behind a wall comes along anyway.
+                            // Was hinter einer Wand hängen geblieben ist, kommt trotzdem mit.
                             entity.teleportTo(c.x, c.y, c.z);
                             entity.setDeltaMovement(Vec3.ZERO);
                         } else {
@@ -1492,11 +1510,12 @@ final class Detonations {
                 });
     }
 
-    // --- building ----------------------------------------------------------
+    // --- Bauen ----------------------------------------------------------
 
     /**
-     * A stone-brick bridge 40 blocks long, three wide, with railings and a lantern every eight
-     * blocks, laid out the way the player faced. It only fills air, liquids and plants.
+     * Eine Steinziegelbrücke, 40 Blöcke lang, drei breit, mit Geländer und alle acht Blöcke einer
+     * Laterne, in die Richtung gelegt, in die der Spieler geschaut hat. Sie füllt nur Luft,
+     * Flüssigkeiten und Pflanzen.
      */
     static void bridge(ServerLevel level, PrimedTnt t) {
         BlockPos start = t.blockPosition().below();
@@ -1527,7 +1546,8 @@ final class Detonations {
     }
 
     /**
-     * A round stone-brick wall with battlements, radius 8, rising out of the ground layer by layer.
+     * Eine runde Steinziegelmauer mit Zinnen, Radius 8, die Schicht für Schicht aus dem Boden
+     * wächst.
      */
     static void wall(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
@@ -1570,7 +1590,7 @@ final class Detonations {
                 });
     }
 
-    /** A glass dome, radius 7, built from the ground up — instant shelter. */
+    /** Eine Glaskuppel, Radius 7, vom Boden aus gebaut – sofortiger Unterschlupf. */
     static void dome(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
         sound(level, t.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 2.0f, 1.2f);
@@ -1597,7 +1617,7 @@ final class Detonations {
                 });
     }
 
-    /** Spins cobwebs into the air around it — a trap for anything that follows. */
+    /** Spinnt Spinnweben in die Luft ringsum – eine Falle für alles, was folgt. */
     static void cobweb(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         RandomSource random = level.getRandom();
@@ -1608,7 +1628,10 @@ final class Detonations {
         }
     }
 
-    /** Lights up the dark: a torch every six blocks within twenty, wherever the ground is dark. */
+    /**
+     * Erhellt das Dunkel: alle sechs Blöcke im Umkreis von zwanzig eine Fackel, wo immer der Boden
+     * dunkel ist.
+     */
     static void torch(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
         int placed = 0;
@@ -1641,10 +1664,11 @@ final class Detonations {
         sound(level, t.position(), SoundEvents.FIRECHARGE_USE, 1.5f, placed > 0 ? 1.2f : 0.6f);
     }
 
-    // --- nature --------------------------------------------------------
+    // --- Natur --------------------------------------------------------
 
     /**
-     * Bone meal for everything within eight blocks: saplings grow, crops ripen, dirt turns green.
+     * Knochenmehl für alles im Umkreis von acht Blöcken: Setzlinge wachsen, Feldfrüchte reifen,
+     * Erde wird grün.
      */
     static void nature(ServerLevel level, PrimedTnt t) {
         RandomSource random = level.getRandom();
@@ -1656,7 +1680,7 @@ final class Detonations {
                 continue;
             }
             if (!(state.getBlock() instanceof BonemealableBlock)) continue;
-            // Grass spreads plants all around itself; a few blocks of it are plenty.
+            // Gras verbreitet ringsum Pflanzen; ein paar Blöcke davon reichen völlig.
             if (state.is(Blocks.GRASS_BLOCK) && random.nextFloat() > 0.12f) continue;
             for (int round = 0; round < 4; round++) {
                 BlockState now = level.getBlockState(pos);
@@ -1679,14 +1703,18 @@ final class Detonations {
         sound(level, t.position(), SoundEvents.BONE_MEAL_USE, 2.0f, 0.8f);
     }
 
-    /** Harvests ripe crops within twelve blocks, replants them and drops the yield in one pile. */
+    /**
+     * Erntet reife Feldfrüchte im Umkreis von zwölf Blöcken, pflanzt sie neu und lässt den Ertrag
+     * auf einen Haufen fallen.
+     */
     static void harvest(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
         List<ItemStack> pile = new ArrayList<>();
         List<BlockPos> area =
                 BlockPos.betweenClosedStream(center.offset(-12, -3, -12), center.offset(12, 4, 12))
                         .map(BlockPos::immutable)
-                        // From the top down, so a sugar cane is cut above its lowest block.
+                        // Von oben nach unten, damit Zuckerrohr über seinem untersten Block
+                        // geschnitten wird.
                         .sorted(Comparator.comparingInt((BlockPos p) -> p.getY()).reversed())
                         .toList();
         for (BlockPos pos : area) {
@@ -1713,9 +1741,9 @@ final class Detonations {
     }
 
     /**
-     * Fells the trees around it: every natural leaf within ten blocks and every log connected to
-     * one. Logs in buildings have no natural leaves next to them and stay. Wood, saplings and
-     * apples land in one pile.
+     * Fällt die Bäume ringsum: jedes natürliche Laub im Umkreis von zehn Blöcken und jeden Stamm,
+     * der mit ihm verbunden ist. Stämme in Bauten haben kein natürliches Laub daneben und bleiben.
+     * Holz, Setzlinge und Äpfel landen auf einem Haufen.
      */
     static void lumber(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
@@ -1736,7 +1764,7 @@ final class Detonations {
                 queue.add(leaf);
             }
         }
-        // Walk from the leaves into the logs they touch, and on through connected logs.
+        // Vom Laub in die Stämme gehen, die es berührt, und weiter durch verbundene Stämme.
         while (!queue.isEmpty() && logs.size() < 3000) {
             BlockPos from = queue.poll();
             for (BlockPos next :
@@ -1763,7 +1791,9 @@ final class Detonations {
         particles(level, ParticleTypes.POOF, t.position().add(0, 4, 0), 80, 4, 0.02);
     }
 
-    /** Turns the land around it into the Nether: netherrack, soul soil, crimson trees and fire. */
+    /**
+     * Verwandelt das Land ringsum in den Nether: Netherrack, Seelenerde, Karmesinbäume und Feuer.
+     */
     static void nether(ServerLevel level, PrimedTnt t) {
         pop(level, t, 2);
         RandomSource random = level.getRandom();
@@ -1825,9 +1855,9 @@ final class Detonations {
         particles(level, ParticleTypes.ASH, t.position(), 300, 6, 0.02);
     }
 
-    // --- from the sky ----------------------------------------------------
+    // --- vom Himmel ----------------------------------------------------
 
-    /** Six burning meteors come down within ten blocks, one after another. */
+    /** Sechs brennende Meteore gehen im Umkreis von zehn Blöcken nieder, einer nach dem anderen. */
     static void meteor(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -1843,8 +1873,9 @@ final class Detonations {
                         public boolean tick(int age) {
                             if (age < delay) return false;
                             if (rock == null) {
-                                // as high as the sky (or the roof of the Nether, a cave, a sky
-                                // island) lets it start
+                                // so hoch, wie der Himmel (oder das Dach des Nethers, einer Höhle,
+                                // einer Himmelsinsel)
+                                // den Start erlaubt
                                 BlockPos column =
                                         BlockPos.containing(
                                                 c.x + (random.nextDouble() - 0.5) * 20,
@@ -1906,7 +1937,7 @@ final class Detonations {
         }
     }
 
-    /** Two seconds of arrows raining down on a circle 24 blocks wide. */
+    /** Zwei Sekunden lang regnen Pfeile auf einen Kreis von 24 Blöcken Breite. */
     static void arrowRain(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -1921,8 +1952,7 @@ final class Detonations {
                         BlockPos column = BlockPos.containing(ax, c.y + 1, az);
                         if (!level.isLoaded(column) || !level.getBlockState(column).isAir())
                             continue;
-                        // under a roof the arrows come from just below it instead of out of the
-                        // rock
+                        // unter einem Dach kommen die Pfeile knapp darunter statt aus dem Fels
                         Arrow arrow =
                                 new Arrow(
                                         level,
@@ -1943,7 +1973,10 @@ final class Detonations {
                 });
     }
 
-    /** Lights the fuse of every TNT within 16 blocks, the nearest first — a chain reaction. */
+    /**
+     * Zündet die Lunte jedes TNT im Umkreis von 16 Blöcken, das nächste zuerst – eine
+     * Kettenreaktion.
+     */
     static void chain(ServerLevel level, PrimedTnt t) {
         pop(level, t, 2);
         BlockPos center = t.blockPosition();
@@ -1970,7 +2003,7 @@ final class Detonations {
         }
     }
 
-    /** All show, no damage: three waves of real fireworks in every colour. */
+    /** Nur Schau, kein Schaden: drei Wellen echtes Feuerwerk in allen Farben. */
     static void firework(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
         RandomSource random = level.getRandom();
@@ -2009,9 +2042,9 @@ final class Detonations {
         level.sendParticles(ParticleTypes.FIREWORK, c.x, c.y + 1, c.z, 60, 1, 1, 1, 0.2);
     }
 
-    // --- landscapes ----------------------------------------------------------
+    // --- Landschaften ----------------------------------------------------------
 
-    /** The topmost block of a column near the given height that has air above it. */
+    /** Der oberste Block einer Säule nahe der angegebenen Höhe, über dem Luft ist. */
     static BlockPos surface(ServerLevel level, BlockPos column, int up, int down) {
         for (int dy = up; dy >= -down; dy--) {
             BlockPos pos = column.above(dy);
@@ -2024,7 +2057,7 @@ final class Detonations {
         return null;
     }
 
-    /** Sculk spreads over the ground around it, with a sensor here and there. */
+    /** Sculk breitet sich ringsum über den Boden aus, hier und da mit einem Sensor. */
     static void sculk(ServerLevel level, PrimedTnt t) {
         RandomSource random = level.getRandom();
         for (BlockPos pos : sphere(t.blockPosition(), 9)) {
@@ -2042,7 +2075,8 @@ final class Detonations {
     }
 
     /**
-     * Turns the land into desert: sand, sandstone, dead bushes and the odd cactus. Water dries up.
+     * Verwandelt das Land in Wüste: Sand, Sandstein, tote Büsche und der eine oder andere Kaktus.
+     * Wasser trocknet aus.
      */
     static void desert(ServerLevel level, PrimedTnt t) {
         RandomSource random = level.getRandom();
@@ -2085,9 +2119,7 @@ final class Detonations {
         particles(level, ParticleTypes.WHITE_ASH, t.position(), 200, 6, 0.02);
     }
 
-    /**
-     * A piece of the End: end stone, purpur where the wood was, chorus flowers and two endermites.
-     */
+    /** Ein Stück End: Endstein, Purpur, wo das Holz war, Chorusblüten und zwei Endermiten. */
     static void end(ServerLevel level, PrimedTnt t) {
         RandomSource random = level.getRandom();
         List<BlockPos> area = sphere(t.blockPosition(), 9);
@@ -2127,7 +2159,7 @@ final class Detonations {
         particles(level, ParticleTypes.PORTAL, t.position(), 400, 6, 0.4);
     }
 
-    /** Paints the ground in rainbow rings of concrete. */
+    /** Malt den Boden in Regenbogenringen aus Beton an. */
     static void rainbow(ServerLevel level, PrimedTnt t) {
         DyeColor[] rings = {
             DyeColor.RED,
@@ -2159,9 +2191,9 @@ final class Detonations {
     }
 
     /**
-     * An earthquake: the ground shakes in waves for three seconds — everyone nearby is thrown about
-     * and gets dizzy — and three to five jagged fissures tear open from the centre outwards, 28
-     * blocks long and down to just above bedrock.
+     * Ein Erdbeben: Der Boden bebt drei Sekunden in Wellen – jeder in der Nähe wird herumgeworfen
+     * und bekommt Schwindel –, und drei bis fünf zackige Spalten reißen vom Zentrum nach außen auf,
+     * 28 Blöcke lang und bis knapp über das Grundgestein.
      */
     static void earthquake(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
@@ -2181,7 +2213,7 @@ final class Detonations {
                 null, c.x, c.y, c.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 6.0f, 0.3f);
         Tasks.start(
                 age -> {
-                    // the fissures: every tick each one grows by a block, as deep as it goes
+                    // die Spalten: jeden Tick wächst jede um einen Block, so tief, wie sie reicht
                     if (age < 28) {
                         for (int i = 0; i < count; i++) {
                             angle[i] += (random.nextDouble() - 0.5) * 0.5;
@@ -2200,8 +2232,8 @@ final class Detonations {
                                                 Heightmap.Types.WORLD_SURFACE,
                                                 column.getX(),
                                                 column.getZ());
-                                // in the Nether the heightmap is the roof: tear open the ground
-                                // around the TNT instead
+                                // im Nether ist die Höhenkarte das Dach: stattdessen den Boden um
+                                // das TNT aufreißen
                                 if (level.dimensionType().hasCeiling())
                                     top = Math.min(top, center.getY() + 12);
                                 for (int y = top; y >= floor; y--) {
@@ -2225,7 +2257,7 @@ final class Detonations {
                             }
                         }
                     }
-                    // the shaking
+                    // das Beben
                     if (age % 10 == 0) {
                         level.playSound(
                                 null,
@@ -2257,8 +2289,8 @@ final class Detonations {
     }
 
     /**
-     * A volcano: a cone of basalt, blackstone and magma with a lava crater on top, which then
-     * erupts for fifteen seconds, hurling burning lava bombs.
+     * Ein Vulkan: ein Kegel aus Basalt, Schwarzstein und Magma mit einem Lavakrater obendrauf, der
+     * dann fünfzehn Sekunden lang ausbricht und brennende Lavabomben schleudert.
      */
     static void volcano(ServerLevel level, PrimedTnt t) {
         BlockPos base = t.blockPosition();
@@ -2356,11 +2388,11 @@ final class Detonations {
                 });
     }
 
-    // --- building, part two --------------------------------------------------
+    // --- Bauen, Teil zwei --------------------------------------------------
 
     /**
-     * A spiral staircase of stone-brick stairs down to 48 blocks deep around a pillar with a
-     * glowstone every four steps down. Ores drop, liquids are sealed.
+     * Eine Wendeltreppe aus Steinziegelstufen bis 48 Blöcke tief um eine Säule, alle vier Stufen
+     * ein Leuchtstein. Erze fallen, Flüssigkeiten werden abgedichtet.
      */
     static void staircase(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -2383,7 +2415,7 @@ final class Detonations {
                             seal(level, floor.above(h).relative(d));
                     }
                     seal(level, floor.below());
-                    // The step faces back up the spiral, towards the previous cell.
+                    // Die Stufe zeigt die Wendel hinauf, zur vorigen Zelle.
                     Direction up =
                             Direction.getApproximateNearest(
                                     previous[0] - cell[0], 0, previous[1] - cell[1]);
@@ -2410,8 +2442,8 @@ final class Detonations {
     }
 
     /**
-     * Carves a bunker under the TNT: a lit room nine by nine and four high, walled with stone
-     * bricks, with a ladder up to where the TNT stood.
+     * Gräbt einen Bunker unter das TNT: ein beleuchteter Raum neun mal neun und vier hoch, mit
+     * Steinziegeln ausgemauert, mit einer Leiter hinauf bis dorthin, wo das TNT stand.
      */
     static void bunker(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -2444,7 +2476,7 @@ final class Detonations {
                 level.setBlock(lamp, Blocks.GLOWSTONE.defaultBlockState(), FLAGS);
             }
         }
-        // shaft along the north wall, from the room floor up to the surface
+        // Schacht an der Nordwand, vom Boden des Raums bis zur Oberfläche
         for (int dy = 1; dy <= 6; dy++) {
             BlockPos ladder = roomFloor.offset(0, dy, -4);
             BlockPos wall = ladder.north();
@@ -2463,7 +2495,10 @@ final class Detonations {
         sound(level, t.position(), SoundEvents.STONE_BREAK, 2.0f, 0.6f);
     }
 
-    /** A 15×15 stone-brick floor at the height the TNT stood on — a skybridge or a raft. */
+    /**
+     * Ein 15×15-Boden aus Steinziegeln auf der Höhe, auf der das TNT stand – eine Himmelsbrücke
+     * oder ein Floß.
+     */
     static void platform(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition().below();
         Tasks.start(
@@ -2484,8 +2519,8 @@ final class Detonations {
     }
 
     /**
-     * A watchtower 24 blocks high, built from the ground up around the TNT: a ladder inside and a
-     * battlemented platform with a lantern on top.
+     * Ein Wachturm, 24 Blöcke hoch, vom Boden aus um das TNT gebaut: innen eine Leiter und oben
+     * eine Plattform mit Zinnen und einer Laterne.
      */
     static void tower(ServerLevel level, PrimedTnt t) {
         BlockPos base = t.blockPosition();
@@ -2546,11 +2581,11 @@ final class Detonations {
                 });
     }
 
-    // --- spells ----------------------------------------------------------------
+    // --- Zauber ----------------------------------------------------------------
 
     /**
-     * Curses every creature within ten blocks except the one who lit it: weak, slow, tired, hungry
-     * and glowing.
+     * Verflucht jede Kreatur im Umkreis von zehn Blöcken außer der, die es gezündet hat: schwach,
+     * langsam, müde, hungrig und leuchtend.
      */
     static void curse(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
@@ -2568,8 +2603,8 @@ final class Detonations {
     }
 
     /**
-     * Blesses every player within twelve blocks: strength, speed, haste, regeneration, resistance
-     * and fire resistance for two minutes.
+     * Segnet jeden Spieler im Umkreis von zwölf Blöcken: Stärke, Schnelligkeit, Eile, Regeneration,
+     * Resistenz und Feuerresistenz für zwei Minuten.
      */
     static void blessing(ServerLevel level, PrimedTnt t) {
         for (Player player : around(level, t, Player.class, 12)) {
@@ -2584,11 +2619,14 @@ final class Detonations {
         particles(level, ParticleTypes.TOTEM_OF_UNDYING, t.position().add(0, 1, 0), 300, 3, 0.4);
     }
 
-    /** Freezes every mob within twelve blocks in place for ten seconds — even in mid-air. */
+    /**
+     * Friert jeden Mob im Umkreis von zwölf Blöcken zehn Sekunden lang an Ort und Stelle ein –
+     * selbst mitten in der Luft.
+     */
     static void stasis(ServerLevel level, PrimedTnt t) {
         List<Mob> frozen = new ArrayList<>();
         for (Mob mob : around(level, t, Mob.class, 12)) {
-            if (mob.isNoAi()) continue; // already still on purpose; leave it that way
+            if (mob.isNoAi()) continue; // absichtlich schon still; so lassen
             mob.setNoAi(true);
             mob.addTag(STASIS_TAG);
             mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
@@ -2621,8 +2659,9 @@ final class Detonations {
                     return true;
                 },
                 () -> {
-                    // never leave a mob frozen for good because the server stopped within the ten
-                    // seconds
+                    // nie einen Mob für immer eingefroren lassen, weil der Server innerhalb der
+                    // zehn Sekunden
+                    // gestoppt hat
                     for (Mob mob : frozen) {
                         mob.removeTag(STASIS_TAG);
                         mob.setNoAi(false);
@@ -2630,9 +2669,9 @@ final class Detonations {
                 });
     }
 
-    // --- allies ------------------------------------------------------------------
+    // --- Verbündete ------------------------------------------------------------------
 
-    /** Eight bees that go after every monster within twenty blocks. */
+    /** Acht Bienen, die auf jedes Monster im Umkreis von zwanzig Blöcken losgehen. */
     static void bees(ServerLevel level, PrimedTnt t) {
         List<LivingEntity> enemies = new ArrayList<>();
         for (LivingEntity entity : around(level, t, LivingEntity.class, 20)) {
@@ -2649,7 +2688,7 @@ final class Detonations {
         sound(level, t.position(), SoundEvents.BEEHIVE_EXIT, 3.0f, 0.9f);
     }
 
-    /** A pack of four wolves, tamed to whoever lit the TNT. */
+    /** Ein Rudel aus vier Wölfen, gezähmt für den, der das TNT gezündet hat. */
     static void wolves(ServerLevel level, PrimedTnt t) {
         LivingEntity owner = t.getOwner();
         for (int i = 0; i < 4; i++) {
@@ -2661,7 +2700,10 @@ final class Detonations {
         particles(level, ParticleTypes.HEART, t.position().add(0, 1, 0), 20, 1.5, 0);
     }
 
-    /** Two iron golems that guard the area — built by a player, so they leave players alone. */
+    /**
+     * Zwei Eisengolems, die die Gegend bewachen – von einem Spieler gebaut, deshalb lassen sie
+     * Spieler in Ruhe.
+     */
     static void golems(ServerLevel level, PrimedTnt t) {
         for (int i = 0; i < 2; i++) {
             IronGolem golem =
@@ -2675,15 +2717,16 @@ final class Detonations {
     }
 
     /**
-     * Flak: three Giga TNT shoot up out of it, trailing fire, and burst forty blocks up in the sky.
-     * Under a roof (less than 22 blocks of open air above it) it fires a single harmless flak burst
-     * instead.
+     * Flak: Drei Giga-TNT schießen mit Feuerschweif heraus und zerplatzen vierzig Blöcke hoch am
+     * Himmel. Unter einem Dach (weniger als 22 Blöcke freie Luft darüber) feuert es stattdessen
+     * einen einzigen harmlosen Flakschuss.
      */
     static void flak(ServerLevel level, PrimedTnt t) {
         Vec3 start = t.position();
         sound(level, start, SoundEvents.FIREWORK_ROCKET_LAUNCH, 3.0f, 0.5f);
-        // measured from two blocks up, so a redstone block or a lever right on top does not count
-        // as a roof
+        // von zwei Blöcken darüber aus gemessen, damit ein Redstone-Block oder ein Hebel direkt
+        // obendrauf
+        // nicht als Dach zählt
         BlockPos from = t.blockPosition().above(2);
         if (openAbove(level, from, 40) - from.getY() < 22) {
             Tasks.start(
@@ -2779,7 +2822,7 @@ final class Detonations {
                 0.05);
     }
 
-    /** Halloween: a ring of jack o'lanterns on the ground and a cloud of bats. */
+    /** Halloween: ein Ring aus Kürbislaternen auf dem Boden und ein Schwarm Fledermäuse. */
     static void halloween(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         BlockPos center = t.blockPosition();

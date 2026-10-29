@@ -6,25 +6,25 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 
 /**
- * The mod's own sounds, synthesised by tools/sounds.py; files in assets/tnt_arsenal/sounds, listed
- * in sounds.json.
+ * Die eigenen Geräusche der Mod, synthetisiert von tools/sounds.py; Dateien in
+ * assets/tnt_arsenal/sounds, aufgeführt in sounds.json.
  */
 public final class Sounds {
     private Sounds() {}
 
-    /** One four-second rise and fall of the air-raid siren. */
+    /** Ein vier Sekunden langes Auf und Ab der Luftschutzsirene. */
     public static final SoundEvent SIREN = register("siren");
 
-    /** One click of a Geiger counter (three variants). */
+    /** Ein Klicken eines Geigerzählers (drei Varianten). */
     public static final SoundEvent GEIGER = register("geiger");
 
-    /** A nuclear detonation: crack, pressure wave, rolling thunder. */
+    /** Eine Atomexplosion: Knall, Druckwelle, rollender Donner. */
     public static final SoundEvent NUKE_BLAST = register("nuke_blast");
 
-    /** The countdown beep of a lit bomb and of the timer fuse. */
+    /** Der Countdown-Piepton einer gezündeten Bombe und des Zeitzünders. */
     public static final SoundEvent BEEP = register("beep");
 
-    /** The remote detonator firing. */
+    /** Der Fernzünder löst aus. */
     public static final SoundEvent DETONATOR = register("detonator");
 
     private static SoundEvent register(String name) {
@@ -33,6 +33,6 @@ public final class Sounds {
                 BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
     }
 
-    /** Loads the class, which registers the sounds. */
+    /** Lädt die Klasse, die die Geräusche registriert. */
     public static void register() {}
 }

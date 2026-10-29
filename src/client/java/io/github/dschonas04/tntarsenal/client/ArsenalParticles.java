@@ -15,8 +15,9 @@ import net.minecraft.util.Mth;
 import org.joml.Quaternionf;
 
 /**
- * The mod's own particles. Every one of them is a single textured quad; the sprites are drawn by
- * tools/particles.py. Glowing ones ignore the light level, so they shine at night and underground.
+ * Die eigenen Partikel der Mod. Jeder ist ein einzelnes texturiertes Viereck; die Sprites zeichnet
+ * tools/particles.py. Leuchtende ignorieren die Helligkeit, damit sie nachts und unter der Erde
+ * scheinen.
  */
 final class ArsenalParticles {
     private static final int FULL_BRIGHT = 0xF000F0;
@@ -59,8 +60,8 @@ final class ArsenalParticles {
     }
 
     /**
-     * Common ground: velocity taken as sent (the vanilla constructor would scatter it) and a sprite
-     * set at hand.
+     * Gemeinsame Grundlage: die Geschwindigkeit so, wie sie geschickt wurde (der
+     * Vanilla-Konstruktor würde sie streuen), und ein Sprite-Satz zur Hand.
      */
     private abstract static class Base extends SingleQuadParticle {
         protected final SpriteSet sprites;
@@ -87,7 +88,10 @@ final class ArsenalParticles {
         }
     }
 
-    /** A spark off the fuse: white-hot to orange, falls and bounces, gone in half a second. */
+    /**
+     * Ein Funke von der Lunte: weißglühend bis orange, fällt und springt, nach einer halben Sekunde
+     * weg.
+     */
     static final class Spark extends Base {
         Spark(
                 ClientLevel level,
@@ -121,7 +125,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A ring flat on the ground, racing out to the radius it was sent with and fading. */
+    /** Ein Ring flach auf dem Boden, der bis zum mitgeschickten Radius hinausrast und verblasst. */
     static final class Shockwave extends Base {
         private final float radius;
 
@@ -162,7 +166,7 @@ final class ArsenalParticles {
         @Override
         public void extract(QuadParticleRenderState state, Camera camera, float partialTick) {
             super.extract(state, camera, partialTick);
-            // and the underside, so it shows from below as well
+            // und die Unterseite, damit er auch von unten zu sehen ist
             extractRotatedQuad(
                     state, camera, new Quaternionf().rotationX((float) (Math.PI / 2)), partialTick);
         }
@@ -173,7 +177,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A ball of smoke: swells, drifts up and thins out. */
+    /** Ein Rauchball: schwillt an, steigt auf und wird dünner. */
     static final class SmokeBall extends Base {
         private final float start;
 
@@ -207,7 +211,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** An ember: rises and sways, cooling from yellow through red to dark. */
+    /** Eine Glut: steigt und schwankt, kühlt von Gelb über Rot bis Dunkel ab. */
     static final class Ember extends Base {
         private final float phase;
 
@@ -244,7 +248,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A scrap of coloured paper, tumbling and fluttering down. */
+    /** Ein Fetzen buntes Papier, der taumelnd herunterflattert. */
     static final class Confetti extends Base {
         private static final int[] COLOURS = {
             0xFF3B3B, 0xFFB12B, 0xFFE94A, 0x4BE36B, 0x3BC8FF, 0x6B5BFF, 0xE35BFF, 0xFF7AB0
@@ -291,7 +295,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** An icy twinkle that blinks while it drifts. */
+    /** Ein eisiges Funkeln, das blinkt, während es treibt. */
     static final class Sparkle extends Base {
         Sparkle(
                 ClientLevel level,
@@ -319,7 +323,7 @@ final class ArsenalParticles {
 
         @Override
         public void setSpriteFromAge(SpriteSet sprites) {
-            // blink: the frames run back and forth instead of once through
+            // Blinken: Die Bilder laufen hin und zurück statt einmal durch
             int frame = age % 6;
             setSprite(sprites.get(frame < 4 ? frame : 6 - frame, 3));
         }
@@ -330,7 +334,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A dark mote that spirals into the point it was aimed at. */
+    /** Eine dunkle Flocke, die spiralförmig in den Punkt hineinzieht, auf den sie zielt. */
     static final class Swirl extends Base {
         private final double cx, cy, cz;
 
@@ -370,7 +374,7 @@ final class ArsenalParticles {
                 remove();
                 return;
             }
-            // round and round, and a little closer every turn
+            // rundherum und mit jeder Runde etwas näher
             double speed = 0.12 + 1.2 / (d + 2);
             x += (-dz / Math.max(d, 0.01)) * speed + dx * 0.06;
             z += (dx / Math.max(d, 0.01)) * speed + dz * 0.06;
@@ -384,7 +388,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A pulsing green mote of radiation. */
+    /** Eine pulsierende grüne Strahlungsflocke. */
     static final class Radiation extends Base {
         private final float phase;
 
@@ -421,7 +425,7 @@ final class ArsenalParticles {
         }
     }
 
-    /** A crackling arc: a new zigzag every tick, there and gone. */
+    /** Ein knisternder Bogen: jeden Tick ein neuer Zickzack, da und wieder weg. */
     static final class Arc extends Base {
         Arc(
                 ClientLevel level,

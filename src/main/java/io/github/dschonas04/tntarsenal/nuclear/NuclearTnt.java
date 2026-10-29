@@ -51,7 +51,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-/** Registers the bombs, the lit bomb entity, the detonator and the creative tab. */
+/** Registriert die Bomben, die Entity der gezündeten Bombe, den Zünder und den Kreativ-Reiter. */
 public final class NuclearTnt implements ModInitializer {
     public static final String MOD_ID = "tnt_arsenal";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
@@ -70,7 +70,7 @@ public final class NuclearTnt implements ModInitializer {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    /** Registers an item under the mod's name and puts it into the creative tab. */
+    /** Registriert einen Gegenstand unter dem Namen der Mod und legt ihn in den Kreativ-Reiter. */
     public static <T extends Item> T item(
             String path, Function<Item.Properties, T> make, Item.Properties properties) {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id(path));
@@ -79,7 +79,7 @@ public final class NuclearTnt implements ModInitializer {
         return item;
     }
 
-    /** Registers a block and its item. */
+    /** Registriert einen Block und seinen Gegenstand. */
     public static <T extends Block> T block(
             String path,
             Function<BlockBehaviour.Properties, T> make,
@@ -162,8 +162,9 @@ public final class NuclearTnt implements ModInitializer {
             ITEMS.add(item);
         }
 
-        // There used to be a second nuke, the arsenal's "Nuke TNT". Those still lying in worlds and
-        // chests become the atomic bomb.
+        // Früher gab es eine zweite Atombombe, das „Nuke TNT“ des Arsenals. Die noch in Welten und
+        // Truhen
+        // liegen, werden zur Atombombe.
         ((FabricRegistry) BuiltInRegistries.BLOCK).addAlias(id("nuke_tnt"), id(Tier.NUKE.id()));
         ((FabricRegistry) BuiltInRegistries.ITEM).addAlias(id("nuke_tnt"), id(Tier.NUKE.id()));
 
@@ -252,7 +253,8 @@ public final class NuclearTnt implements ModInitializer {
         IrradiatedZombies.register();
         Contamination.register();
 
-        // No tab of its own: the nuclear items follow the other TNT in the TNT Arsenal tab (see
-        // TntArsenal).
+        // Kein eigener Reiter: Die atomaren Gegenstände folgen auf die anderen TNT im Reiter TNT
+        // Arsenal
+        // (siehe TntArsenal).
     }
 }

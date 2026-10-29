@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.Vec3;
 
-/** A siren that wails as long as it gets a redstone signal. */
+/** Eine Sirene, die heult, solange sie ein Redstone-Signal bekommt. */
 public class SirenBlock extends Block {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 

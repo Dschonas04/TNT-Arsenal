@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * When the fuse of a primed TNT runs out, check whose block it carries. Ours detonate their own
- * way; everything else explodes as before.
+ * Wenn die Lunte eines gezündeten TNT abgebrannt ist, prüfen, wessen Block es trägt. Unsere
+ * detonieren auf ihre eigene Art; alles andere explodiert wie bisher.
  */
 @Mixin(PrimedTnt.class)
 public abstract class PrimedTntMixin {

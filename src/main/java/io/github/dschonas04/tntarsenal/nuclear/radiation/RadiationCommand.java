@@ -19,11 +19,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 
 /**
- * {@code /nuclear radiation <pos>} shows the dose rate of a chunk, {@code /nuclear dose <player>
- * [set <mSv>]} shows or sets a player's dose. {@code /nuclear clear <radius>} removes all radiation
- * around the caller. {@code /nuclear count <block> <radius>} counts a block around the caller, 40
- * blocks up and down. {@code /nuclear config [key value]} lists or changes a setting and saves it.
- * For operators.
+ * {@code /nuclear radiation <pos>} zeigt die Dosisleistung eines Chunks, {@code /nuclear dose
+ * <player> [set <mSv>]} zeigt oder setzt die Dosis eines Spielers. {@code /nuclear clear <radius>}
+ * entfernt alle Strahlung um den Aufrufer. {@code /nuclear count <block> <radius>} zählt einen
+ * Block um den Aufrufer, 40 Blöcke nach oben und unten. {@code /nuclear config [key value]} listet
+ * oder ändert eine Einstellung und speichert sie. Für Operatoren.
  */
 public final class RadiationCommand {
     private RadiationCommand() {}

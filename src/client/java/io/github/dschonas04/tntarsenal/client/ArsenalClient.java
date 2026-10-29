@@ -16,10 +16,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 /**
- * Client side of the arsenal: the particles, and what a detonation does to the screen of the
- * players near it — the view shakes and takes on the colour of the kind (icy blue, poison green,
- * the gold of a blessing ...). In contaminated land green motes of radiation float around the
- * player.
+ * Die Client-Seite des Arsenals: die Partikel und was eine Detonation mit dem Bildschirm der
+ * Spieler in der Nähe macht – die Sicht wackelt und nimmt die Farbe der Art an (eisblau, giftgrün,
+ * das Gold eines Segens ...). In verstrahltem Land schweben grüne Strahlungsflocken um den Spieler.
  */
 public final class ArsenalClient implements ClientModInitializer {
     private static final RandomSource RANDOM = RandomSource.create();
@@ -57,7 +56,8 @@ public final class ArsenalClient implements ClientModInitializer {
         if (mc.isPaused()) return;
         if (tintLeft > 0) tintLeft--;
         if (shake > 0.01f) {
-            // jitter and undo the last jitter, so the view shakes but does not drift
+            // wackeln und das letzte Wackeln zurücknehmen, damit die Sicht bebt, aber nicht
+            // abdriftet
             double x = (RANDOM.nextDouble() - 0.5) * shake * 8;
             double y = (RANDOM.nextDouble() - 0.5) * shake * 8;
             player.turn(x - shakeX, y - shakeY);
@@ -70,7 +70,7 @@ public final class ArsenalClient implements ClientModInitializer {
             shakeY = 0;
             shake = 0;
         }
-        // radiation you can see: more motes the hotter the ground
+        // sichtbare Strahlung: mehr Flocken, je heißer der Boden
         float rate = GreenFog.rate(mc.level, player.blockPosition());
         if (rate > 0.02f) {
             int motes = Mth.clamp((int) (rate * 6), 1, 8);
@@ -95,8 +95,9 @@ public final class ArsenalClient implements ClientModInitializer {
         if (alpha <= 0) return;
         int w = graphics.guiWidth(), h = graphics.guiHeight();
         int rgb = tint & 0xFFFFFF;
-        // a vignette: eight nested frames, strongest at the edge, over a light wash of the whole
-        // screen
+        // eine Vignette: acht ineinander liegende Rahmen, am Rand am stärksten, über einem leichten
+        // Schleier
+        // auf dem ganzen Bildschirm
         int steps = 8, step = Math.max(2, Math.min(w, h) / 5 / steps);
         for (int i = 0; i < steps; i++) {
             int a = alpha * (steps - i) / steps / 2;

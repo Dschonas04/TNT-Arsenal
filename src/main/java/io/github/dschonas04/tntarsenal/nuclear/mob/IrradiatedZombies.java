@@ -15,16 +15,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 
 /**
- * Zombies that wander into contaminated land turn: tougher, faster, harder hitting, trailing green
- * motes, and every hit they land adds 25 mSv to the victim's dose. They stay that way when they
- * wander out again.
+ * Zombies, die in verseuchtes Land wandern, verwandeln sich: zäher, schneller, schlagkräftiger, mit
+ * einer Spur grüner Flocken, und jeder Treffer erhöht die Dosis des Opfers um 25 mSv. Sie bleiben
+ * so, wenn sie wieder herauswandern.
  */
 public final class IrradiatedZombies {
     private IrradiatedZombies() {}
 
     public static final String TAG = "tnt_arsenal.irradiated";
 
-    /** The dose rate in mSv/s from which a zombie turns. */
+    /** Die Dosisleistung in mSv/s, ab der sich ein Zombie verwandelt. */
     private static final float THRESHOLD = 0.2f;
 
     private static final float DOSE_PER_HIT = 25f;

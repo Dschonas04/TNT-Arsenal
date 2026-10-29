@@ -17,10 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 /**
- * The fallout after a detonation. After a delay the wind carries the ash downwind and it settles
- * over half a minute: a glowing layer, thickest along the plume. Near ground zero the land itself
- * changes: grass dies to irradiated earth, sand melts to trinitite, water is contaminated. Columns
- * in unloaded chunks are left alone.
+ * Der Fallout nach einer Detonation. Nach einer Verzögerung trägt der Wind die Asche in
+ * Windrichtung, und sie setzt sich über eine halbe Minute ab: eine leuchtende Schicht, am dicksten
+ * entlang der Fahne. Nahe am Nullpunkt verändert sich das Land selbst: Gras stirbt zu verstrahlter
+ * Erde, Sand schmilzt zu Trinitit, Wasser wird verseucht. Säulen in nicht geladenen Chunks bleiben
+ * unberührt.
  */
 public final class Fallout implements Jobs.Job {
     private static final long BUDGET_NANOS = 4_000_000L;
@@ -55,7 +56,8 @@ public final class Fallout implements Jobs.Job {
                 }
             }
         }
-        // a random order, so the ash comes down everywhere at once and not row by row
+        // eine zufällige Reihenfolge, damit die Asche überall gleichzeitig fällt und nicht Reihe
+        // für Reihe
         for (int i = columns.size() - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);
             long t = columns.getLong(i);
@@ -66,8 +68,8 @@ public final class Fallout implements Jobs.Job {
     }
 
     /**
-     * How thick the fallout lies at an offset from ground zero: 1 in the middle of the plume, 0
-     * outside it.
+     * Wie dick der Fallout bei einem Abstand vom Nullpunkt liegt: 1 in der Mitte der Fahne, 0
+     * außerhalb.
      */
     private double plume(double x, double z) {
         double px = x - windX * drift;

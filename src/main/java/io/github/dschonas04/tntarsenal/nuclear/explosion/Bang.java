@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The bang, heard late: sound travels 343 blocks a second, so every player gets it when it reaches
- * them, quieter the further away they are. Played just next to the player, so it is heard at any
- * distance.
+ * Der Knall, spät gehört: Schall legt 343 Blöcke pro Sekunde zurück, jeder Spieler hört ihn also,
+ * wenn er ihn erreicht, leiser, je weiter er weg ist. Direkt neben dem Spieler abgespielt, damit er
+ * auf jede Entfernung zu hören ist.
  */
 public final class Bang implements Jobs.Job {
-    private static final double SPEED = 343.0 / 20.0; // blocks per tick
+    private static final double SPEED = 343.0 / 20.0; // Blöcke pro Tick
     private static final double AUDIBLE = 1200;
 
     private final ServerLevel level;
@@ -57,7 +57,7 @@ public final class Bang implements Jobs.Job {
                     player.getEyePosition()
                             .add(toward.lengthSqr() < 1 ? Vec3.ZERO : toward.normalize().scale(4));
             long seed = level.getRandom().nextLong();
-            // farther away the thunder arrives deeper
+            // weiter weg kommt der Donner tiefer an
             float pitch = (float) Math.max(0.7, 1.0 - dist / AUDIBLE * 0.3);
             player.connection.send(
                     new ClientboundSoundPacket(

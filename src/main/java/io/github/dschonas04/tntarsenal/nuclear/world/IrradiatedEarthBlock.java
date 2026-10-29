@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * What grass becomes near a detonation: grey, dead earth. When the radiation is gone it turns back
- * into dirt, and grass can grow again.
+ * Was nahe einer Detonation aus Gras wird: graue, tote Erde. Ist die Strahlung weg, wird sie wieder
+ * zu Erde, und Gras kann wieder wachsen.
  */
 public class IrradiatedEarthBlock extends Block {
     public IrradiatedEarthBlock(Properties properties) {

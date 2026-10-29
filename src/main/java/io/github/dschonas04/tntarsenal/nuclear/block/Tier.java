@@ -1,8 +1,8 @@
 package io.github.dschonas04.tntarsenal.nuclear.block;
 
 /**
- * The three sizes of bomb. Radius and fuse come from the config; the tier only names them and says
- * which config entry applies.
+ * Die drei Bombengrößen. Radius und Lunte kommen aus der Konfiguration; die Stufe benennt sie nur
+ * und sagt, welcher Konfigurationseintrag gilt.
  */
 public enum Tier {
     MINI("mini_nuke"),

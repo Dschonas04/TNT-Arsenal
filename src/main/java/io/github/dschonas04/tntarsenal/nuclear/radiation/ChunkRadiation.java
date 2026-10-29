@@ -8,9 +8,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 /**
- * The radiation of one chunk: the dose rate in mSv per second as it was at game time {@code since}.
- * It wanes steadily and is gone after the configured lifetime (two Minecraft days); the current
- * value is worked out when someone asks, not every tick.
+ * Die Strahlung eines Chunks: die Dosisleistung in mSv pro Sekunde, wie sie zur Spielzeit {@code
+ * since} war. Sie nimmt gleichmäßig ab und ist nach der eingestellten Lebensdauer (zwei
+ * Minecraft-Tage) weg; der aktuelle Wert wird berechnet, wenn jemand fragt, nicht jeden Tick.
  */
 public record ChunkRadiation(float value, long since) {
     public static final ChunkRadiation NONE = new ChunkRadiation(0f, 0L);
@@ -36,8 +36,8 @@ public record ChunkRadiation(float value, long since) {
                     ChunkRadiation::new);
 
     /**
-     * The dose rate at {@code now}: falls in a straight line from {@code value} to nothing over
-     * {@code lifetime} ticks.
+     * Die Dosisleistung bei {@code now}: fällt geradlinig von {@code value} auf null über {@code
+     * lifetime} Ticks.
      */
     public float at(long now, long lifetime) {
         if (value <= 0) return 0f;
@@ -45,16 +45,16 @@ public record ChunkRadiation(float value, long since) {
     }
 
     /**
-     * The share of a rate that is left {@code elapsed} ticks later: 1 at first, 0 once the lifetime
-     * is over.
+     * Der Anteil einer Leistung, der {@code elapsed} Ticks später übrig ist: anfangs 1, 0, sobald
+     * die Lebensdauer vorbei ist.
      */
     public static float left(long elapsed, long lifetime) {
         return (float) Math.max(0.0, 1.0 - (double) Math.max(0, elapsed) / Math.max(1, lifetime));
     }
 
     /**
-     * This chunk with more radiation added on top of what is left now; the new total lasts a full
-     * lifetime again.
+     * Dieser Chunk mit zusätzlicher Strahlung auf dem, was jetzt übrig ist; die neue Summe hält
+     * wieder eine volle Lebensdauer.
      */
     public ChunkRadiation plus(float more, long now, long lifetime) {
         return new ChunkRadiation(at(now, lifetime) + more, now);

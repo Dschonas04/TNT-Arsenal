@@ -12,15 +12,15 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 
 /**
- * Client side: the lit bomb's renderer (flashing like TNT), the effects of a detonation and
- * contaminated water.
+ * Client-Seite: der Renderer der gezündeten Bombe (blinkt wie TNT), die Effekte einer Detonation
+ * und verseuchtes Wasser.
  */
 public final class NuclearTntClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(NuclearTnt.PRIMED_NUKE, TntRenderer::new);
         NukeEffects.register();
-        // contaminated water: the water textures, tinted a sickly green
+        // verseuchtes Wasser: die Wassertexturen, kränklich grün eingefärbt
         FluidRenderingRegistry.register(
                 Contamination.WATER,
                 Contamination.FLOWING_WATER,

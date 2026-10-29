@@ -8,24 +8,24 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The air-raid siren: a tone that rises and falls over four seconds, synthesised by
- * tools/sounds.py. Siren blocks wail while powered; every lit bomb sounds it over the land for as
- * long as its fuse burns.
+ * Die Luftschutzsirene: ein Ton, der über vier Sekunden an- und abschwillt, synthetisiert von
+ * tools/sounds.py. Sirenenblöcke heulen, solange sie Strom haben; jede gezündete Bombe lässt sie
+ * über das Land heulen, solange ihre Lunte brennt.
  */
 public final class Siren {
     private Siren() {}
 
     /**
-     * To be called every four ticks: starts one four-second rise and fall of the siren at the
-     * beginning of every 80-tick cycle, so callers in step stay in tune. Volume 16 carries about
-     * 256 blocks.
+     * Alle vier Ticks aufzurufen: startet zu Beginn jedes 80-Tick-Zyklus ein vier Sekunden langes
+     * Auf und Ab der Sirene, damit gleichzeitige Aufrufer im Takt bleiben. Lautstärke 16 trägt etwa
+     * 256 Blöcke.
      */
     public static void wail(ServerLevel level, Vec3 at, float volume) {
         if (level.getGameTime() % 80 >= 4) return;
         level.playSound(null, at.x, at.y, at.z, Sounds.SIREN, SoundSource.BLOCKS, volume, 1.0f);
     }
 
-    /** Wails over a lit bomb until its fuse has burnt down. */
+    /** Heult über einer gezündeten Bombe, bis ihre Lunte abgebrannt ist. */
     public static void warn(ServerLevel level, Vec3 at, int ticks) {
         Jobs.add(
                 new Jobs.Job() {

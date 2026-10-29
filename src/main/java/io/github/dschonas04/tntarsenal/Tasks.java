@@ -8,17 +8,17 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Detonations that play out over time — a tunnel that is dug slice by slice, a black hole that
- * pulls for five seconds — register a task here. The server ticks every task once at the end of
- * each server tick until it says it is done. Spreading work over ticks also keeps big jobs from
- * stalling the server.
+ * Detonationen, die sich über Zeit abspielen – ein Tunnel, der Scheibe für Scheibe gegraben wird,
+ * ein schwarzes Loch, das fünf Sekunden lang zieht –, melden hier eine Aufgabe an. Der Server führt
+ * jede Aufgabe am Ende jedes Server-Ticks einmal aus, bis sie meldet, dass sie fertig ist. Die
+ * Arbeit auf Ticks zu verteilen, verhindert außerdem, dass große Aufträge den Server ausbremsen.
  */
 final class Tasks {
     private Tasks() {}
 
     @FunctionalInterface
     interface Task {
-        /** Runs once per tick; {@code age} counts from 0. Returns true when finished. */
+        /** Läuft einmal pro Tick; {@code age} zählt ab 0. Gibt true zurück, wenn fertig. */
         boolean tick(int age);
     }
 
@@ -50,14 +50,17 @@ final class Tasks {
     }
 
     /**
-     * Like {@link #start(Task)}, but runs {@code onAbort} if the task fails or the server stops
-     * before it is done.
+     * Wie {@link #start(Task)}, führt aber {@code onAbort} aus, wenn die Aufgabe scheitert oder der
+     * Server stoppt, bevor sie fertig ist.
      */
     static void start(Task task, Runnable onAbort) {
         STARTED.add(new Running(task, onAbort));
     }
 
-    /** Called from the server tick. Tasks started during this tick run from the next one. */
+    /**
+     * Wird aus dem Server-Tick aufgerufen. Aufgaben, die in diesem Tick gestartet werden, laufen ab
+     * dem nächsten.
+     */
     static void tickAll() {
         RUNNING.addAll(STARTED);
         STARTED.clear();
@@ -75,7 +78,7 @@ final class Tasks {
         }
     }
 
-    /** Drops everything when the server stops, so no task outlives its world. */
+    /** Verwirft alles, wenn der Server stoppt, damit keine Aufgabe ihre Welt überlebt. */
     static void clear() {
         RUNNING.forEach(Running::abort);
         STARTED.forEach(Running::abort);
