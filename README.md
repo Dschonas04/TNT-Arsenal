@@ -84,6 +84,14 @@ other explosions. While the fuse burns they keep their own texture. Kinds that
 build or dig — drill, tunnel and bridge — go the way the player
 faced when placing the block. The five party kinds at the end break nothing and hurt no one.
 
+## Screenshots
+
+![32 of the 64 TNT kinds on a stand](docs/images/showcase.jpg)
+
+![Confetti TNT going off](docs/images/confetti.jpg)
+
+![The nuke: fireball, stem and mushroom cloud](docs/images/nuke.jpg)
+
 ## Gimmicks
 
 - **TNT sling.** Throws lit TNT — from the other hand, or else the first one in the
