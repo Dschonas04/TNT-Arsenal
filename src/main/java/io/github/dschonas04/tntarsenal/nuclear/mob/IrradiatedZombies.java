@@ -8,7 +8,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -32,7 +32,7 @@ public final class IrradiatedZombies {
     public static void register() {
         ServerTickEvents.END_LEVEL_TICK.register(level -> {
             if (level.getGameTime() % 40 != 0) return;
-            for (Zombie zombie : level.getEntities(EntityTypes.ZOMBIE, z -> z.isAlive())) {
+            for (Zombie zombie : level.getEntities(EntityType.ZOMBIE, z -> z.isAlive())) {
                 if (zombie.entityTags().contains(TAG)) {
                     level.sendParticles(GLOW, zombie.getX(), zombie.getY() + 1.2, zombie.getZ(), 4, 0.3, 0.5, 0.3, 0);
                 } else if (Radiation.rateAt(level, zombie.blockPosition()) >= THRESHOLD) {

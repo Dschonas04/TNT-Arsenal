@@ -30,7 +30,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -409,7 +409,7 @@ final class Detonations {
     }
 
     private static void strike(ServerLevel level, double x, double y, double z) {
-        LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
+        LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
         if (bolt == null) return;
         bolt.setPos(x, y, z);
         level.addFreshEntity(bolt);
@@ -754,8 +754,8 @@ final class Detonations {
         for (int i = 0; i < 8; i++) {
             BlockPos pos = center.offset(random.nextInt(7) - 3, 0, random.nextInt(7) - 3);
             for (int up = 0; up < 4 && !level.getBlockState(pos).isAir(); up++) pos = pos.above();
-            if (i < 5) EntityTypes.ZOMBIE.spawn(level, pos, EntitySpawnReason.TRIGGERED);
-            else EntityTypes.SKELETON.spawn(level, pos, EntitySpawnReason.TRIGGERED);
+            if (i < 5) EntityType.ZOMBIE.spawn(level, pos, EntitySpawnReason.TRIGGERED);
+            else EntityType.SKELETON.spawn(level, pos, EntitySpawnReason.TRIGGERED);
         }
         sound(level, t.position(), SoundEvents.ZOMBIE_AMBIENT, 3.0f, 0.7f);
         particles(level, ParticleTypes.LARGE_SMOKE, t.position(), 80, 2, 0.05);
@@ -1504,7 +1504,7 @@ final class Detonations {
                 level.setBlock(pos, Blocks.CHORUS_FLOWER.defaultBlockState(), FLAGS);
             }
         }
-        for (int i = 0; i < 2; i++) EntityTypes.ENDERMITE.spawn(level, t.blockPosition().above(), EntitySpawnReason.TRIGGERED);
+        for (int i = 0; i < 2; i++) EntityType.ENDERMITE.spawn(level, t.blockPosition().above(), EntitySpawnReason.TRIGGERED);
         sound(level, t.position(), SoundEvents.END_PORTAL_SPAWN, 2.0f, 1.2f);
         particles(level, ParticleTypes.PORTAL, t.position(), 400, 6, 0.4);
     }
@@ -1522,7 +1522,7 @@ final class Detonations {
                 BlockState state = level.getBlockState(top);
                 if (!removable(level, top, state) || !state.isCollisionShapeFullBlock(level, top)) continue;
                 DyeColor colour = rings[Math.min(rings.length - 1, (int) (d / 1.5))];
-                level.setBlock(top, Blocks.CONCRETE.pick(colour).defaultBlockState(), FLAGS);
+                level.setBlock(top, Compat.concrete(colour).defaultBlockState(), FLAGS);
             }
         }
         sound(level, t.position(), SoundEvents.NOTE_BLOCK_CHIME.value(), 3.0f, 1.0f);
@@ -1858,7 +1858,7 @@ final class Detonations {
             if (entity instanceof Enemy) enemies.add(entity);
         }
         for (int i = 0; i < 8; i++) {
-            Bee bee = EntityTypes.BEE.spawn(level, t.blockPosition().above(), EntitySpawnReason.TRIGGERED);
+            Bee bee = EntityType.BEE.spawn(level, t.blockPosition().above(), EntitySpawnReason.TRIGGERED);
             if (bee == null || enemies.isEmpty()) continue;
             bee.setTarget(enemies.get(i % enemies.size()));
             ((NeutralMob) bee).startPersistentAngerTimer();
@@ -1870,7 +1870,7 @@ final class Detonations {
     static void wolves(ServerLevel level, PrimedTnt t) {
         LivingEntity owner = t.getOwner();
         for (int i = 0; i < 4; i++) {
-            Wolf wolf = EntityTypes.WOLF.spawn(level, t.blockPosition(), EntitySpawnReason.TRIGGERED);
+            Wolf wolf = EntityType.WOLF.spawn(level, t.blockPosition(), EntitySpawnReason.TRIGGERED);
             if (wolf != null && owner instanceof Player player) wolf.tame(player);
         }
         sound(level, t.position(), SoundEvents.PLAYER_LEVELUP, 2.0f, 0.8f);
@@ -1880,7 +1880,7 @@ final class Detonations {
     /** Two iron golems that guard the area — built by a player, so they leave players alone. */
     static void golems(ServerLevel level, PrimedTnt t) {
         for (int i = 0; i < 2; i++) {
-            IronGolem golem = EntityTypes.IRON_GOLEM.spawn(level, t.blockPosition().offset(i * 2 - 1, 0, 0), EntitySpawnReason.TRIGGERED);
+            IronGolem golem = EntityType.IRON_GOLEM.spawn(level, t.blockPosition().offset(i * 2 - 1, 0, 0), EntitySpawnReason.TRIGGERED);
             if (golem != null) golem.setPlayerCreated(true);
         }
         sound(level, t.position(), SoundEvents.IRON_GOLEM_REPAIR, 3.0f, 0.8f);
@@ -1941,7 +1941,7 @@ final class Detonations {
             Direction face = Direction.getApproximateNearest(center.getX() - column.getX(), 0, center.getZ() - column.getZ());
             place(level, ground.above(), Blocks.JACK_O_LANTERN.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, face));
         }
-        for (int i = 0; i < 12; i++) EntityTypes.BAT.spawn(level, center.above(2), EntitySpawnReason.TRIGGERED);
+        for (int i = 0; i < 12; i++) EntityType.BAT.spawn(level, center.above(2), EntitySpawnReason.TRIGGERED);
         sound(level, t.position(), SoundEvents.ZOMBIE_AMBIENT, 2.0f, 0.5f);
         particles(level, ParticleTypes.SOUL_FIRE_FLAME, t.position().add(0, 1, 0), 120, 4, 0.03);
     }

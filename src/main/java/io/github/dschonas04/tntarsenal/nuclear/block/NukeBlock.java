@@ -1,5 +1,7 @@
 package io.github.dschonas04.tntarsenal.nuclear.block;
 
+import io.github.dschonas04.tntarsenal.Compat;
+
 import io.github.dschonas04.tntarsenal.nuclear.alarm.Siren;
 import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
 import io.github.dschonas04.tntarsenal.nuclear.entity.PrimedNuke;
@@ -82,7 +84,7 @@ public class NukeBlock extends TntBlock {
         // Already gone from the world; light a fresh one with a short fuse, as TNT does.
         Entity source = explosion.getIndirectSourceEntity();
         PrimedNuke nuke = PrimedNuke.create(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this,
-                source instanceof LivingEntity living ? living : null, PrimedTnt.getRandomShortFuse(fuse(), level.getRandom()));
+                source instanceof LivingEntity living ? living : null, Compat.randomShortFuse(fuse(), level.getRandom()));
         level.addFreshEntity(nuke);
     }
 

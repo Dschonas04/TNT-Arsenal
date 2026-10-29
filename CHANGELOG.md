@@ -6,6 +6,10 @@ All notable changes to TNT Arsenal. The format follows
 
 ## [Unreleased]
 
+## [1.8.1+26.1] - 2026-10-29
+
+- Backport of 1.8.1 to Minecraft **26.1.x** (Fabric API 0.155.3): `EntityType` instead of `EntityTypes`, wool and concrete by colour and the short fuse in `Compat`.
+
 ## [1.8.1] - 2026-10-22
 
 ### Changed

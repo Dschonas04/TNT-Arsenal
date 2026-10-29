@@ -101,7 +101,7 @@ public class ArsenalTntBlock extends TntBlock {
     @Override
     public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
         // The block is already gone; prime a fresh one with a short fuse, as vanilla does.
-        int fuse = PrimedTnt.getRandomShortFuse(kind.fuse(), level.getRandom());
+        int fuse = Compat.randomShortFuse(kind.fuse(), level.getRandom());
         ignite(level, pos, defaultBlockState(), explosion.getIndirectSourceEntity(), fuse);
     }
 

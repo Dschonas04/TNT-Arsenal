@@ -2,11 +2,11 @@
 
 [![Build](https://github.com/Dschonas04/tnt-arsenal/actions/workflows/build.yml/badge.svg)](https://github.com/Dschonas04/tnt-arsenal/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/Dschonas04/tnt-arsenal)](https://github.com/Dschonas04/tnt-arsenal/releases/latest)
-[![Minecraft 26.2](https://img.shields.io/badge/Minecraft-26.2-62b47a)](https://www.minecraft.net)
+[![Minecraft 26.1.x](https://img.shields.io/badge/Minecraft-26.1.x-62b47a)](https://www.minecraft.net)
 [![Fabric](https://img.shields.io/badge/loader-Fabric-dbd0b4)](https://fabricmc.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Sixty-four kinds of TNT for Minecraft 26.2 (Fabric), each with its own hand-drawn
+Sixty-four kinds of TNT for Minecraft 26.1.x (Fabric) – branch `mc/26.1`, see `main` for the current version, each with its own hand-drawn
 look, a little 3D sculpture on top that shows what it does, and its own way of going off. They are crafted at an ordinary crafting table,
 so **JEI and REI show every recipe**.
 

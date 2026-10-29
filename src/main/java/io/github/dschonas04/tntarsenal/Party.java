@@ -13,7 +13,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.sheep.Sheep;
@@ -129,7 +129,7 @@ final class Party {
             if (age % 3 == 0) {
                 BlockPos at = BlockPos.containing(c.x + (random.nextDouble() - 0.5) * 12, c.y + 14, c.z + (random.nextDouble() - 0.5) * 12);
                 if (level.getBlockState(at).isAir()) {
-                    Chicken chicken = EntityTypes.CHICKEN.spawn(level, at, EntitySpawnReason.TRIGGERED);
+                    Chicken chicken = EntityType.CHICKEN.spawn(level, at, EntitySpawnReason.TRIGGERED);
                     if (chicken != null && random.nextInt(5) == 0) chicken.setBaby(true);
                 }
                 level.playSound(null, c.x, c.y + 8, c.z, SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.NEUTRAL, 1.5f,
@@ -150,15 +150,15 @@ final class Party {
             DyeColor colour = colours[random.nextInt(colours.length)];
             sheep.setColor(colour);
             sheep.setSheared(false);
-            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.WOOL.pick(colour).defaultBlockState()),
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Compat.wool(colour).defaultBlockState()),
                     sheep.getX(), sheep.getY() + 0.8, sheep.getZ(), 20, 0.4, 0.4, 0.4, 0.1);
         }
         for (int i = 0; i < 3; i++) {
-            Sheep sheep = EntityTypes.SHEEP.spawn(level, t.blockPosition().offset(i - 1, 0, 0), EntitySpawnReason.TRIGGERED);
+            Sheep sheep = EntityType.SHEEP.spawn(level, t.blockPosition().offset(i - 1, 0, 0), EntitySpawnReason.TRIGGERED);
             if (sheep != null) sheep.setCustomName(Component.literal("jeb_"));
         }
         for (int i = 0; i < 4; i++) {
-            Sheep sheep = EntityTypes.SHEEP.spawn(level, t.blockPosition().offset(0, 0, i - 2), EntitySpawnReason.TRIGGERED);
+            Sheep sheep = EntityType.SHEEP.spawn(level, t.blockPosition().offset(0, 0, i - 2), EntitySpawnReason.TRIGGERED);
             if (sheep != null) sheep.setColor(colours[random.nextInt(colours.length)]);
         }
         level.playSound(null, c.x, c.y, c.z, SoundEvents.SHEEP_AMBIENT, net.minecraft.sounds.SoundSource.NEUTRAL, 2.0f, 1.2f);
