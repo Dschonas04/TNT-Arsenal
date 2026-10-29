@@ -1,20 +1,20 @@
 package io.github.dschonas04.tntarsenal;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
- * Detonations that play out over time — a tunnel that is dug slice by slice, a
- * black hole that pulls for five seconds — register a task here. The server
- * ticks every task once at the end of each server tick until it says it is done.
- * Spreading work over ticks also keeps big jobs from stalling the server.
+ * Detonations that play out over time — a tunnel that is dug slice by slice, a black hole that
+ * pulls for five seconds — register a task here. The server ticks every task once at the end of
+ * each server tick until it says it is done. Spreading work over ticks also keeps big jobs from
+ * stalling the server.
  */
 final class Tasks {
-    private Tasks() {
-    }
+    private Tasks() {}
 
     @FunctionalInterface
     interface Task {
@@ -46,10 +46,13 @@ final class Tasks {
     }
 
     static void start(Task task) {
-        start(task, () -> { });
+        start(task, () -> {});
     }
 
-    /** Like {@link #start(Task)}, but runs {@code onAbort} if the task fails or the server stops before it is done. */
+    /**
+     * Like {@link #start(Task)}, but runs {@code onAbort} if the task fails or the server stops
+     * before it is done.
+     */
     static void start(Task task, Runnable onAbort) {
         STARTED.add(new Running(task, onAbort));
     }

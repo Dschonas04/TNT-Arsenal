@@ -4,8 +4,7 @@ import io.github.dschonas04.tntarsenal.Bombs;
 import io.github.dschonas04.tntarsenal.Gimmicks;
 import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.explosion.Jobs;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -24,11 +23,15 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The remote detonator. Right-click bombs — nuclear, any arsenal TNT or plain TNT — to link up to sixteen of them
- * (right-click a linked one again to unlink it); right-click anywhere else to set them all off, one after the other,
- * as long as their chunks are loaded and you are in the same dimension. Sneak and right-click the air to unlink all.
- * Whoever holds a linked detonator sees a red marker above each of its bombs.
+ * The remote detonator. Right-click bombs — nuclear, any arsenal TNT or plain TNT — to link up to
+ * sixteen of them (right-click a linked one again to unlink it); right-click anywhere else to set
+ * them all off, one after the other, as long as their chunks are loaded and you are in the same
+ * dimension. Sneak and right-click the air to unlink all. Whoever holds a linked detonator sees a
+ * red marker above each of its bombs.
  */
 public class DetonatorItem extends Item {
     public static final int MAX = 16;
@@ -40,21 +43,35 @@ public class DetonatorItem extends Item {
 
     /** The red markers over linked bombs, for the player holding the detonator only. */
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if (server.getTickCount() % 10 != 0) return;
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                for (InteractionHand hand : InteractionHand.values()) {
-                    ItemStack stack = player.getItemInHand(hand);
-                    if (!(stack.getItem() instanceof DetonatorItem)) continue;
-                    ServerLevel level = player.level();
-                    if (!dimension(stack).equals(level.dimension().identifier().toString())) continue;
-                    for (BlockPos pos : bombs(stack)) {
-                        if (pos.distSqr(player.blockPosition()) > 96 * 96) continue;
-                        level.sendParticles(player, MARKER, true, false, pos.getX() + 0.5, pos.getY() + 1.4, pos.getZ() + 0.5, 3, 0.05, 0.15, 0.05, 0);
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    if (server.getTickCount() % 10 != 0) return;
+                    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                        for (InteractionHand hand : InteractionHand.values()) {
+                            ItemStack stack = player.getItemInHand(hand);
+                            if (!(stack.getItem() instanceof DetonatorItem)) continue;
+                            ServerLevel level = player.level();
+                            if (!dimension(stack).equals(level.dimension().identifier().toString()))
+                                continue;
+                            for (BlockPos pos : bombs(stack)) {
+                                if (pos.distSqr(player.blockPosition()) > 96 * 96) continue;
+                                level.sendParticles(
+                                        player,
+                                        MARKER,
+                                        true,
+                                        false,
+                                        pos.getX() + 0.5,
+                                        pos.getY() + 1.4,
+                                        pos.getZ() + 0.5,
+                                        3,
+                                        0.05,
+                                        0.15,
+                                        0.05,
+                                        0);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     private static CompoundTag tag(ItemStack stack) {
@@ -98,15 +115,30 @@ public class DetonatorItem extends Item {
             String here = level.dimension().identifier().toString();
             List<BlockPos> bombs = here.equals(dimension(stack)) ? bombs(stack) : new ArrayList<>();
             if (bombs.remove(pos)) {
-                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.unlinked", bombs.size()));
+                player.sendOverlayMessage(
+                        Component.translatable(
+                                "item.tnt_arsenal.detonator.unlinked", bombs.size()));
                 level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 0.8f);
             } else if (bombs.size() >= MAX) {
-                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.full", MAX));
+                player.sendOverlayMessage(
+                        Component.translatable("item.tnt_arsenal.detonator.full", MAX));
                 return InteractionResult.FAIL;
             } else {
                 bombs.add(pos);
-                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.linked", bombs.size(), pos.getX(), pos.getY(), pos.getZ()));
-                level.playSound(null, pos, Sounds.BEEP, SoundSource.PLAYERS, 1.0f, 1.0f + bombs.size() * 0.05f);
+                player.sendOverlayMessage(
+                        Component.translatable(
+                                "item.tnt_arsenal.detonator.linked",
+                                bombs.size(),
+                                pos.getX(),
+                                pos.getY(),
+                                pos.getZ()));
+                level.playSound(
+                        null,
+                        pos,
+                        Sounds.BEEP,
+                        SoundSource.PLAYERS,
+                        1.0f,
+                        1.0f + bombs.size() * 0.05f);
             }
             save(stack, bombs, here);
         }
@@ -128,31 +160,42 @@ public class DetonatorItem extends Item {
             return InteractionResult.SUCCESS;
         }
         if (!dimension(stack).equals(level.dimension().identifier().toString())) {
-            player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.other_dimension"));
+            player.sendOverlayMessage(
+                    Component.translatable("item.tnt_arsenal.detonator.other_dimension"));
             return InteractionResult.FAIL;
         }
         // a salvo: one bomb every three ticks, in the order they were linked
         List<BlockPos> salvo = new ArrayList<>(bombs);
-        Jobs.add(new Jobs.Job() {
-            private int age;
+        Jobs.add(
+                new Jobs.Job() {
+                    private int age;
 
-            @Override
-            public ServerLevel level() {
-                return server;
-            }
+                    @Override
+                    public ServerLevel level() {
+                        return server;
+                    }
 
-            @Override
-            public boolean tick() {
-                if (age % 3 == 0 && age / 3 < salvo.size()) {
-                    BlockPos pos = salvo.get(age / 3);
-                    if (server.isLoaded(pos)) Bombs.ignite(server, pos, player, 0);
-                }
-                return ++age > salvo.size() * 3;
-            }
-        });
+                    @Override
+                    public boolean tick() {
+                        if (age % 3 == 0 && age / 3 < salvo.size()) {
+                            BlockPos pos = salvo.get(age / 3);
+                            if (server.isLoaded(pos)) Bombs.ignite(server, pos, player, 0);
+                        }
+                        return ++age > salvo.size() * 3;
+                    }
+                });
         save(stack, List.of(), "");
-        player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.detonator.fired", salvo.size()));
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.DETONATOR, SoundSource.PLAYERS, 1.0f, 1.0f);
+        player.sendOverlayMessage(
+                Component.translatable("item.tnt_arsenal.detonator.fired", salvo.size()));
+        level.playSound(
+                null,
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                Sounds.DETONATOR,
+                SoundSource.PLAYERS,
+                1.0f,
+                1.0f);
         if (salvo.size() >= 8 && player instanceof ServerPlayer sp) Gimmicks.award(sp, "salvo");
         return InteractionResult.SUCCESS;
     }

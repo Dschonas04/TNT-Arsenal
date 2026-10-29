@@ -29,10 +29,10 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * A TNT block of one {@link Kind}. It primes like vanilla TNT — redstone, flint
- * and steel, fire charges, burning arrows, other explosions — but the primed
- * entity carries this block's state. The entity therefore renders with this
- * block's texture, and the mixin recognises the kind when the fuse runs out.
+ * A TNT block of one {@link Kind}. It primes like vanilla TNT — redstone, flint and steel, fire
+ * charges, burning arrows, other explosions — but the primed entity carries this block's state. The
+ * entity therefore renders with this block's texture, and the mixin recognises the kind when the
+ * fuse runs out.
  */
 public class ArsenalTntBlock extends TntBlock {
     /** Where the player faced when placing it; only the tunnel kind uses it. */
@@ -49,7 +49,6 @@ public class ArsenalTntBlock extends TntBlock {
         return kind;
     }
 
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
@@ -62,20 +61,35 @@ public class ArsenalTntBlock extends TntBlock {
     }
 
     /** Replaces the block with a primed copy of itself. */
-    public void ignite(Level level, BlockPos pos, BlockState state, LivingEntity igniter, int fuse) {
+    public void ignite(
+            Level level, BlockPos pos, BlockState state, LivingEntity igniter, int fuse) {
         if (!(level instanceof ServerLevel)) return;
-        PrimedTnt primed = new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, igniter);
+        PrimedTnt primed =
+                new PrimedTnt(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, igniter);
         primed.setBlockState(state);
         primed.setFuse(fuse);
         level.addFreshEntity(primed);
-        level.playSound(null, primed.getX(), primed.getY(), primed.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0f, 1.0f);
+        level.playSound(
+                null,
+                primed.getX(),
+                primed.getY(),
+                primed.getZ(),
+                SoundEvents.TNT_PRIMED,
+                SoundSource.BLOCKS,
+                1.0f,
+                1.0f);
         level.gameEvent(igniter, GameEvent.PRIME_FUSE, pos);
         // Only the nuclear bombs sound the siren; every TNT here sparks its own way instead.
         Fuses.burn((ServerLevel) level, primed, kind);
     }
 
     @Override
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+    protected void onPlace(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            BlockState oldState,
+            boolean movedByPiston) {
         if (!oldState.is(state.getBlock()) && level.hasNeighborSignal(pos)) {
             ignite(level, pos, state, null, kind.fuse());
             level.removeBlock(pos, false);
@@ -83,7 +97,13 @@ public class ArsenalTntBlock extends TntBlock {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, Orientation orientation, boolean movedByPiston) {
+    protected void neighborChanged(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Block neighbor,
+            Orientation orientation,
+            boolean movedByPiston) {
         if (level.hasNeighborSignal(pos)) {
             ignite(level, pos, state, null, kind.fuse());
             level.removeBlock(pos, false);
@@ -98,8 +118,14 @@ public class ArsenalTntBlock extends TntBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hit) {
         if (!stack.is(Items.FLINT_AND_STEEL) && !stack.is(Items.FIRE_CHARGE)) {
             return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
@@ -116,11 +142,17 @@ public class ArsenalTntBlock extends TntBlock {
     }
 
     @Override
-    protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+    protected void onProjectileHit(
+            Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (level instanceof ServerLevel && projectile.isOnFire()) {
             BlockPos pos = hit.getBlockPos();
             Entity owner = projectile.getOwner();
-            ignite(level, pos, state, owner instanceof LivingEntity living ? living : null, kind.fuse());
+            ignite(
+                    level,
+                    pos,
+                    state,
+                    owner instanceof LivingEntity living ? living : null,
+                    kind.fuse());
             level.removeBlock(pos, false);
         }
     }

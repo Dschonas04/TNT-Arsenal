@@ -2,8 +2,7 @@ package io.github.dschonas04.tntarsenal.nuclear.client;
 
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.network.NukeDetonatedPayload;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -15,14 +14,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Everything a player sees of a detonation: the flash (blinding if you look at
- * it, a glare if you do not), the mushroom cloud and the shaking ground, which
- * arrives with the shock wave — later, the further away you are.
+ * Everything a player sees of a detonation: the flash (blinding if you look at it, a glare if you
+ * do not), the mushroom cloud and the shaking ground, which arrives with the shock wave — later,
+ * the further away you are.
  */
 final class NukeEffects {
-    private NukeEffects() {
-    }
+    private NukeEffects() {}
 
     private static final List<MushroomCloud> CLOUDS = new ArrayList<>();
     private static final RandomSource RANDOM = RandomSource.create();
@@ -33,7 +34,8 @@ final class NukeEffects {
     private static double shakeY;
 
     static void register() {
-        ClientPlayNetworking.registerGlobalReceiver(NukeDetonatedPayload.TYPE, (payload, context) -> detonated(payload));
+        ClientPlayNetworking.registerGlobalReceiver(
+                NukeDetonatedPayload.TYPE, (payload, context) -> detonated(payload));
         ClientTickEvents.END_CLIENT_TICK.register(NukeEffects::tick);
         HudElementRegistry.addLast(NuclearTnt.id("flash"), NukeEffects::drawFlash);
     }

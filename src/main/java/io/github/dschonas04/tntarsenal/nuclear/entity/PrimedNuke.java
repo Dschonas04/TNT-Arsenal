@@ -1,10 +1,11 @@
 package io.github.dschonas04.tntarsenal.nuclear.entity;
 
-import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.block.NukeBlock;
 import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
 import io.github.dschonas04.tntarsenal.nuclear.explosion.Detonation;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -13,10 +14,10 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
 
 /**
- * A lit bomb. It is a primed TNT in every respect the client cares about — it
- * falls, flashes and renders with the bomb's block — but it has its own entity
- * type, beeps faster and faster as the fuse runs down, and does not explode the
- * vanilla way: a mixin hands the moment of detonation to {@link Detonation}.
+ * A lit bomb. It is a primed TNT in every respect the client cares about — it falls, flashes and
+ * renders with the bomb's block — but it has its own entity type, beeps faster and faster as the
+ * fuse runs down, and does not explode the vanilla way: a mixin hands the moment of detonation to
+ * {@link Detonation}.
  */
 public class PrimedNuke extends PrimedTnt {
     private LivingEntity igniter;
@@ -25,7 +26,14 @@ public class PrimedNuke extends PrimedTnt {
         super(type, level);
     }
 
-    public static PrimedNuke create(Level level, double x, double y, double z, NukeBlock block, LivingEntity igniter, int fuse) {
+    public static PrimedNuke create(
+            Level level,
+            double x,
+            double y,
+            double z,
+            NukeBlock block,
+            LivingEntity igniter,
+            int fuse) {
         PrimedNuke nuke = new PrimedNuke(NuclearTnt.PRIMED_NUKE, level);
         nuke.setPos(x, y, z);
         nuke.setBlockState(block.defaultBlockState());
@@ -56,7 +64,8 @@ public class PrimedNuke extends PrimedTnt {
         int every = fuse > 200 ? 20 : fuse > 100 ? 10 : fuse > 40 ? 5 : 2;
         if (fuse % every == 0) {
             float pitch = fuse > 100 ? 0.8f : fuse > 40 ? 1.0f : 1.25f;
-            level.playSound(null, getX(), getY(), getZ(), Sounds.BEEP, SoundSource.BLOCKS, 2.0f, pitch);
+            level.playSound(
+                    null, getX(), getY(), getZ(), Sounds.BEEP, SoundSource.BLOCKS, 2.0f, pitch);
         }
     }
 

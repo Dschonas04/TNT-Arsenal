@@ -2,8 +2,7 @@ package io.github.dschonas04.tntarsenal.nuclear.protection;
 
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.radiation.Radiation;
-import java.util.EnumMap;
-import java.util.Map;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,7 +14,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
@@ -33,27 +31,48 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
- * What stands between a player and the radiation: iodine tablets, RadAway, the
- * hazmat suit and lead.
+ * What stands between a player and the radiation: iodine tablets, RadAway, the hazmat suit and
+ * lead.
  *
  * <ul>
- * <li><b>Iodine tablets</b> give ten minutes of the iodine effect, which halves what
- *     the body takes in.</li>
- * <li><b>RadAway</b> washes 200 mSv out at once, at the price of a moment of nausea.</li>
- * <li><b>Hazmat suit</b>: every worn piece keeps a fifth out, the whole suit 90 %.</li>
- * <li><b>Lead blocks</b> overhead shield four times as well as stone.</li>
+ *   <li><b>Iodine tablets</b> give ten minutes of the iodine effect, which halves what the body
+ *       takes in.
+ *   <li><b>RadAway</b> washes 200 mSv out at once, at the price of a moment of nausea.
+ *   <li><b>Hazmat suit</b>: every worn piece keeps a fifth out, the whole suit 90 %.
+ *   <li><b>Lead blocks</b> overhead shield four times as well as stone.
  * </ul>
  */
 public final class Protection {
-    private Protection() {
-    }
+    private Protection() {}
 
-    public static final ResourceKey<EquipmentAsset> HAZMAT_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, NuclearTnt.id("hazmat"));
-    public static final TagKey<Item> HAZMAT_REPAIR = TagKey.create(Registries.ITEM, NuclearTnt.id("repairs_hazmat_suit"));
-    public static final ArmorMaterial HAZMAT = new ArmorMaterial(12,
-            Map.of(ArmorType.HELMET, 1, ArmorType.CHESTPLATE, 3, ArmorType.LEGGINGS, 2, ArmorType.BOOTS, 1, ArmorType.BODY, 3),
-            9, SoundEvents.ARMOR_EQUIP_LEATHER, 0f, 0f, HAZMAT_REPAIR, HAZMAT_ASSET);
+    public static final ResourceKey<EquipmentAsset> HAZMAT_ASSET =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, NuclearTnt.id("hazmat"));
+    public static final TagKey<Item> HAZMAT_REPAIR =
+            TagKey.create(Registries.ITEM, NuclearTnt.id("repairs_hazmat_suit"));
+    public static final ArmorMaterial HAZMAT =
+            new ArmorMaterial(
+                    12,
+                    Map.of(
+                            ArmorType.HELMET,
+                            1,
+                            ArmorType.CHESTPLATE,
+                            3,
+                            ArmorType.LEGGINGS,
+                            2,
+                            ArmorType.BOOTS,
+                            1,
+                            ArmorType.BODY,
+                            3),
+                    9,
+                    SoundEvents.ARMOR_EQUIP_LEATHER,
+                    0f,
+                    0f,
+                    HAZMAT_REPAIR,
+                    HAZMAT_ASSET);
 
     public static Holder<MobEffect> IODINE;
     public static Item IODINE_TABLETS;
@@ -83,26 +102,66 @@ public final class Protection {
     }
 
     public static void register() {
-        IODINE = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, NuclearTnt.id("iodine"), new Iodine());
-        FoodProperties nothing = new FoodProperties.Builder().nutrition(0).saturationModifier(0f).alwaysEdible().build();
+        IODINE =
+                Registry.registerForHolder(
+                        BuiltInRegistries.MOB_EFFECT, NuclearTnt.id("iodine"), new Iodine());
+        FoodProperties nothing =
+                new FoodProperties.Builder()
+                        .nutrition(0)
+                        .saturationModifier(0f)
+                        .alwaysEdible()
+                        .build();
 
-        IODINE_TABLETS = NuclearTnt.item("iodine_tablets", Item::new, new Item.Properties().stacksTo(16)
-                .food(nothing, Consumables.defaultFood().consumeSeconds(0.8f)
-                        .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(IODINE, 12000, 0))).build()));
-        RAD_AWAY = NuclearTnt.item("rad_away", RadAway::new, new Item.Properties().stacksTo(8)
-                .food(nothing, Consumables.defaultDrink().consumeSeconds(1.6f).animation(ItemUseAnimation.DRINK).build()));
+        IODINE_TABLETS =
+                NuclearTnt.item(
+                        "iodine_tablets",
+                        Item::new,
+                        new Item.Properties()
+                                .stacksTo(16)
+                                .food(
+                                        nothing,
+                                        Consumables.defaultFood()
+                                                .consumeSeconds(0.8f)
+                                                .onConsume(
+                                                        new ApplyStatusEffectsConsumeEffect(
+                                                                new MobEffectInstance(
+                                                                        IODINE, 12000, 0)))
+                                                .build()));
+        RAD_AWAY =
+                NuclearTnt.item(
+                        "rad_away",
+                        RadAway::new,
+                        new Item.Properties()
+                                .stacksTo(8)
+                                .food(
+                                        nothing,
+                                        Consumables.defaultDrink()
+                                                .consumeSeconds(1.6f)
+                                                .animation(ItemUseAnimation.DRINK)
+                                                .build()));
 
-        LEAD_BLOCK = NuclearTnt.block("lead_block", Block::new,
-                BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(6f, 1200f));
+        LEAD_BLOCK =
+                NuclearTnt.block(
+                        "lead_block",
+                        Block::new,
+                        BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                                .strength(6f, 1200f));
 
-        for (ArmorType type : new ArmorType[] {ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS}) {
-            String name = switch (type) {
-                case HELMET -> "hazmat_helmet";
-                case CHESTPLATE -> "hazmat_suit";
-                case LEGGINGS -> "hazmat_leggings";
-                default -> "hazmat_boots";
-            };
-            SUIT.put(type, NuclearTnt.item(name, Item::new, new Item.Properties().humanoidArmor(HAZMAT, type)));
+        for (ArmorType type :
+                new ArmorType[] {
+                    ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS
+                }) {
+            String name =
+                    switch (type) {
+                        case HELMET -> "hazmat_helmet";
+                        case CHESTPLATE -> "hazmat_suit";
+                        case LEGGINGS -> "hazmat_leggings";
+                        default -> "hazmat_boots";
+                    };
+            SUIT.put(
+                    type,
+                    NuclearTnt.item(
+                            name, Item::new, new Item.Properties().humanoidArmor(HAZMAT, type)));
         }
     }
 

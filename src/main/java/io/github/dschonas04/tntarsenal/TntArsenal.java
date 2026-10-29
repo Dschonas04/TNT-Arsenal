@@ -1,14 +1,12 @@
 package io.github.dschonas04.tntarsenal;
 
-import java.util.ArrayList;
-import java.util.List;
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
+
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.minecraft.world.entity.Mob;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -17,6 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -26,10 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Registers one block and one block item per {@link Kind}, plus a creative tab
- * that lists them all. Everything else lives in the blocks themselves and in
- * the mixin that hands a detonation to the right kind.
+ * Registers one block and one block item per {@link Kind}, plus a creative tab that lists them all.
+ * Everything else lives in the blocks themselves and in the mixin that hands a detonation to the
+ * right kind.
  */
 public final class TntArsenal implements ModInitializer {
     public static final String MOD_ID = "tnt_arsenal";
@@ -49,56 +51,92 @@ public final class TntArsenal implements ModInitializer {
     }
 
     /** Entry point for the mixin: the flash and sparks every kind goes off with. */
-    public static void burst(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.item.PrimedTnt tnt, Kind kind) {
+    public static void burst(
+            net.minecraft.server.level.ServerLevel level,
+            net.minecraft.world.entity.item.PrimedTnt tnt,
+            Kind kind) {
         Fuses.burst(level, tnt, kind);
         Gimmicks.detonated(level, tnt, kind);
     }
 
     @Override
     public void onInitialize() {
-        // A mob that was frozen by stasis TNT and unloaded before it thawed thaws when it loads again.
-        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
-            if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG)) mob.setNoAi(false);
-        });
+        // A mob that was frozen by stasis TNT and unloaded before it thawed thaws when it loads
+        // again.
+        ServerEntityEvents.ENTITY_LOAD.register(
+                (entity, level) -> {
+                    if (entity instanceof Mob mob && mob.removeTag(Detonations.STASIS_TAG))
+                        mob.setNoAi(false);
+                });
         Gimmicks.register();
         Particles.init();
         for (Kind kind : Kind.values()) {
             ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id(kind.id()));
-            Block block = new ArsenalTntBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.TNT).setId(blockKey));
+            Block block =
+                    new ArsenalTntBlock(
+                            kind, BlockBehaviour.Properties.ofFullCopy(Blocks.TNT).setId(blockKey));
             Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
             ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id(kind.id()));
             // One line under the name says what this kind does.
-            ItemLore lore = new ItemLore(List.of(Component.translatable("block.tnt_arsenal." + kind.id() + ".desc")
-                    .withStyle(ChatFormatting.GRAY)));
-            Item item = new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()
-                    .component(DataComponents.LORE, lore));
+            ItemLore lore =
+                    new ItemLore(
+                            List.of(
+                                    Component.translatable(
+                                                    "block.tnt_arsenal." + kind.id() + ".desc")
+                                            .withStyle(ChatFormatting.GRAY)));
+            Item item =
+                    new BlockItem(
+                            block,
+                            new Item.Properties()
+                                    .setId(itemKey)
+                                    .useBlockDescriptionPrefix()
+                                    .component(DataComponents.LORE, lore));
             Registry.register(BuiltInRegistries.ITEM, itemKey, item);
             ITEMS.add(item);
         }
 
         ResourceKey<Item> slingKey = ResourceKey.create(Registries.ITEM, id("tnt_sling"));
-        ITEMS.add(Registry.register(BuiltInRegistries.ITEM, slingKey, new SlingItem(new Item.Properties().setId(slingKey).durability(256)
-                .component(DataComponents.LORE, new ItemLore(List.of(
-                        Component.translatable("item.tnt_arsenal.tnt_sling.desc").withStyle(ChatFormatting.GRAY)))))));
+        ITEMS.add(
+                Registry.register(
+                        BuiltInRegistries.ITEM,
+                        slingKey,
+                        new SlingItem(
+                                new Item.Properties()
+                                        .setId(slingKey)
+                                        .durability(256)
+                                        .component(
+                                                DataComponents.LORE,
+                                                new ItemLore(
+                                                        List.of(
+                                                                Component.translatable(
+                                                                                "item.tnt_arsenal.tnt_sling.desc")
+                                                                        .withStyle(
+                                                                                ChatFormatting
+                                                                                        .GRAY)))))));
 
         // The vanilla builder keeps its item output type protected, so the items
         // go in through Fabric's event for this tab instead.
-        ResourceKey<CreativeModeTab> tabKey = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id("tnt"));
-        CreativeModeTab tab = FabricCreativeModeTab.builder()
-                .title(Component.translatable("itemGroup.tnt_arsenal"))
-                .icon(() -> new ItemStack(NuclearTnt.BOMBS.get(Tier.NUKE)))
-                .build();
+        ResourceKey<CreativeModeTab> tabKey =
+                ResourceKey.create(Registries.CREATIVE_MODE_TAB, id("tnt"));
+        CreativeModeTab tab =
+                FabricCreativeModeTab.builder()
+                        .title(Component.translatable("itemGroup.tnt_arsenal"))
+                        .icon(() -> new ItemStack(NuclearTnt.BOMBS.get(Tier.NUKE)))
+                        .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, tabKey, tab);
-        CreativeModeTabEvents.modifyOutputEvent(tabKey).register(output -> {
-            // TabVisibility is protected as well; the stack lists are not.
-            // the ordinary arsenal first, then the nuclear one: bombs, fuses, protection, alarms
-            List<Item> all = new ArrayList<>(ITEMS);
-            all.addAll(NuclearTnt.ITEMS);
-            for (Item item : all) {
-                output.getDisplayStacks().add(new ItemStack(item));
-                output.getSearchTabStacks().add(new ItemStack(item));
-            }
-        });
+        CreativeModeTabEvents.modifyOutputEvent(tabKey)
+                .register(
+                        output -> {
+                            // TabVisibility is protected as well; the stack lists are not.
+                            // the ordinary arsenal first, then the nuclear one: bombs, fuses,
+                            // protection, alarms
+                            List<Item> all = new ArrayList<>(ITEMS);
+                            all.addAll(NuclearTnt.ITEMS);
+                            for (Item item : all) {
+                                output.getDisplayStacks().add(new ItemStack(item));
+                                output.getSearchTabStacks().add(new ItemStack(item));
+                            }
+                        });
     }
 }

@@ -3,6 +3,7 @@ package io.github.dschonas04.tntarsenal.client;
 import io.github.dschonas04.tntarsenal.Particles;
 import io.github.dschonas04.tntarsenal.TntArsenal;
 import io.github.dschonas04.tntarsenal.nuclear.client.GreenFog;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -15,9 +16,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 /**
- * Client side of the arsenal: the particles, and what a detonation does to the screen of the players near it —
- * the view shakes and takes on the colour of the kind (icy blue, poison green, the gold of a blessing ...).
- * In contaminated land green motes of radiation float around the player.
+ * Client side of the arsenal: the particles, and what a detonation does to the screen of the
+ * players near it — the view shakes and takes on the colour of the kind (icy blue, poison green,
+ * the gold of a blessing ...). In contaminated land green motes of radiation float around the
+ * player.
  */
 public final class ArsenalClient implements ClientModInitializer {
     private static final RandomSource RANDOM = RandomSource.create();
@@ -31,14 +33,16 @@ public final class ArsenalClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ArsenalParticles.register();
-        ClientPlayNetworking.registerGlobalReceiver(Particles.ScreenEffect.TYPE, (payload, context) -> {
-            shake = Math.max(shake, payload.shake());
-            if ((payload.tint() >>> 24) > 0) {
-                tint = payload.tint();
-                tintTicks = Math.max(1, payload.ticks());
-                tintLeft = tintTicks;
-            }
-        });
+        ClientPlayNetworking.registerGlobalReceiver(
+                Particles.ScreenEffect.TYPE,
+                (payload, context) -> {
+                    shake = Math.max(shake, payload.shake());
+                    if ((payload.tint() >>> 24) > 0) {
+                        tint = payload.tint();
+                        tintTicks = Math.max(1, payload.ticks());
+                        tintLeft = tintTicks;
+                    }
+                });
         ClientTickEvents.END_CLIENT_TICK.register(ArsenalClient::tick);
         HudElementRegistry.addLast(TntArsenal.id("tint"), ArsenalClient::drawTint);
     }
@@ -72,9 +76,14 @@ public final class ArsenalClient implements ClientModInitializer {
             int motes = Mth.clamp((int) (rate * 6), 1, 8);
             for (int i = 0; i < motes; i++) {
                 if (RANDOM.nextFloat() > 0.5f) continue;
-                mc.level.addParticle(Particles.RADIATION, player.getX() + (RANDOM.nextDouble() - 0.5) * 12,
-                        player.getY() + RANDOM.nextDouble() * 4, player.getZ() + (RANDOM.nextDouble() - 0.5) * 12,
-                        (RANDOM.nextDouble() - 0.5) * 0.05, 0.02, (RANDOM.nextDouble() - 0.5) * 0.05);
+                mc.level.addParticle(
+                        Particles.RADIATION,
+                        player.getX() + (RANDOM.nextDouble() - 0.5) * 12,
+                        player.getY() + RANDOM.nextDouble() * 4,
+                        player.getZ() + (RANDOM.nextDouble() - 0.5) * 12,
+                        (RANDOM.nextDouble() - 0.5) * 0.05,
+                        0.02,
+                        (RANDOM.nextDouble() - 0.5) * 0.05);
             }
         }
     }
@@ -86,7 +95,8 @@ public final class ArsenalClient implements ClientModInitializer {
         if (alpha <= 0) return;
         int w = graphics.guiWidth(), h = graphics.guiHeight();
         int rgb = tint & 0xFFFFFF;
-        // a vignette: eight nested frames, strongest at the edge, over a light wash of the whole screen
+        // a vignette: eight nested frames, strongest at the edge, over a light wash of the whole
+        // screen
         int steps = 8, step = Math.max(2, Math.min(w, h) / 5 / steps);
         for (int i = 0; i < steps; i++) {
             int a = alpha * (steps - i) / steps / 2;

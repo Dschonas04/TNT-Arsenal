@@ -4,8 +4,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.PrimedTnt;
 
 /**
- * Every TNT kind: its registry name, fuse in ticks and what happens when it goes off.
- * Vanilla TNT has a power of 4 and an 80-tick fuse; the numbers below are relative to that.
+ * Every TNT kind: its registry name, fuse in ticks and what happens when it goes off. Vanilla TNT
+ * has a power of 4 and an 80-tick fuse; the numbers below are relative to that.
  */
 public enum Kind {
     MEGA("mega_tnt", 80, Detonations::mega),
@@ -75,7 +75,11 @@ public enum Kind {
 
     /** The party kinds break nothing and hurt no one. */
     public boolean party() {
-        return this == CONFETTI || this == CAKE || this == DISCO || this == CHICKEN || this == SHEEP;
+        return this == CONFETTI
+                || this == CAKE
+                || this == DISCO
+                || this == CHICKEN
+                || this == SHEEP;
     }
 
     @FunctionalInterface

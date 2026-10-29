@@ -1,6 +1,7 @@
 package io.github.dschonas04.tntarsenal.nuclear.client;
 
 import io.github.dschonas04.tntarsenal.nuclear.config.NukeConfig;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -9,16 +10,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The mushroom cloud, drawn with particles that stay visible at any distance.
- * Its size follows the bomb's radius; it lives for sixty seconds:
+ * The mushroom cloud, drawn with particles that stay visible at any distance. Its size follows the
+ * bomb's radius; it lives for sixty seconds:
  *
  * <ol>
- * <li>fireball — a glowing ball that swells for half a second;</li>
- * <li>stem — a column that climbs for six seconds, particles streaming upwards;</li>
- * <li>cap — a torus on top of the stem that grows and rolls outwards: over the top,
- *     down the outside, in underneath and up through the middle;</li>
- * <li>condensation ring — a white ring halfway up that spreads out;</li>
- * <li>fade — after thirty seconds fewer and fewer particles, gone at sixty.</li>
+ *   <li>fireball — a glowing ball that swells for half a second;
+ *   <li>stem — a column that climbs for six seconds, particles streaming upwards;
+ *   <li>cap — a torus on top of the stem that grows and rolls outwards: over the top, down the
+ *       outside, in underneath and up through the middle;
+ *   <li>condensation ring — a white ring halfway up that spreads out;
+ *   <li>fade — after thirty seconds fewer and fewer particles, gone at sixty.
  * </ol>
  */
 final class MushroomCloud {
@@ -54,8 +55,17 @@ final class MushroomCloud {
             double h = random.nextDouble() * stemTop;
             double r = cap * 0.18 * (0.6 + 0.4 * h / height) * Math.sqrt(random.nextDouble());
             double a = random.nextDouble() * Math.PI * 2;
-            ParticleOptions dust = age < 80 && h < stemTop * 0.5 ? EMBER : (random.nextBoolean() ? ASH : DARK);
-            add(level, dust, ground.x + Math.cos(a) * r, ground.y + h, ground.z + Math.sin(a) * r, 0, 0.25, 0);
+            ParticleOptions dust =
+                    age < 80 && h < stemTop * 0.5 ? EMBER : (random.nextBoolean() ? ASH : DARK);
+            add(
+                    level,
+                    dust,
+                    ground.x + Math.cos(a) * r,
+                    ground.y + h,
+                    ground.z + Math.sin(a) * r,
+                    0,
+                    0.25,
+                    0);
         }
         if (age > 30) capTorus(level, count - stem, stemTop);
         if (age > 40 && age < 260) ring(level, count / 6);
@@ -65,12 +75,24 @@ final class MushroomCloud {
     private void fireball(ClientLevel level, int count) {
         double r = cap * 0.6 * Math.min(1.0, age / 10.0);
         for (int i = 0; i < count; i++) {
-            Vec3 dir = new Vec3(random.nextGaussian(), random.nextGaussian(), random.nextGaussian()).normalize();
+            Vec3 dir =
+                    new Vec3(random.nextGaussian(), random.nextGaussian(), random.nextGaussian())
+                            .normalize();
             double d = r * Math.cbrt(random.nextDouble());
             double x = ground.x + dir.x * d;
             double y = ground.y + r * 0.6 + dir.y * d;
             double z = ground.z + dir.z * d;
-            add(level, random.nextInt(3) == 0 ? ParticleTypes.FLAME : random.nextBoolean() ? GLOW : EMBER, x, y, z, 0, 0.05, 0);
+            add(
+                    level,
+                    random.nextInt(3) == 0
+                            ? ParticleTypes.FLAME
+                            : random.nextBoolean() ? GLOW : EMBER,
+                    x,
+                    y,
+                    z,
+                    0,
+                    0.05,
+                    0);
         }
     }
 
@@ -81,8 +103,8 @@ final class MushroomCloud {
         double minor = cap * 0.35 * (0.5 + 0.5 * grow);
         double cy = ground.y + stemTop;
         for (int i = 0; i < count; i++) {
-            double around = random.nextDouble() * Math.PI * 2;   // around the stem
-            double roll = random.nextDouble() * Math.PI * 2;     // around the tube
+            double around = random.nextDouble() * Math.PI * 2; // around the stem
+            double roll = random.nextDouble() * Math.PI * 2; // around the tube
             double r = major + Math.cos(roll) * minor;
             double x = ground.x + Math.cos(around) * r;
             double y = cy + Math.sin(roll) * minor;
@@ -94,7 +116,15 @@ final class MushroomCloud {
             double vx = Math.cos(around) * -radial;
             double vz = Math.sin(around) * -radial;
             boolean hot = age < 200 && Math.sin(roll) < 0.3 && random.nextInt(3) == 0;
-            add(level, hot ? GLOW : (random.nextInt(3) == 0 ? DARK : ASH), x, y, z, vx, up + 0.02, vz);
+            add(
+                    level,
+                    hot ? GLOW : (random.nextInt(3) == 0 ? DARK : ASH),
+                    x,
+                    y,
+                    z,
+                    vx,
+                    up + 0.02,
+                    vz);
         }
     }
 
@@ -104,12 +134,27 @@ final class MushroomCloud {
         for (int i = 0; i < count; i++) {
             double a = random.nextDouble() * Math.PI * 2;
             double r = spread * (0.92 + random.nextDouble() * 0.08);
-            add(level, ParticleTypes.CLOUD, ground.x + Math.cos(a) * r, y + random.nextGaussian() * 0.6, ground.z + Math.sin(a) * r,
-                    Math.cos(a) * 0.15, 0, Math.sin(a) * 0.15);
+            add(
+                    level,
+                    ParticleTypes.CLOUD,
+                    ground.x + Math.cos(a) * r,
+                    y + random.nextGaussian() * 0.6,
+                    ground.z + Math.sin(a) * r,
+                    Math.cos(a) * 0.15,
+                    0,
+                    Math.sin(a) * 0.15);
         }
     }
 
-    private static void add(ClientLevel level, ParticleOptions type, double x, double y, double z, double vx, double vy, double vz) {
+    private static void add(
+            ClientLevel level,
+            ParticleOptions type,
+            double x,
+            double y,
+            double z,
+            double vx,
+            double vy,
+            double vz) {
         level.addAlwaysVisibleParticle(type, true, x, y, z, vx, vy, vz);
     }
 }

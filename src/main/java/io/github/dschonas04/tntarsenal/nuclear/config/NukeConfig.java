@@ -2,22 +2,25 @@ package io.github.dschonas04.tntarsenal.nuclear.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;
 import io.github.dschonas04.tntarsenal.nuclear.block.Tier;
+
+import net.fabricmc.loader.api.FabricLoader;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import net.fabricmc.loader.api.FabricLoader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Settings in {@code config/tnt_arsenal-nuclear.json}. Missing entries keep their
- * defaults, and the file is rewritten on load so new entries show up in it.
+ * Settings in {@code config/tnt_arsenal-nuclear.json}. Missing entries keep their defaults, and the
+ * file is rewritten on load so new entries show up in it.
  */
 public final class NukeConfig {
     public int miniRadius = 15;
@@ -31,11 +34,15 @@ public final class NukeConfig {
     /** How many blocks the explosion may change per server tick. */
     public int blocksPerTick = 2000;
 
-    /** Radiation: how long contaminated land stays radioactive; it wanes steadily until then (48000 ticks = two Minecraft days). */
+    /**
+     * Radiation: how long contaminated land stays radioactive; it wanes steadily until then (48000
+     * ticks = two Minecraft days).
+     */
     public long radiationTicks = 48000;
 
     /** Radiation: the dose rate at ground zero right after the blast, in mSv per second. */
     public float miniPeakRate = 2f;
+
     public float nukePeakRate = 8f;
     public float tsarPeakRate = 25f;
 
@@ -47,8 +54,12 @@ public final class NukeConfig {
         };
     }
 
-    /** Fallout: ticks after the detonation before the ash starts to come down, and how long it takes. */
+    /**
+     * Fallout: ticks after the detonation before the ash starts to come down, and how long it
+     * takes.
+     */
     public int falloutDelayTicks = 200;
+
     public int falloutTicks = 600;
 
     /** Client: how thick the green fog in contaminated land gets, 0 turns it off. */
@@ -118,8 +129,8 @@ public final class NukeConfig {
     }
 
     /**
-     * Sets one setting from text and saves the file. Returns null on success,
-     * otherwise what was wrong. Takes effect for the next bomb.
+     * Sets one setting from text and saves the file. Returns null on success, otherwise what was
+     * wrong. Takes effect for the next bomb.
      */
     public static String set(String name, String text) {
         Field field;

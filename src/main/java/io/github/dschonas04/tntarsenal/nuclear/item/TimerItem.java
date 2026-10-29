@@ -1,8 +1,9 @@
 package io.github.dschonas04.tntarsenal.nuclear.item;
 
-import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.Bombs;
+import io.github.dschonas04.tntarsenal.nuclear.Sounds;
 import io.github.dschonas04.tntarsenal.nuclear.explosion.Jobs;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -24,10 +25,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * The timer fuse. Sneak and right-click to set the time (5 s, 10 s, 30 s, 1, 2 or 5
- * minutes), then right-click a bomb (nuclear, arsenal or plain TNT) to fix it there: the countdown runs above
- * the hotbar of everyone within 64 blocks and floats over the bomb, beeping faster at the end, and lights
- * the bomb at zero. The fuse is used up.
+ * The timer fuse. Sneak and right-click to set the time (5 s, 10 s, 30 s, 1, 2 or 5 minutes), then
+ * right-click a bomb (nuclear, arsenal or plain TNT) to fix it there: the countdown runs above the
+ * hotbar of everyone within 64 blocks and floats over the bomb, beeping faster at the end, and
+ * lights the bomb at zero. The fuse is used up.
  */
 public class TimerItem extends Item {
     private static final int[] STEPS = {5, 10, 30, 60, 120, 300};
@@ -37,7 +38,8 @@ public class TimerItem extends Item {
     }
 
     private static int seconds(ItemStack stack) {
-        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        CompoundTag tag =
+                stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         return tag.getIntOr("seconds", STEPS[1]);
     }
 
@@ -47,12 +49,19 @@ public class TimerItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (level instanceof ServerLevel) {
             int now = seconds(stack), next = STEPS[0];
-            for (int i = 0; i < STEPS.length; i++) if (STEPS[i] == now) next = STEPS[(i + 1) % STEPS.length];
+            for (int i = 0; i < STEPS.length; i++)
+                if (STEPS[i] == now) next = STEPS[(i + 1) % STEPS.length];
             CompoundTag tag = new CompoundTag();
             tag.putInt("seconds", next);
             CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
             player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.timer.set", next));
-            level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5f, 1.4f);
+            level.playSound(
+                    null,
+                    player.blockPosition(),
+                    SoundEvents.UI_BUTTON_CLICK.value(),
+                    SoundSource.PLAYERS,
+                    0.5f,
+                    1.4f);
         }
         return InteractionResult.SUCCESS;
     }
@@ -67,7 +76,8 @@ public class TimerItem extends Item {
             Player player = context.getPlayer();
             countdown(server, pos, seconds(stack) * 20, player);
             if (player != null) {
-                player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.timer.started", seconds(stack)));
+                player.sendOverlayMessage(
+                        Component.translatable("item.tnt_arsenal.timer.started", seconds(stack)));
                 if (!player.isCreative()) stack.shrink(1);
             }
         }
@@ -77,60 +87,108 @@ public class TimerItem extends Item {
     /** Runs a command quietly, as the server, in the bomb's dimension. */
     private static void command(ServerLevel level, String command) {
         var server = level.getServer();
-        server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput().withLevel(level),
-                "execute in " + level.dimension().identifier() + " run " + command);
+        server.getCommands()
+                .performPrefixedCommand(
+                        server.createCommandSourceStack().withSuppressedOutput().withLevel(level),
+                        "execute in " + level.dimension().identifier() + " run " + command);
     }
 
     /** The seconds left, floating over the bomb: big, red, always facing you. */
-    private static void label(ServerLevel level, BlockPos pos, String tag, int seconds, boolean create) {
-        String text = "{text:\"" + (seconds >= 60 ? seconds / 60 + ":" + String.format("%02d", seconds % 60) : String.valueOf(seconds))
-                + "\",color:\"" + (seconds <= 5 ? "red" : seconds <= 10 ? "gold" : "white") + "\",bold:1b}";
+    private static void label(
+            ServerLevel level, BlockPos pos, String tag, int seconds, boolean create) {
+        String text =
+                "{text:\""
+                        + (seconds >= 60
+                                ? seconds / 60 + ":" + String.format("%02d", seconds % 60)
+                                : String.valueOf(seconds))
+                        + "\",color:\""
+                        + (seconds <= 5 ? "red" : seconds <= 10 ? "gold" : "white")
+                        + "\",bold:1b}";
         if (create) {
-            command(level, String.format(java.util.Locale.ROOT, "summon text_display %.2f %.2f %.2f {Tags:[\"%s\"],billboard:\"center\",text:%s,"
-                    + "transformation:{scale:[1.6f,1.6f,1.6f],translation:[0f,0f,0f],left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f]}}",
-                    pos.getX() + 0.5, pos.getY() + 1.35, pos.getZ() + 0.5, tag, text));
+            command(
+                    level,
+                    String.format(
+                            java.util.Locale.ROOT,
+                            "summon text_display %.2f %.2f %.2f"
+                                + " {Tags:[\"%s\"],billboard:\"center\",text:%s,"
+                                + "transformation:{scale:[1.6f,1.6f,1.6f],translation:[0f,0f,0f],left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f]}}",
+                            pos.getX() + 0.5,
+                            pos.getY() + 1.35,
+                            pos.getZ() + 0.5,
+                            tag,
+                            text));
         } else {
-            command(level, "data merge entity @e[type=text_display,tag=" + tag + ",limit=1] {text:" + text + "}");
+            command(
+                    level,
+                    "data merge entity @e[type=text_display,tag="
+                            + tag
+                            + ",limit=1] {text:"
+                            + text
+                            + "}");
         }
     }
 
     private static void countdown(ServerLevel level, BlockPos pos, int ticks, Player igniter) {
         String tag = "tnt_arsenal.timer." + pos.asLong();
         label(level, pos, tag, (ticks + 19) / 20, true);
-        Jobs.add(new Jobs.Job() {
-            private int left = ticks;
+        Jobs.add(
+                new Jobs.Job() {
+                    private int left = ticks;
 
-            @Override
-            public ServerLevel level() {
-                return level;
-            }
-
-            @Override
-            public boolean tick() {
-                if (!Bombs.isBomb(level.getBlockState(pos)) || left <= 0) command(level, "kill @e[type=text_display,tag=" + tag + "]");
-                if (!Bombs.isBomb(level.getBlockState(pos))) {
-                    if (igniter instanceof ServerPlayer player) player.sendOverlayMessage(Component.translatable("item.tnt_arsenal.timer.gone"));
-                    return true;
-                }
-                if (left <= 0) {
-                    Bombs.ignite(level, pos, igniter, 1);
-                    return true;
-                }
-                int every = left > 200 ? 20 : left > 60 ? 10 : 4;
-                if (left % every == 0) {
-                    level.playSound(null, pos, Sounds.BEEP, SoundSource.BLOCKS, 1.5f, left > 200 ? 0.8f : 1.2f);
-                    level.sendParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 2, 0.1, 0.05, 0.1, 0);
-                }
-                if (left % 20 == 0) {
-                    label(level, pos, tag, (left + 19) / 20, false);
-                    Component text = Component.translatable("item.tnt_arsenal.timer.countdown", (left + 19) / 20).withStyle(ChatFormatting.RED);
-                    for (ServerPlayer player : level.players()) {
-                        if (player.distanceToSqr(Vec3.atCenterOf(pos)) < 64 * 64) player.sendOverlayMessage(text);
+                    @Override
+                    public ServerLevel level() {
+                        return level;
                     }
-                }
-                left--;
-                return false;
-            }
-        });
+
+                    @Override
+                    public boolean tick() {
+                        if (!Bombs.isBomb(level.getBlockState(pos)) || left <= 0)
+                            command(level, "kill @e[type=text_display,tag=" + tag + "]");
+                        if (!Bombs.isBomb(level.getBlockState(pos))) {
+                            if (igniter instanceof ServerPlayer player)
+                                player.sendOverlayMessage(
+                                        Component.translatable("item.tnt_arsenal.timer.gone"));
+                            return true;
+                        }
+                        if (left <= 0) {
+                            Bombs.ignite(level, pos, igniter, 1);
+                            return true;
+                        }
+                        int every = left > 200 ? 20 : left > 60 ? 10 : 4;
+                        if (left % every == 0) {
+                            level.playSound(
+                                    null,
+                                    pos,
+                                    Sounds.BEEP,
+                                    SoundSource.BLOCKS,
+                                    1.5f,
+                                    left > 200 ? 0.8f : 1.2f);
+                            level.sendParticles(
+                                    ParticleTypes.SMOKE,
+                                    pos.getX() + 0.5,
+                                    pos.getY() + 1.1,
+                                    pos.getZ() + 0.5,
+                                    2,
+                                    0.1,
+                                    0.05,
+                                    0.1,
+                                    0);
+                        }
+                        if (left % 20 == 0) {
+                            label(level, pos, tag, (left + 19) / 20, false);
+                            Component text =
+                                    Component.translatable(
+                                                    "item.tnt_arsenal.timer.countdown",
+                                                    (left + 19) / 20)
+                                            .withStyle(ChatFormatting.RED);
+                            for (ServerPlayer player : level.players()) {
+                                if (player.distanceToSqr(Vec3.atCenterOf(pos)) < 64 * 64)
+                                    player.sendOverlayMessage(text);
+                            }
+                        }
+                        left--;
+                        return false;
+                    }
+                });
     }
 }

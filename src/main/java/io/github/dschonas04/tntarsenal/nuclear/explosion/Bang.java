@@ -1,19 +1,21 @@
 package io.github.dschonas04.tntarsenal.nuclear.explosion;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import io.github.dschonas04.tntarsenal.nuclear.Sounds;
-import java.util.ArrayList;
-import java.util.List;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The bang, heard late: sound travels 343 blocks a second, so every player gets
- * it when it reaches them, quieter the further away they are. Played just next
- * to the player, so it is heard at any distance.
+ * The bang, heard late: sound travels 343 blocks a second, so every player gets it when it reaches
+ * them, quieter the further away they are. Played just next to the player, so it is heard at any
+ * distance.
  */
 public final class Bang implements Jobs.Job {
     private static final double SPEED = 343.0 / 20.0; // blocks per tick
@@ -51,12 +53,22 @@ public final class Bang implements Jobs.Job {
             double dist = Math.sqrt(player.distanceToSqr(origin));
             float volume = (float) Math.max(0.15, 1.0 - dist / AUDIBLE) * 4.0f;
             Vec3 toward = origin.subtract(player.position());
-            Vec3 at = player.getEyePosition().add(toward.lengthSqr() < 1 ? Vec3.ZERO : toward.normalize().scale(4));
+            Vec3 at =
+                    player.getEyePosition()
+                            .add(toward.lengthSqr() < 1 ? Vec3.ZERO : toward.normalize().scale(4));
             long seed = level.getRandom().nextLong();
             // farther away the thunder arrives deeper
             float pitch = (float) Math.max(0.7, 1.0 - dist / AUDIBLE * 0.3);
-            player.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(Sounds.NUKE_BLAST),
-                    SoundSource.BLOCKS, at.x, at.y, at.z, volume, pitch, seed));
+            player.connection.send(
+                    new ClientboundSoundPacket(
+                            BuiltInRegistries.SOUND_EVENT.wrapAsHolder(Sounds.NUKE_BLAST),
+                            SoundSource.BLOCKS,
+                            at.x,
+                            at.y,
+                            at.z,
+                            volume,
+                            pitch,
+                            seed));
         }
         age++;
         return waiting.isEmpty();

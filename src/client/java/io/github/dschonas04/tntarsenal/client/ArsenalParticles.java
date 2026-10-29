@@ -1,6 +1,7 @@
 package io.github.dschonas04.tntarsenal.client;
 
 import io.github.dschonas04.tntarsenal.Particles;
+
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -10,6 +11,7 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+
 import org.joml.Quaternionf;
 
 /**
@@ -19,17 +21,29 @@ import org.joml.Quaternionf;
 final class ArsenalParticles {
     private static final int FULL_BRIGHT = 0xF000F0;
 
-    private ArsenalParticles() {
-    }
+    private ArsenalParticles() {}
 
     @FunctionalInterface
     private interface Maker {
-        SingleQuadParticle make(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites);
+        SingleQuadParticle make(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites);
     }
 
     private static void register(SimpleParticleType type, Maker maker) {
-        ParticleProviderRegistry.getInstance().register(type, sprites ->
-                (ParticleProvider<SimpleParticleType>) (options, level, x, y, z, xd, yd, zd, random) -> maker.make(level, x, y, z, xd, yd, zd, sprites));
+        ParticleProviderRegistry.getInstance()
+                .register(
+                        type,
+                        sprites ->
+                                (ParticleProvider<SimpleParticleType>)
+                                        (options, level, x, y, z, xd, yd, zd, random) ->
+                                                maker.make(level, x, y, z, xd, yd, zd, sprites));
     }
 
     static void register() {
@@ -44,11 +58,22 @@ final class ArsenalParticles {
         register(Particles.ARC, Arc::new);
     }
 
-    /** Common ground: velocity taken as sent (the vanilla constructor would scatter it) and a sprite set at hand. */
+    /**
+     * Common ground: velocity taken as sent (the vanilla constructor would scatter it) and a sprite
+     * set at hand.
+     */
     private abstract static class Base extends SingleQuadParticle {
         protected final SpriteSet sprites;
 
-        Base(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Base(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, 0, 0, 0, sprites.first());
             this.sprites = sprites;
             this.xd = xd;
@@ -64,7 +89,15 @@ final class ArsenalParticles {
 
     /** A spark off the fuse: white-hot to orange, falls and bounces, gone in half a second. */
     static final class Spark extends Base {
-        Spark(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Spark(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd, yd, zd, sprites);
             lifetime = 6 + random.nextInt(8);
             gravity = 0.6f;
@@ -92,7 +125,15 @@ final class ArsenalParticles {
     static final class Shockwave extends Base {
         private final float radius;
 
-        Shockwave(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Shockwave(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, 0, 0, 0, sprites);
             radius = (float) Math.max(1, xd);
             lifetime = 10 + (int) (radius * 0.6);
@@ -122,7 +163,8 @@ final class ArsenalParticles {
         public void extract(QuadParticleRenderState state, Camera camera, float partialTick) {
             super.extract(state, camera, partialTick);
             // and the underside, so it shows from below as well
-            extractRotatedQuad(state, camera, new Quaternionf().rotationX((float) (Math.PI / 2)), partialTick);
+            extractRotatedQuad(
+                    state, camera, new Quaternionf().rotationX((float) (Math.PI / 2)), partialTick);
         }
 
         @Override
@@ -135,7 +177,15 @@ final class ArsenalParticles {
     static final class SmokeBall extends Base {
         private final float start;
 
-        SmokeBall(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        SmokeBall(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd * 0.3, yd * 0.3 + 0.02, zd * 0.3, sprites);
             lifetime = 50 + random.nextInt(50);
             gravity = -0.004f;
@@ -161,7 +211,15 @@ final class ArsenalParticles {
     static final class Ember extends Base {
         private final float phase;
 
-        Ember(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Ember(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd, yd + 0.05, zd, sprites);
             lifetime = 30 + random.nextInt(40);
             gravity = -0.015f;
@@ -188,10 +246,20 @@ final class ArsenalParticles {
 
     /** A scrap of coloured paper, tumbling and fluttering down. */
     static final class Confetti extends Base {
-        private static final int[] COLOURS = {0xFF3B3B, 0xFFB12B, 0xFFE94A, 0x4BE36B, 0x3BC8FF, 0x6B5BFF, 0xE35BFF, 0xFF7AB0};
+        private static final int[] COLOURS = {
+            0xFF3B3B, 0xFFB12B, 0xFFE94A, 0x4BE36B, 0x3BC8FF, 0x6B5BFF, 0xE35BFF, 0xFF7AB0
+        };
         private final float spin;
 
-        Confetti(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Confetti(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd, yd, zd, sprites);
             lifetime = 50 + random.nextInt(60);
             gravity = 0.05f;
@@ -225,7 +293,15 @@ final class ArsenalParticles {
 
     /** An icy twinkle that blinks while it drifts. */
     static final class Sparkle extends Base {
-        Sparkle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Sparkle(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd, yd - 0.01, zd, sprites);
             lifetime = 30 + random.nextInt(30);
             gravity = 0.01f;
@@ -258,7 +334,15 @@ final class ArsenalParticles {
     static final class Swirl extends Base {
         private final double cx, cy, cz;
 
-        Swirl(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Swirl(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, 0, 0, 0, sprites);
             cx = x + xd;
             cy = y + yd;
@@ -304,7 +388,15 @@ final class ArsenalParticles {
     static final class Radiation extends Base {
         private final float phase;
 
-        Radiation(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Radiation(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, xd * 0.2, yd * 0.2 + 0.005, zd * 0.2, sprites);
             lifetime = 60 + random.nextInt(60);
             gravity = 0;
@@ -318,7 +410,9 @@ final class ArsenalParticles {
         public void tick() {
             super.tick();
             float t = (float) age / lifetime;
-            setAlpha((0.55f + 0.45f * (float) Math.sin(age * 0.35 + phase)) * Math.min(1f, (1 - t) * 4));
+            setAlpha(
+                    (0.55f + 0.45f * (float) Math.sin(age * 0.35 + phase))
+                            * Math.min(1f, (1 - t) * 4));
         }
 
         @Override
@@ -329,7 +423,15 @@ final class ArsenalParticles {
 
     /** A crackling arc: a new zigzag every tick, there and gone. */
     static final class Arc extends Base {
-        Arc(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
+        Arc(
+                ClientLevel level,
+                double x,
+                double y,
+                double z,
+                double xd,
+                double yd,
+                double zd,
+                SpriteSet sprites) {
             super(level, x, y, z, 0, 0, 0, sprites);
             lifetime = 3 + random.nextInt(5);
             gravity = 0;
