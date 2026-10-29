@@ -5,7 +5,7 @@
   "name": "TNT Arsenal",
   "description": "Sixty kinds of TNT, each with its own hand-drawn look and its own way of going off: earthquakes that tear fissures down to bedrock, volcanoes, black holes, meteors, drills, tunnels, spiral staircases, bunkers, towers, bridges, x-ray, harvesters, lumberjacks, wolf packs and more. Plus a nuclear arsenal: mini nuke, nuke and tsar bomba with a remote detonator, a mushroom cloud, radiation in chunks and players, fallout, contaminated water and a Geiger counter. Bedrock, obsidian and chests are never touched. Crafted at the table, so JEI and REI show every recipe.",
   "authors": [
-    "Dschonas04"
+    {"name": "Dschonas04", "contact": {"homepage": "https://github.com/Dschonas04"}}
   ],
   "contact": {
     "homepage": "https://github.com/Dschonas04/tnt-arsenal",
