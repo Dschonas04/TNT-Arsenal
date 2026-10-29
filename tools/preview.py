@@ -1,3 +1,4 @@
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """Renders the block models isometrically into the preview sheets in docs/ — pure Python,
 a little rasteriser with a depth buffer that reads the models and textures as the game would.
 

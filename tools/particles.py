@@ -1,3 +1,4 @@
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """The sprites of the mod's own particles (white or grey, the client tints them) and their particle definitions."""
 import math
 import random

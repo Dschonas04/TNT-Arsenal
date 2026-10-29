@@ -1,3 +1,5 @@
+// Autor: Dschonas04 (https://github.com/Dschonas04)
+
 package io.github.dschonas04.tntarsenal.nuclear.explosion;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

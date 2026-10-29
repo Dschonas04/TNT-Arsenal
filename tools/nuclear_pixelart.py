@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """Generates every asset of TNT Arsenal: block textures, models, blockstates, item
 definitions, translations, loot tables, recipes, the mod icon and the preview sheet
 in docs/. Pure Python 3 (zlib + struct), no image library needed.

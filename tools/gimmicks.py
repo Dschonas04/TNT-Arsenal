@@ -1,3 +1,4 @@
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """The extras around the TNT: the TNT sling, the handbook, the advancements of the "TNT Arsenal" tab,
 the statistics and the texts of the linking detonator and the floating timer. Runs after nuclear_assets,
 because it adds to (and partly overrides) the translations written before it."""

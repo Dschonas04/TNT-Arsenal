@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """Generates the assets of Nuclear TNT: block and item textures, models, blockstates,
 item definitions, translations, loot tables and recipes of the nuclear part of TNT
 Arsenal: the three bombs, the detonator, the Geiger counter and the contamination.

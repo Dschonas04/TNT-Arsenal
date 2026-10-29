@@ -1,3 +1,4 @@
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """Assets for the protective gear and the alarms of the nuclear arsenal: iodine
 tablets, RadAway, hazmat suit, lead block, timer fuse, siren, bunker door, the
 iodine effect icon, the irradiated zombie's name and the advancements.

@@ -1,3 +1,5 @@
+// Autor: Dschonas04 (https://github.com/Dschonas04)
+
 package io.github.dschonas04.tntarsenal.nuclear.client;
 
 import io.github.dschonas04.tntarsenal.nuclear.NuclearTnt;

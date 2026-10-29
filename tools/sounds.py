@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 """Synthesises the mod's own sounds and writes them as mono WAV files.
 
     python3 tools/sounds.py OUTDIR

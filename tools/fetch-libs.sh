@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Autor: Dschonas04 (https://github.com/Dschonas04)
 # Fetches into libs/ what the build needs but the repository must not carry:
 # the Minecraft server and client jars and their libraries from Mojang, and the
 # Fabric API modules from the Fabric maven. Used by CI and for a fresh clone.
