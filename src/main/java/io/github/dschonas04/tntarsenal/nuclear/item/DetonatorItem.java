@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Der Fernzünder. Rechtsklick auf Bomben – atomare, jedes Arsenal-TNT oder einfaches TNT –
+ * Der Fernzünder. Rechtsklick auf Bomben, atomare, jedes Arsenal-TNT oder einfaches TNT:
  * verknüpft bis zu sechzehn davon (Rechtsklick auf eine verknüpfte löst sie wieder); Rechtsklick
  * irgendwo sonst zündet sie alle nacheinander, solange ihre Chunks geladen sind und man in
  * derselben Dimension ist. Schleichend in die Luft rechtsklicken löst alle. Wer einen verknüpften

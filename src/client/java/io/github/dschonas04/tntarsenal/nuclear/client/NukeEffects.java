@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * Alles, was ein Spieler von einer Detonation sieht: den Blitz (blendend, wenn man hinsieht, ein
- * Gleißen, wenn nicht), den Atompilz und den bebenden Boden, der mit der Druckwelle ankommt –
+ * Gleißen, wenn nicht), den Atompilz und den bebenden Boden, der mit der Druckwelle ankommt:
  * später, je weiter man weg ist.
  */
 final class NukeEffects {

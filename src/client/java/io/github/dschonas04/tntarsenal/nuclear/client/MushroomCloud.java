@@ -16,12 +16,12 @@ import net.minecraft.world.phys.Vec3;
  * folgt dem Radius der Bombe; er lebt sechzig Sekunden:
  *
  * <ol>
- *   <li>Feuerball – eine glühende Kugel, die eine halbe Sekunde anschwillt;
- *   <li>Stamm – eine Säule, die sechs Sekunden lang aufsteigt, die Partikel strömen nach oben;
- *   <li>Hut – ein Torus oben auf dem Stamm, der wächst und nach außen rollt: oben drüber, außen
+ *   <li>Feuerball: eine glühende Kugel, die eine halbe Sekunde anschwillt;
+ *   <li>Stamm: eine Säule, die sechs Sekunden lang aufsteigt, die Partikel strömen nach oben;
+ *   <li>Hut: ein Torus oben auf dem Stamm, der wächst und nach außen rollt: oben drüber, außen
  *       herunter, unten herein und durch die Mitte hinauf;
- *   <li>Kondensationsring – ein weißer Ring auf halber Höhe, der sich ausbreitet;
- *   <li>Ausblenden – nach dreißig Sekunden immer weniger Partikel, nach sechzig weg.
+ *   <li>Kondensationsring: ein weißer Ring auf halber Höhe, der sich ausbreitet;
+ *   <li>Ausblenden: nach dreißig Sekunden immer weniger Partikel, nach sechzig weg.
  * </ol>
  */
 final class MushroomCloud {

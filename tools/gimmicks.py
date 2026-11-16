@@ -51,11 +51,11 @@ EN = {
     "item.tnt_arsenal.tnt_sling": "TNT Sling",
     "item.tnt_arsenal.tnt_sling.desc": "Throws lit TNT from your other hand or inventory; sneak to throw it sticky",
     "item.tnt_arsenal.tnt_sling.empty": "No TNT to throw",
-    "item.tnt_arsenal.detonator.linked": "%s bomb(s) linked — newest at %s, %s, %s",
-    "item.tnt_arsenal.detonator.unlinked": "Unlinked — %s bomb(s) left",
-    "item.tnt_arsenal.detonator.full": "Full — a detonator holds %s bombs",
+    "item.tnt_arsenal.detonator.linked": "%s bomb(s) linked: newest at %s, %s, %s",
+    "item.tnt_arsenal.detonator.unlinked": "Unlinked: %s bomb(s) left",
+    "item.tnt_arsenal.detonator.full": "Full: a detonator holds %s bombs",
     "item.tnt_arsenal.detonator.cleared": "All bombs unlinked",
-    "item.tnt_arsenal.detonator.unbound": "Nothing linked — right-click bombs first",
+    "item.tnt_arsenal.detonator.unbound": "Nothing linked: right-click bombs first",
     "item.tnt_arsenal.detonator.fired": "Firing %s bomb(s)",
     "item.tnt_arsenal.detonator.desc": "Right-click up to 16 bombs to link them, right-click the air to set them all off; sneak to unlink all",
     "item.tnt_arsenal.timer.desc": "Sneak + right-click: set the time; right-click a bomb: start the countdown, shown above it",
@@ -69,11 +69,11 @@ DE = {
     "item.tnt_arsenal.tnt_sling": "TNT-Schleuder",
     "item.tnt_arsenal.tnt_sling.desc": "Wirft brennendes TNT aus der anderen Hand oder dem Inventar; schleichend wird es zum Klebe-TNT",
     "item.tnt_arsenal.tnt_sling.empty": "Kein TNT zum Werfen",
-    "item.tnt_arsenal.detonator.linked": "%s Bombe(n) verbunden – zuletzt bei %s, %s, %s",
-    "item.tnt_arsenal.detonator.unlinked": "Getrennt – noch %s Bombe(n)",
-    "item.tnt_arsenal.detonator.full": "Voll – ein Fernzünder fasst %s Bomben",
+    "item.tnt_arsenal.detonator.linked": "%s Bombe(n) verbunden: zuletzt bei %s, %s, %s",
+    "item.tnt_arsenal.detonator.unlinked": "Getrennt: noch %s Bombe(n)",
+    "item.tnt_arsenal.detonator.full": "Voll: ein Fernzünder fasst %s Bomben",
     "item.tnt_arsenal.detonator.cleared": "Alle Bomben getrennt",
-    "item.tnt_arsenal.detonator.unbound": "Nichts verbunden – erst Bomben rechtsklicken",
+    "item.tnt_arsenal.detonator.unbound": "Nichts verbunden: erst Bomben rechtsklicken",
     "item.tnt_arsenal.detonator.fired": "%s Bombe(n) werden gezündet",
     "item.tnt_arsenal.detonator.desc": "Bis zu 16 Bomben rechtsklicken zum Verbinden, in die Luft rechtsklicken zündet alle; schleichend alle trennen",
     "item.tnt_arsenal.timer.desc": "Schleichen + Rechtsklick: Zeit einstellen; Rechtsklick auf eine Bombe: Countdown starten, schwebt über ihr",
@@ -86,7 +86,7 @@ DE = {
 
 
 def page(kind, ingredient_keys):
-    """One handbook page: the name, what it does and what goes into it — all translated on the reader's side."""
+    """One handbook page: the name, what it does and what goes into it, all translated on the reader's side."""
     parts = [{"translate": f"block.tnt_arsenal.{kind['id']}", "bold": True, "color": "dark_red"}, "\n\n",
              {"translate": f"block.tnt_arsenal.{kind['id']}.desc"}, "\n\n",
              {"translate": "book.tnt_arsenal.recipe", "italic": True}]

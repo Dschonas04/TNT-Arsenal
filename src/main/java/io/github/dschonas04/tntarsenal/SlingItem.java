@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 /**
- * Die TNT-Schleuder. Rechtsklick wirft ein gezündetes TNT – das in der anderen Hand, sonst das
+ * Die TNT-Schleuder. Rechtsklick wirft ein gezündetes TNT, das in der anderen Hand, sonst das
  * erste im Inventar, jede Arsenal-Art oder einfaches TNT, nie eine Atombombe. Es fliegt im Bogen
  * und geht hoch, wenn seine Lunte abgebrannt ist. Schleichend wirft man es klebend: Es haftet an
  * der ersten Kreatur, die es berührt, oder am Boden, wo es landet.

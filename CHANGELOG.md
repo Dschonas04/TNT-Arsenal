@@ -92,7 +92,7 @@ All notable changes to TNT Arsenal. The format follows
   TNT, not only on the nuclear bombs.
 - The heavy kinds (giga, nuke, antimatter, black hole, earthquake, volcano)
   sound the siren while their fuse burns, like the nuclear bombs.
-- Radiation is one effect, *Radiation* I–IV with its own icon, instead of
+- Radiation is one effect, *Radiation* I-IV with its own icon, instead of
   nausea, weakness, hunger, slowness, poison and wither. RadAway no longer
   makes you sick.
 - Radiation fades faster: chunks halve every four minutes by default (was three

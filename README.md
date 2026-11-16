@@ -63,7 +63,7 @@ so **JEI and REI show every recipe**.
 | Volcano TNT | raises a volcano that erupts for fifteen seconds | TNT + magma block + 2 × basalt |
 | Staircase TNT | a spiral staircase 48 blocks down | TNT + 2 × stone brick stairs |
 | Bunker TNT | carves a lit bunker under the TNT | TNT + iron door |
-| Platform TNT | a 15×15 stone floor — over water, air or lava | TNT + 3 × stone brick slab |
+| Platform TNT | a 15×15 stone floor: over water, air or lava | TNT + 3 × stone brick slab |
 | Tower TNT | a 24-block watchtower with ladder and battlements | TNT + 2 × ladder + stone bricks |
 | Curse TNT | curses every creature nearby except you | TNT + wither rose |
 | Blessing TNT | strength, speed, haste and more for every player nearby | TNT + golden apple |
@@ -81,7 +81,7 @@ so **JEI and REI show every recipe**.
 
 They light like TNT: redstone, flint and steel, fire charges, burning arrows and
 other explosions. While the fuse burns they keep their own texture. Kinds that
-build or dig — drill, tunnel and bridge — go the way the player
+build or dig (drill, tunnel and bridge) go the way the player
 faced when placing the block. The five party kinds at the end break nothing and hurt no one.
 
 ## Screenshots
@@ -94,8 +94,8 @@ faced when placing the block. The five party kinds at the end break nothing and 
 
 ## Gimmicks
 
-- **TNT sling.** Throws lit TNT — from the other hand, or else the first one in the
-  inventory, any arsenal kind or plain TNT — in an arc. Sneak while throwing and it is
+- **TNT sling.** Throws lit TNT, from the other hand, or else the first one in the
+  inventory, any arsenal kind or plain TNT, in an arc. Sneak while throwing and it is
   **sticky**: it clings to the first creature it touches, or stays where it lands.
   Crafted from three sticks and two string.
 - **Handbook.** A book and a TNT give a written book with one page per kind: what it
@@ -103,7 +103,7 @@ faced when placing the block. The five party kinds at the end break nothing and 
 - **Advancements.** A tab of its own: the first bang, ten kinds, every kind, a hundred
   TNT, a salvo of eight bombs from one detonator, sticky TNT on a creature, a party TNT.
 - **Particles and screen effects.** Every TNT goes off with a shock wave ring on the
-  ground and smoke sized to how hard it hits, and its own particles — embers, frost
+  ground and smoke sized to how hard it hits, and its own particles, embers, frost
   twinkles, electric arcs, dark motes spiralling into the centre, confetti. Big ones
   shake the camera of everyone nearby; some tint the screen in their colour.
 - **Statistics.** "Arsenal TNT set off" and "TNT thrown with the sling" in the
@@ -111,12 +111,12 @@ faced when placing the block. The five party kinds at the end break nothing and 
 
 ## The nuke
 
-The nuke is meant to be one — and a nether star is worth it. A flash of heat
+The nuke is meant to be one, and a nether star is worth it. A flash of heat
 burns everything within 72 blocks, armour or not; a core blast and three rings of
 blasts tear the land open; a bowl-shaped crater **110 blocks wide and about 37
 deep** is carved out from the middle; the blast wave throws everything within 96
 blocks outwards. A mushroom cloud rises 50 blocks. Within 70 blocks the land is
-scorched — grass turns to coarse dirt, leaves and plants burn away, the crater
+scorched: grass turns to coarse dirt, leaves and plants burn away, the crater
 and its rim glaze over with blackstone and glowing magma. Then the fallout: for
 two minutes mobs within 96 blocks get radiation sickness (worse within 48
 blocks), and players take in the radiation of the crater as a dose, which shows
@@ -132,11 +132,11 @@ plain TNT and the nuclear bombs.
 
 
 - **Mini nuke, nuke and tsar bomba** (radius 15, 40 and 80). The explosion is
-  spread over many ticks in zones — core, middle, edge — with a blast wave that
+  spread over many ticks in zones (core, middle, edge) with a blast wave that
   respects cover and a bang that travels at the speed of sound. A flash, a
   shaking ground and a mushroom cloud go with it.
-- **Remote detonator.** Right-click up to sixteen bombs — nuclear, any arsenal TNT or
-  plain TNT — to link them (again to unlink one), right-click anywhere to set them all
+- **Remote detonator.** Right-click up to sixteen bombs, nuclear, any arsenal TNT or
+  plain TNT: to link them (again to unlink one), right-click anywhere to set them all
   off one after the other, as long as their chunks are loaded. Holding it shows a red
   marker over each linked bomb; sneak and right-click the air to unlink them all.
 - **Radiation** stays in the chunks around ground zero for two Minecraft days
@@ -184,9 +184,9 @@ Kinds that remove or swap blocks directly (leveler, miner, x-ray, antimatter,
 black hole, nether, lumber, drill, tunnel and the rest) never touch:
 
 - **bedrock** or anything else unbreakable,
-- **obsidian-hard blocks** — anything an explosion could not break either:
+- **obsidian-hard blocks**: anything an explosion could not break either:
   obsidian, crying obsidian, ancient debris, netherite, anvils, reinforced deepslate,
-- **blocks with contents** — chests, barrels, furnaces, spawners, signs,
+- **blocks with contents**: chests, barrels, furnaces, spawners, signs,
 - other TNT, which goes off instead of vanishing.
 
 The big explosions (Giga, Nuke) use block-explosion rules, so only a share of
@@ -207,7 +207,7 @@ work over several ticks instead of stalling one, and never load chunks.
 ## How it works
 
 Minecraft 26.3 ships without obfuscation, so the mod is compiled straight against
-the game jars — no mappings, no Loom, plain Gradle and Java 25:
+the game jars: no mappings, no Loom, plain Gradle and Java 25:
 
 ```bash
 tools/fetch-libs.sh   # server and client jar, their libraries and the Fabric API modules, into libs/
@@ -220,7 +220,7 @@ API modules are compile-only dependencies; they are inside every `fabric-api` ja
 under `META-INF/jars/`, and the script takes them from there.
 
 Each kind is an ordinary `TntBlock` subclass. When it primes, the primed entity
-carries the block's state — vanilla renders it with that texture. A mixin on `PrimedTnt#explode` hands the detonation to the kind
+carries the block's state: vanilla renders it with that texture. A mixin on `PrimedTnt#explode` hands the detonation to the kind
 whose block the entity carries; every other TNT explodes as before. A second mixin
 on the server tick drives detonations that play out over time.
 

@@ -332,7 +332,7 @@ kind("staircase_tnt", "Staircase TNT", "Wendeltreppen-TNT", "A spiral staircase 
 kind("bunker_tnt", "Bunker TNT", "Bunker-TNT", "Carves a lit bunker under the TNT", "Gräbt einen beleuchteten Bunker unter das TNT",
      "#5a6a4a", ("metal", "#3a3f44"), "#e8e4d4", "bunker", {"c": "#5fa83c", "d": "#7a5a3a", "a": "#8a8a8a", "b": "#ffd23a"},
      "rivets", [T, "minecraft:iron_door"])
-kind("platform_tnt", "Platform TNT", "Plattform-TNT", "A 15×15 stone floor — over water, air or lava", "Eine 15×15-Steinfläche — über Wasser, Luft oder Lava",
+kind("platform_tnt", "Platform TNT", "Plattform-TNT", "A 15×15 stone floor: over water, air or lava", "Eine 15×15-Steinfläche: über Wasser, Luft oder Lava",
      "#9a9a9a", ("rope",), "#efe8d8", "platform", {"a": "#8a8a8a", "b": "#5a5a5a", "c": "#c8322f", "d": "#6b4a2a"},
      "bricks", [T, "minecraft:stone_brick_slab", "minecraft:stone_brick_slab", "minecraft:stone_brick_slab"])
 kind("tower_tnt", "Tower TNT", "Turm-TNT", "A 24-block watchtower with ladder and battlements", "Ein 24 Blöcke hoher Wachturm mit Leiter und Zinnen",
@@ -356,7 +356,7 @@ kind("wolf_tnt", "Wolf Pack TNT", "Wolfsrudel-TNT", "Four wolves, tamed to you",
 kind("golem_tnt", "Golem TNT", "Golem-TNT", "Two iron golems guard the area", "Zwei Eisengolems bewachen die Gegend",
      "#b8b0a4", ("metal", "#6a6a6a"), "#f2f0ea", "golem", {"a": "#c9c2b8", "b": "#e2dcd2", "d": "#8a1a1a", "c": "#9a9288", "v": "#4a8a2a"},
      "moss", [T, "minecraft:iron_block", "minecraft:carved_pumpkin"], ["#4a8a2a", "#2f6a1a"])
-kind("flak_tnt", "Flak TNT", "Flak-TNT", "Shoots up 40 blocks and bursts — anti-air", "Schießt 40 Blöcke hoch und platzt — gegen Phantome",
+kind("flak_tnt", "Flak TNT", "Flak-TNT", "Shoots up 40 blocks and bursts, anti-air", "Schießt 40 Blöcke hoch und platzt, gegen Phantome",
      "#4a5a3a", ("hazard",), "#e8e4d4", "rocket", {"a": "#8a949b", "b": "#2a2a2a", "c": "#ff7a1a"},
      "rivets", [T, "minecraft:firework_rocket", "minecraft:gunpowder"])
 kind("halloween_tnt", "Halloween TNT", "Halloween-TNT", "A ring of jack o'lanterns and a cloud of bats", "Ein Ring aus Kürbislaternen und eine Wolke Fledermäuse",

@@ -11,8 +11,8 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Eine brennende Lunte, die verrät, was kommt: Jede Art sprüht auf ihre eigene Weise – Frost-TNT
- * schneit, Feuer-TNT spuckt Flammen, das Ender-TNT schimmert violett –, und je näher es dem
+ * Eine brennende Lunte, die verrät, was kommt: Jede Art sprüht auf ihre eigene Weise, Frost-TNT
+ * schneit, Feuer-TNT spuckt Flammen, das Ender-TNT schimmert violett, und je näher es dem
  * Hochgehen kommt, desto mehr sprüht es.
  */
 final class Fuses {

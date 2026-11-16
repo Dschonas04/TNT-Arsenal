@@ -342,7 +342,7 @@ kind("staircase_tnt", "Staircase TNT", "Wendeltreppen-TNT", "A spiral staircase 
 kind("bunker_tnt", "Bunker TNT", "Bunker-TNT", "Carves a lit bunker under the TNT", "Gräbt einen beleuchteten Bunker unter das TNT",
      "#5a6a4a", ("metal", "#3a3f44"), "#e8e4d4", "bunker", {"c": "#5fa83c", "d": "#7a5a3a", "a": "#8a8a8a", "b": "#ffd23a"},
      "rivets", [T, "minecraft:iron_door"])
-kind("platform_tnt", "Platform TNT", "Plattform-TNT", "A 15×15 stone floor — over water, air or lava", "Eine 15×15-Steinfläche — über Wasser, Luft oder Lava",
+kind("platform_tnt", "Platform TNT", "Plattform-TNT", "A 15×15 stone floor: over water, air or lava", "Eine 15×15-Steinfläche: über Wasser, Luft oder Lava",
      "#9a9a9a", ("rope",), "#efe8d8", "platform", {"a": "#8a8a8a", "b": "#5a5a5a", "c": "#c8322f", "d": "#6b4a2a"},
      "bricks", [T, "minecraft:stone_brick_slab", "minecraft:stone_brick_slab", "minecraft:stone_brick_slab"])
 kind("tower_tnt", "Tower TNT", "Turm-TNT", "A 24-block watchtower with ladder and battlements", "Ein 24 Blöcke hoher Wachturm mit Leiter und Zinnen",

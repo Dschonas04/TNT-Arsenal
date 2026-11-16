@@ -42,7 +42,7 @@ import java.util.List;
  *   <li><b>Kern</b> (unter 0.55 R) und <b>Krater</b> (bis 0.8 R): Alles verschwindet außer dem, was
  *       TNT Arsenal nie anfasst: Grundgestein und anderes Unzerstörbare, obsidianharte Blöcke und
  *       Blöcke mit Inhalt wie Truhen;
- *   <li><b>Rand</b> (bis R): eine ausgefranste Kante – je weiter innen, desto mehr wird
+ *   <li><b>Rand</b> (bis R): eine ausgefranste Kante, je weiter innen, desto mehr wird
  *       herausgerissen; was bleibt, ist verkohlt: Gras und Erde werden zu grober Erde, Stämme zu
  *       verkohlten Stämmen, Laub und Pflanzen verbrennen;
  *   <li><b>Außenzone</b> (bis 1.6 R): Glas und Eis zerspringen, Laub fällt, Feuer brechen aus.

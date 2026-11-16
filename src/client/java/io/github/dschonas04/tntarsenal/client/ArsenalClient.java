@@ -19,7 +19,7 @@ import net.minecraft.util.RandomSource;
 
 /**
  * Die Client-Seite des Arsenals: die Partikel und was eine Detonation mit dem Bildschirm der
- * Spieler in der Nähe macht – die Sicht wackelt und nimmt die Farbe der Art an (eisblau, giftgrün,
+ * Spieler in der Nähe macht, die Sicht wackelt und nimmt die Farbe der Art an (eisblau, giftgrün,
  * das Gold eines Segens ...). In verstrahltem Land schweben grüne Strahlungsflocken um den Spieler.
  */
 public final class ArsenalClient implements ClientModInitializer {

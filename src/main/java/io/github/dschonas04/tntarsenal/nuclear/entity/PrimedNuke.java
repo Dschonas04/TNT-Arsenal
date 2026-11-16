@@ -16,8 +16,8 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
 
 /**
- * Eine gezündete Bombe. In allem, was den Client betrifft, ist sie ein gezündetes TNT – sie fällt,
- * blinkt und wird mit dem Block der Bombe gezeichnet –, aber sie hat ihren eigenen Entity-Typ,
+ * Eine gezündete Bombe. In allem, was den Client betrifft, ist sie ein gezündetes TNT, sie fällt,
+ * blinkt und wird mit dem Block der Bombe gezeichnet, aber sie hat ihren eigenen Entity-Typ,
  * piept immer schneller, je weiter die Lunte abbrennt, und explodiert nicht auf Vanilla-Art: Ein
  * Mixin übergibt den Moment der Detonation an {@link Detonation}.
  */

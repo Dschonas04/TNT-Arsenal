@@ -168,7 +168,7 @@ final class Detonations {
     }
 
     /**
-     * Einfacher Boden: Stein jeder Dimension, Erde, Sand, Kies – und Fels und Erde aus
+     * Einfacher Boden: Stein jeder Dimension, Erde, Sand, Kies, und Fels und Erde aus
      * Mod-Dimensionen (Aerial Hell, Limbo, Chrono Dawn und Ähnliche), die die Vanilla-Tags nicht
      * kennen.
      */
@@ -532,7 +532,7 @@ final class Detonations {
 
     /**
      * Napalm: eine Explosion, dann ein Feuerring, der bis zehn Blöcke hinausläuft und jede Kreatur
-     * in Brand setzt, die er erreicht – außer der, die ihn gezündet hat.
+     * in Brand setzt, die er erreicht, außer der, die ihn gezündet hat.
      */
     static void fire(ServerLevel level, PrimedTnt t) {
         debris(level, t.position(), 4);
@@ -1019,7 +1019,7 @@ final class Detonations {
         cloud(level, t, 6, 600, new MobEffectInstance(MobEffects.POISON, 200, 1));
     }
 
-    /** Eine Wolke, die heilt und Gift und Verdorren kuriert – nichts geht kaputt. */
+    /** Eine Wolke, die heilt und Gift und Verdorren kuriert, nichts geht kaputt. */
     static void healing(ServerLevel level, PrimedTnt t) {
         sound(level, t.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 2.0f, 1.0f);
         cloud(level, t, 6, 400, new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
@@ -1126,7 +1126,7 @@ final class Detonations {
 
     /**
      * Schwerkraft: reißt anderthalb Sekunden lang die Blöcke ringsum los und zieht sie und jede
-     * Kreatur im Umkreis von 16 Blöcken in einen Wirbel über dem TNT – explodiert dann und
+     * Kreatur im Umkreis von 16 Blöcken in einen Wirbel über dem TNT, explodiert dann und
      * schleudert alles nach außen.
      */
     static void gravity(ServerLevel level, PrimedTnt t) {
@@ -1363,7 +1363,7 @@ final class Detonations {
     }
 
     /**
-     * Schleudert alles ringsum in die Luft, ohne einen Block zu zerstören – und lässt es
+     * Schleudert alles ringsum in die Luft, ohne einen Block zu zerstören, und lässt es
      * herabgleiten.
      */
     static void bounce(ServerLevel level, PrimedTnt t) {
@@ -1381,7 +1381,7 @@ final class Detonations {
 
     /**
      * Eine flache Druckwelle: wirft alles im Umkreis von 14 Blöcken nach außen, verletzt ein wenig,
-     * zerschlägt Glas und Laub – und zerstört sonst nichts.
+     * zerschlägt Glas und Laub: und zerstört sonst nichts.
      */
     static void shockwave(ServerLevel level, PrimedTnt t) {
         Vec3 c = t.position();
@@ -1592,7 +1592,7 @@ final class Detonations {
                 });
     }
 
-    /** Eine Glaskuppel, Radius 7, vom Boden aus gebaut – sofortiger Unterschlupf. */
+    /** Eine Glaskuppel, Radius 7, vom Boden aus gebaut, sofortiger Unterschlupf. */
     static void dome(ServerLevel level, PrimedTnt t) {
         BlockPos center = t.blockPosition();
         sound(level, t.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 2.0f, 1.2f);
@@ -1619,7 +1619,7 @@ final class Detonations {
                 });
     }
 
-    /** Spinnt Spinnweben in die Luft ringsum – eine Falle für alles, was folgt. */
+    /** Spinnt Spinnweben in die Luft ringsum, eine Falle für alles, was folgt. */
     static void cobweb(ServerLevel level, PrimedTnt t) {
         pop(level, t, 1);
         RandomSource random = level.getRandom();
@@ -1976,7 +1976,7 @@ final class Detonations {
     }
 
     /**
-     * Zündet die Lunte jedes TNT im Umkreis von 16 Blöcken, das nächste zuerst – eine
+     * Zündet die Lunte jedes TNT im Umkreis von 16 Blöcken, das nächste zuerst, eine
      * Kettenreaktion.
      */
     static void chain(ServerLevel level, PrimedTnt t) {
@@ -2193,8 +2193,8 @@ final class Detonations {
     }
 
     /**
-     * Ein Erdbeben: Der Boden bebt drei Sekunden in Wellen – jeder in der Nähe wird herumgeworfen
-     * und bekommt Schwindel –, und drei bis fünf zackige Spalten reißen vom Zentrum nach außen auf,
+     * Ein Erdbeben: Der Boden bebt drei Sekunden in Wellen, jeder in der Nähe wird herumgeworfen
+     * und bekommt Schwindel, und drei bis fünf zackige Spalten reißen vom Zentrum nach außen auf,
      * 28 Blöcke lang und bis knapp über das Grundgestein.
      */
     static void earthquake(ServerLevel level, PrimedTnt t) {
@@ -2498,7 +2498,7 @@ final class Detonations {
     }
 
     /**
-     * Ein 15×15-Boden aus Steinziegeln auf der Höhe, auf der das TNT stand – eine Himmelsbrücke
+     * Ein 15×15-Boden aus Steinziegeln auf der Höhe, auf der das TNT stand, eine Himmelsbrücke
      * oder ein Floß.
      */
     static void platform(ServerLevel level, PrimedTnt t) {
@@ -2622,7 +2622,7 @@ final class Detonations {
     }
 
     /**
-     * Friert jeden Mob im Umkreis von zwölf Blöcken zehn Sekunden lang an Ort und Stelle ein –
+     * Friert jeden Mob im Umkreis von zwölf Blöcken zehn Sekunden lang an Ort und Stelle ein:
      * selbst mitten in der Luft.
      */
     static void stasis(ServerLevel level, PrimedTnt t) {
@@ -2703,7 +2703,7 @@ final class Detonations {
     }
 
     /**
-     * Zwei Eisengolems, die die Gegend bewachen – von einem Spieler gebaut, deshalb lassen sie
+     * Zwei Eisengolems, die die Gegend bewachen, von einem Spieler gebaut, deshalb lassen sie
      * Spieler in Ruhe.
      */
     static void golems(ServerLevel level, PrimedTnt t) {

@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Detonationen, die sich über Zeit abspielen – ein Tunnel, der Scheibe für Scheibe gegraben wird,
- * ein schwarzes Loch, das fünf Sekunden lang zieht –, melden hier eine Aufgabe an. Der Server führt
+ * Detonationen, die sich über Zeit abspielen, ein Tunnel, der Scheibe für Scheibe gegraben wird,
+ * ein schwarzes Loch, das fünf Sekunden lang zieht, melden hier eine Aufgabe an. Der Server führt
  * jede Aufgabe am Ende jedes Server-Ticks einmal aus, bis sie meldet, dass sie fertig ist. Die
  * Arbeit auf Ticks zu verteilen, verhindert außerdem, dass große Aufträge den Server ausbremsen.
  */

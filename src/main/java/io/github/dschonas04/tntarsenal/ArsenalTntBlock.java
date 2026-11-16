@@ -31,8 +31,8 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Ein TNT-Block einer {@link Kind}. Er wird gezündet wie Vanilla-TNT – Redstone, Feuerzeug,
- * Feuerkugeln, brennende Pfeile, andere Explosionen –, aber die gezündete Entity trägt den Zustand
+ * Ein TNT-Block einer {@link Kind}. Er wird gezündet wie Vanilla-TNT, Redstone, Feuerzeug,
+ * Feuerkugeln, brennende Pfeile, andere Explosionen, aber die gezündete Entity trägt den Zustand
  * dieses Blocks. Deshalb wird sie mit der Textur dieses Blocks gezeichnet, und das Mixin erkennt
  * die Art, wenn die Lunte abgebrannt ist.
  */

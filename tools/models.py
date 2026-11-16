@@ -1,7 +1,7 @@
 # Autor: Dschonas04 (https://github.com/Dschonas04)
-"""The 3D models of every TNT: each kind is an object of its own — a fuel barrel,
+"""The 3D models of every TNT: each kind is an object of its own, a fuel barrel,
 a round bomb on a stand, a crate of building material, a drilling machine, a
-crystal in a cage, a rocket on its ramp — so it can be told apart at a glance.
+crystal in a cage, a rocket on its ramp, so it can be told apart at a glance.
 
 Textures are calm 16x16 materials (painted metal with a sheen, planks, stone,
 glass, glowing cores) plus one small sign per kind with its emblem. Faces take
@@ -43,7 +43,7 @@ def mix(a, b, t):
 
 # --- materials -----------------------------------------------------------------
 # Each painter returns 256 RGB tuples. They are smooth on purpose: shading in
-# bands, a highlight, edges — no random speckle.
+# bands, a highlight, edges: no random speckle.
 
 def m_metal(c):
     """Painted sheet metal with a soft vertical sheen and a seam."""

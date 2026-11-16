@@ -29,8 +29,8 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Ein Bombenblock. Er wird gezündet wie TNT – Redstone, Feuerzeug, Feuerkugeln, brennende Pfeile,
- * Explosionen –, und der Zünder zündet ihn aus der Ferne. Die gezündete Bombe ist eine {@link
+ * Ein Bombenblock. Er wird gezündet wie TNT, Redstone, Feuerzeug, Feuerkugeln, brennende Pfeile,
+ * Explosionen, und der Zünder zündet ihn aus der Ferne. Die gezündete Bombe ist eine {@link
  * PrimedNuke}.
  */
 public class NukeBlock extends TntBlock {

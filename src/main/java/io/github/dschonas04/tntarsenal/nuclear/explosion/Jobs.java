@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Die Auftragswarteschlange: Arbeit, die auf viele Ticks verteilt ist – die Explosion, verzögerte
- * Geräusche –, läuft hier am Ende jedes Welt-Ticks, bis sie meldet, dass sie fertig ist.
+ * Die Auftragswarteschlange: Arbeit, die auf viele Ticks verteilt ist, die Explosion, verzögerte
+ * Geräusche, läuft hier am Ende jedes Welt-Ticks, bis sie meldet, dass sie fertig ist.
  */
 public final class Jobs {
     private Jobs() {}

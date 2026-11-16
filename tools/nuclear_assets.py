@@ -184,16 +184,16 @@ GEIGER_PAL = {"k": "#1f1d1a", "y": "#e8c13a", "Y": "#a8861f", "K": "#3a3a3a", "w
 def main():
     lang_en = {"itemGroup.tnt_arsenal.nuclear": "TNT Arsenal: Nuclear", "item.tnt_arsenal.detonator": "Detonator",
                "item.tnt_arsenal.detonator.bound": "Bound to the bomb at %s, %s, %s",
-               "item.tnt_arsenal.detonator.unbound": "Not bound — right-click a bomb first",
+               "item.tnt_arsenal.detonator.unbound": "Not bound: right-click a bomb first",
                "item.tnt_arsenal.detonator.other_dimension": "The bomb is in another dimension",
-               "item.tnt_arsenal.detonator.not_loaded": "No signal — the bomb is too far away",
+               "item.tnt_arsenal.detonator.not_loaded": "No signal: the bomb is too far away",
                "item.tnt_arsenal.detonator.gone": "The bomb is gone",
                "item.tnt_arsenal.detonator.fired": "Detonation sequence started"}
     lang_de = {"itemGroup.tnt_arsenal.nuclear": "TNT-Arsenal: Atom", "item.tnt_arsenal.detonator": "Fernzünder",
                "item.tnt_arsenal.detonator.bound": "Verbunden mit der Bombe bei %s, %s, %s",
-               "item.tnt_arsenal.detonator.unbound": "Nicht verbunden – erst eine Bombe rechtsklicken",
+               "item.tnt_arsenal.detonator.unbound": "Nicht verbunden: erst eine Bombe rechtsklicken",
                "item.tnt_arsenal.detonator.other_dimension": "Die Bombe ist in einer anderen Dimension",
-               "item.tnt_arsenal.detonator.not_loaded": "Kein Signal – die Bombe ist zu weit weg",
+               "item.tnt_arsenal.detonator.not_loaded": "Kein Signal: die Bombe ist zu weit weg",
                "item.tnt_arsenal.detonator.gone": "Die Bombe ist nicht mehr da",
                "item.tnt_arsenal.detonator.fired": "Zündsequenz gestartet"}
     import textures as T
